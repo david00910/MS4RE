@@ -1,0 +1,38 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreatePropertiesTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('properties', function (Blueprint $table) {
+            $table->bigIncrements('id')->unsigned();
+            $table->string('description')->nullable;
+            $table->bigInteger('price');
+            $table->bigInteger('brutto');
+            $table->bigInteger('netto');
+            $table->bigInteger('own_exp');
+            $table->bigInteger('deposit');
+            $table->bigInteger('sqm_price');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('properties');
+    }
+}
