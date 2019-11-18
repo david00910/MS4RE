@@ -3,22 +3,26 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\User;
 use App\Property;
-use App\PropertyCategories;
-use Illuminate\Database;
-use Exception;
+use Illuminate\Support\Facades\Auth;
 
-class PropertyController extends Controller
+class SelfServiceController extends Controller
 {
-    public function __construct()
-    {
-
+    public function __construct() {
+        $this->middleware('auth');
     }
 
-    protected function indexData()
-    {
+    protected function index() {
+        return view('model.self_service.self_service');
+    }
+
+    protected function indexMyProperties() {
+
+        $user = Auth::user()->id;
+
         try {
-            $property = Property::with('files')->with('propertycategories')->orderBy('created_at', 'ASC')->paginate(12);
+            $property = Property::with('files')->with('propertycategories')->orderBy('created_at', 'ASC')->where('created_by', $user)->paginate(2);
             $response = [
                 'pagination' => [
                     'total' => $property->total(),
@@ -38,7 +42,10 @@ class PropertyController extends Controller
         }
 
         return response()->json(
-          $response, 200
+            $response, 200
         );
+
+
     }
+
 }
