@@ -2,31 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="194c585d-efab-437c-b7c7-343e71abc0c5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/SelfServiceController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/PropertyCategories.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/PropertyFiles.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/factories/CategoryFactory.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2019_11_18_130342_add_birth_date_column_to_users_table.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2019_11_18_131319_add_created_by_column_to_properties_table.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/seeds/AddMyIDToProperties.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/seeds/CategorySeeder.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/bradybunchhouse_sc11.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/js/components/misc/Pagination.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/js/components/properties/Properties.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/js/components/self_service/MyProperties.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/js/components/self_service/User.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/model/self_service/self_service.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config/scout.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/migrations/2019_11_19_104300_add_soft_deletes_to_users_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/MS4RE.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MS4RE.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PropertyController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PropertyController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Property.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Property.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/SelfServiceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/SelfServiceController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/components/Properties.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/welcome.blade.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/components/properties/Properties.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/properties/Properties.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/components/self_service/User.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/self_service/User.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/home.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/home.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -132,6 +122,9 @@
       <path value="$PROJECT_DIR$/vendor/jakub-onderka/php-console-color" />
       <path value="$PROJECT_DIR$/vendor/symfony/event-dispatcher" />
       <path value="$PROJECT_DIR$/vendor/laravel/ui" />
+      <path value="$PROJECT_DIR$/vendor/laravel/scout" />
+      <path value="$PROJECT_DIR$/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/vendor/algolia/algoliasearch-client-php" />
     </include_path>
   </component>
   <component name="ProjectId" id="1T9FU499Wkm4rQNmqHLrEmYgjEn" />
@@ -141,7 +134,7 @@
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/public/images" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../SportsLadder" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -195,7 +188,8 @@
       <workItem from="1572937664635" duration="102000" />
       <workItem from="1573738134509" duration="2207000" />
       <workItem from="1573802015521" duration="21028000" />
-      <workItem from="1574060691677" duration="26831000" />
+      <workItem from="1574060691677" duration="27304000" />
+      <workItem from="1574148812503" duration="23835000" />
     </task>
     <servers />
   </component>

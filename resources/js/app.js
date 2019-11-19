@@ -14,6 +14,9 @@ import Pagination from './components/misc/Pagination';
 import User from './components/self_service/User';
 import MyProperties from "./components/self_service/MyProperties";
 
+// use default options
+
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -22,7 +25,11 @@ import MyProperties from "./components/self_service/MyProperties";
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
 
+// Return authenticated user, so Vue modules can access it.
 Vue.prototype.$user = window.Laravel.user;
+
+// Return Laravel csrf token and save it in a Vue global variable.
+Vue.prototype.$csrf = window.Laravel.csrfToken;
 
 
 // const files = require.context('./', true, /\.vue$/i)

@@ -28,7 +28,11 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('index', 'SelfServiceController@index')->name('self_service.index');
 
-        // List of sold properties by the authenticated user (if exists)
+        // List of properties for sale by the authenticated user (if exists)
         Route::get('myProperties', 'SelfServiceController@indexMyProperties')->name('myProperties.index');
+        // Edit auth user info
+        Route::post('storeEditUser', 'SelfServiceController@storeEditUser')->name('storeEditUser');
+        // Soft delete auth user (User does not get deleted permanently, can be recovered anytime)
+        Route::delete('storeSoftDeleteUser', 'SelfServiceController@storeSoftDeleteUser');
     });
 });

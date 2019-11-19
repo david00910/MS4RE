@@ -1,6 +1,89 @@
 <template>
     <div class="container">
         <div class="row justify-content-center">
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Modify your search and find your home!</div>
+                    <div class="card-body">
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                    <label class="form-check-label" for="defaultCheck1">
+                                        Category 1
+                                    </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                    <label class="form-check-label" for="defaultCheck1">
+                                        Category 2
+                                    </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                    <label class="form-check-label" for="defaultCheck1">
+                                        Category 3
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                    <label class="form-check-label" for="defaultCheck1">
+                                        Category 4
+                                    </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                    <label class="form-check-label" for="defaultCheck1">
+                                        Category 5
+                                    </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                    <label class="form-check-label" for="defaultCheck1">
+                                        Category 6
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+                            <div class="form-group">
+                                <label for="price">Price (DKK)</label>
+                                <input type="range" min="100000" step="10000" value="1500000" max="15000000" class="form-control-range" id="price">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="brutto">Brutto amount (DKK)</label>
+                                <input type="range" class="form-control-range" id="brutto">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="netto">Netto amount (DKK)</label>
+                                <input type="range" class="form-control-range" id="netto">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="own_exp">Owner expense (DKK)</label>
+                                <input type="range" class="form-control-range" id="own_exp">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="sqm_price">m² price (DKK)</label>
+                                <input type="range" class="form-control-range" id="sqm_price">
+                            </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">List of properties</div>
@@ -68,7 +151,7 @@
 </template>
 
 <script>
-    import axios from 'axios'
+    import axios from 'axios';
 
     export default {
 
