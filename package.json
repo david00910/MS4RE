@@ -24,5 +24,9 @@
         "vue": "^2.5.17",
         "vue-template-compiler": "^2.6.10"
     },
-    "dependencies": {}
+    "dependencies": {
+        "lodash.debounce": "^4.0.8",
+        "vue-numeral-filter": "^1.1.1",
+        "vue-slider-component": "^3.0.43"
+    }
 }

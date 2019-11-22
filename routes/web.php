@@ -35,4 +35,9 @@ Route::group(['middleware' => 'auth'], function () {
         // Soft delete auth user (User does not get deleted permanently, can be recovered anytime)
         Route::delete('storeSoftDeleteUser', 'SelfServiceController@storeSoftDeleteUser');
     });
+
+    // Search route
+
+    Route::get('search', 'SearchController@search');
+
 });

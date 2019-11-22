@@ -2,21 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="194c585d-efab-437c-b7c7-343e71abc0c5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/config/scout.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2019_11_19_104300_add_soft_deletes_to_users_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/MS4RE.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MS4RE.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/SearchController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/js/components/properties/debounce.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/js/components/properties/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/SelfServiceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/SelfServiceController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/components/properties/Properties.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/properties/Properties.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/components/self_service/User.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/self_service/User.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/home.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/home.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -134,7 +128,7 @@
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../SportsLadder" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -147,13 +141,13 @@
     <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\MS4RE\resources\js\components\properties" />
+      <recent name="C:\xampp\htdocs\MS4RE\resources\js\components\misc" />
+      <recent name="C:\xampp\htdocs\MS4RE\database\exclude_migrations" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\xampp\htdocs\MS4RE\public\images" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\xampp\htdocs\MS4RE\resources\js\components\misc" />
-      <recent name="C:\xampp\htdocs\MS4RE\resources\js\components\properties" />
-      <recent name="C:\xampp\htdocs\MS4RE\database\exclude_migrations" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -189,7 +183,8 @@
       <workItem from="1573738134509" duration="2207000" />
       <workItem from="1573802015521" duration="21028000" />
       <workItem from="1574060691677" duration="27304000" />
-      <workItem from="1574148812503" duration="23835000" />
+      <workItem from="1574148812503" duration="24035000" />
+      <workItem from="1574410531293" duration="23600000" />
     </task>
     <servers />
   </component>

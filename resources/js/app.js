@@ -13,8 +13,16 @@ window.Vue = require('vue');
 import Pagination from './components/misc/Pagination';
 import User from './components/self_service/User';
 import MyProperties from "./components/self_service/MyProperties";
+import vueNumeralFilterInstaller from 'vue-numeral-filter';
+import VueSlider from 'vue-slider-component';
+import 'vue-slider-component/theme/default.css';
+
 
 // use default options
+// Numeral filter for outputs
+Vue.use(vueNumeralFilterInstaller);
+
+// Use debouncer for search queries
 
 
 /**
@@ -39,6 +47,8 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('pagination', Pagination);
 Vue.component('user', User);
 Vue.component('myproperties', MyProperties);
+Vue.component('vue-slider', VueSlider)
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
