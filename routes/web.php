@@ -19,6 +19,10 @@ Route::get('/', 'HomeController@index')->name('home');
 
 Route::get('/properties', 'PropertyController@indexData')->name('properties');
 
+// Search route
+
+Route::get('search', 'SearchController@search');
+
 // AUTHENTICATED ROUTES
 
 Route::group(['middleware' => 'auth'], function () {
@@ -36,8 +40,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('storeSoftDeleteUser', 'SelfServiceController@storeSoftDeleteUser');
     });
 
-    // Search route
 
-    Route::get('search', 'SearchController@search');
 
 });

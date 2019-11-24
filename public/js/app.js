@@ -1986,8 +1986,15 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./index */ "./resources/js/components/properties/index.js");
-/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_index__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2190,14 +2197,46 @@ __webpack_require__.r(__webpack_exports__);
     return {
       searchInProgress: false,
       // if this is true, the pagination is rendered for the filtered results only.
-      delay: 500,
+      queryCat1: null,
+      queryCat2: null,
+      queryCat3: null,
+      queryCat4: null,
+      queryCat5: null,
       queryPrice: [100000, 55000000],
       // multi-range slider for the price filter query
       priceOptions: {
-        // array of options for the multi-range slider component
+        // array of options for the price slider component
         min: 100000,
         max: 55000000,
         minRange: 100000
+      },
+      queryBrutto: [100000, 55000000],
+      bruttoOptions: {
+        // array of options for the brutto price slider component
+        min: 100000,
+        max: 55000000,
+        minRange: 100000
+      },
+      queryNetto: [100000, 55000000],
+      nettoOptions: {
+        // array of options for the netto price slider component
+        min: 100000,
+        max: 55000000,
+        minRange: 100000
+      },
+      queryOwnExp: [1000, 500000],
+      ownExpOptions: {
+        // array of options for the owner expense price slider component
+        min: 1000,
+        max: 500000,
+        minRange: 1000
+      },
+      querySqmPrice: [100, 20000],
+      sqmPriceOptions: {
+        // array of options for the sqm price price slider component
+        min: 100,
+        max: 20000,
+        minRange: 200
       },
       properties: [null, {
         // this is where the properties with all their props are getting saved from the request
@@ -2225,13 +2264,6 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     this.indexData();
   },
-  watch: {
-    queryPrice: function queryPrice(after, before) {
-      setTimeout(function () {
-        console.log("Hello");
-      }, 400);
-    }
-  },
   methods: {
     indexData: function indexData() {
       var _this = this;
@@ -2251,6 +2283,10 @@ __webpack_require__.r(__webpack_exports__);
         _this.hasError = true;
       });
     },
+    // when a filter is set, on value change this computed function is getting called first, so it can debounce the trigger, resulting in optimized request time.
+    callFiltering: lodash__WEBPACK_IMPORTED_MODULE_1___default.a.debounce(function () {
+      this.fetchFiltered();
+    }, 800),
     fetchFiltered: function fetchFiltered() {
       var _this2 = this;
 
@@ -2259,7 +2295,20 @@ __webpack_require__.r(__webpack_exports__);
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/search?page=' + this.filteredPagination.current_page, {
         params: {
           queryPriceFrom: this.queryPrice[0],
-          queryPriceTo: this.queryPrice[1]
+          queryPriceTo: this.queryPrice[1],
+          queryBruttoFrom: this.queryBrutto[0],
+          queryBruttoTo: this.queryBrutto[1],
+          queryNettoFrom: this.queryNetto[0],
+          queryNettoTo: this.queryNetto[1],
+          queryOwnExpFrom: this.queryOwnExp[0],
+          queryOwnExpTo: this.queryOwnExp[1],
+          querySqmPriceFrom: this.querySqmPrice[0],
+          querySqmPriceTo: this.querySqmPrice[1],
+          queryCategory1: this.queryCat1,
+          queryCategory2: this.queryCat2,
+          queryCategory3: this.queryCat3,
+          queryCategory4: this.queryCat4,
+          queryCategory5: this.queryCat5
         }
       }).then(function (response) {
         console.log(response.data);
@@ -2271,9 +2320,6 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     }
-  },
-  directives: {
-    debounce: _index__WEBPACK_IMPORTED_MODULE_1___default.a
   }
 });
 
@@ -40537,7 +40583,286 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
-            _vm._m(0),
+            _c("div", { staticClass: "row text-center" }, [
+              _c("div", { staticClass: "col" }, [
+                _c("div", { staticClass: "form-check" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model.lazy",
+                        value: _vm.queryCat1,
+                        expression: "queryCat1",
+                        modifiers: { lazy: true }
+                      }
+                    ],
+                    staticClass: "form-check-input",
+                    attrs: { type: "checkbox", value: "", id: "cat1" },
+                    domProps: {
+                      checked: Array.isArray(_vm.queryCat1)
+                        ? _vm._i(_vm.queryCat1, "") > -1
+                        : _vm.queryCat1
+                    },
+                    on: {
+                      change: [
+                        function($event) {
+                          var $$a = _vm.queryCat1,
+                            $$el = $event.target,
+                            $$c = $$el.checked ? true : false
+                          if (Array.isArray($$a)) {
+                            var $$v = "",
+                              $$i = _vm._i($$a, $$v)
+                            if ($$el.checked) {
+                              $$i < 0 && (_vm.queryCat1 = $$a.concat([$$v]))
+                            } else {
+                              $$i > -1 &&
+                                (_vm.queryCat1 = $$a
+                                  .slice(0, $$i)
+                                  .concat($$a.slice($$i + 1)))
+                            }
+                          } else {
+                            _vm.queryCat1 = $$c
+                          }
+                        },
+                        _vm.callFiltering
+                      ]
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    { staticClass: "form-check-label", attrs: { for: "cat1" } },
+                    [
+                      _vm._v(
+                        "\n                                    Category 1\n                                "
+                      )
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-check" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model.lazy",
+                        value: _vm.queryCat2,
+                        expression: "queryCat2",
+                        modifiers: { lazy: true }
+                      }
+                    ],
+                    staticClass: "form-check-input",
+                    attrs: { type: "checkbox", value: "", id: "cat2" },
+                    domProps: {
+                      checked: Array.isArray(_vm.queryCat2)
+                        ? _vm._i(_vm.queryCat2, "") > -1
+                        : _vm.queryCat2
+                    },
+                    on: {
+                      change: [
+                        function($event) {
+                          var $$a = _vm.queryCat2,
+                            $$el = $event.target,
+                            $$c = $$el.checked ? true : false
+                          if (Array.isArray($$a)) {
+                            var $$v = "",
+                              $$i = _vm._i($$a, $$v)
+                            if ($$el.checked) {
+                              $$i < 0 && (_vm.queryCat2 = $$a.concat([$$v]))
+                            } else {
+                              $$i > -1 &&
+                                (_vm.queryCat2 = $$a
+                                  .slice(0, $$i)
+                                  .concat($$a.slice($$i + 1)))
+                            }
+                          } else {
+                            _vm.queryCat2 = $$c
+                          }
+                        },
+                        _vm.callFiltering
+                      ]
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    { staticClass: "form-check-label", attrs: { for: "cat2" } },
+                    [
+                      _vm._v(
+                        "\n                                    Category 2\n                                "
+                      )
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-check" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model.lazy",
+                        value: _vm.queryCat3,
+                        expression: "queryCat3",
+                        modifiers: { lazy: true }
+                      }
+                    ],
+                    staticClass: "form-check-input",
+                    attrs: { type: "checkbox", value: "", id: "cat3" },
+                    domProps: {
+                      checked: Array.isArray(_vm.queryCat3)
+                        ? _vm._i(_vm.queryCat3, "") > -1
+                        : _vm.queryCat3
+                    },
+                    on: {
+                      change: [
+                        function($event) {
+                          var $$a = _vm.queryCat3,
+                            $$el = $event.target,
+                            $$c = $$el.checked ? true : false
+                          if (Array.isArray($$a)) {
+                            var $$v = "",
+                              $$i = _vm._i($$a, $$v)
+                            if ($$el.checked) {
+                              $$i < 0 && (_vm.queryCat3 = $$a.concat([$$v]))
+                            } else {
+                              $$i > -1 &&
+                                (_vm.queryCat3 = $$a
+                                  .slice(0, $$i)
+                                  .concat($$a.slice($$i + 1)))
+                            }
+                          } else {
+                            _vm.queryCat3 = $$c
+                          }
+                        },
+                        _vm.callFiltering
+                      ]
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    { staticClass: "form-check-label", attrs: { for: "cat3" } },
+                    [
+                      _vm._v(
+                        "\n                                    Category 3\n                                "
+                      )
+                    ]
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col" }, [
+                _c("div", { staticClass: "form-check" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model.lazy",
+                        value: _vm.queryCat4,
+                        expression: "queryCat4",
+                        modifiers: { lazy: true }
+                      }
+                    ],
+                    staticClass: "form-check-input",
+                    attrs: { type: "checkbox", value: "", id: "cat4" },
+                    domProps: {
+                      checked: Array.isArray(_vm.queryCat4)
+                        ? _vm._i(_vm.queryCat4, "") > -1
+                        : _vm.queryCat4
+                    },
+                    on: {
+                      change: [
+                        function($event) {
+                          var $$a = _vm.queryCat4,
+                            $$el = $event.target,
+                            $$c = $$el.checked ? true : false
+                          if (Array.isArray($$a)) {
+                            var $$v = "",
+                              $$i = _vm._i($$a, $$v)
+                            if ($$el.checked) {
+                              $$i < 0 && (_vm.queryCat4 = $$a.concat([$$v]))
+                            } else {
+                              $$i > -1 &&
+                                (_vm.queryCat4 = $$a
+                                  .slice(0, $$i)
+                                  .concat($$a.slice($$i + 1)))
+                            }
+                          } else {
+                            _vm.queryCat4 = $$c
+                          }
+                        },
+                        _vm.callFiltering
+                      ]
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    { staticClass: "form-check-label", attrs: { for: "cat4" } },
+                    [
+                      _vm._v(
+                        "\n                                    Category 4\n                                "
+                      )
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-check" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model.lazy",
+                        value: _vm.queryCat5,
+                        expression: "queryCat5",
+                        modifiers: { lazy: true }
+                      }
+                    ],
+                    staticClass: "form-check-input",
+                    attrs: { type: "checkbox", value: "", id: "cat5" },
+                    domProps: {
+                      checked: Array.isArray(_vm.queryCat5)
+                        ? _vm._i(_vm.queryCat5, "") > -1
+                        : _vm.queryCat5
+                    },
+                    on: {
+                      change: [
+                        function($event) {
+                          var $$a = _vm.queryCat5,
+                            $$el = $event.target,
+                            $$c = $$el.checked ? true : false
+                          if (Array.isArray($$a)) {
+                            var $$v = "",
+                              $$i = _vm._i($$a, $$v)
+                            if ($$el.checked) {
+                              $$i < 0 && (_vm.queryCat5 = $$a.concat([$$v]))
+                            } else {
+                              $$i > -1 &&
+                                (_vm.queryCat5 = $$a
+                                  .slice(0, $$i)
+                                  .concat($$a.slice($$i + 1)))
+                            }
+                          } else {
+                            _vm.queryCat5 = $$c
+                          }
+                        },
+                        _vm.callFiltering
+                      ]
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    { staticClass: "form-check-label", attrs: { for: "cat5" } },
+                    [
+                      _vm._v(
+                        "\n                                    Category 5\n                                "
+                      )
+                    ]
+                  )
+                ])
+              ])
+            ]),
             _vm._v(" "),
             _c("hr"),
             _vm._v(" "),
@@ -40555,15 +40880,8 @@ var render = function() {
                       "vue-slider",
                       _vm._b(
                         {
-                          directives: [
-                            {
-                              name: "debounce",
-                              rawName: "v-debounce",
-                              value: _vm.delay,
-                              expression: "delay"
-                            }
-                          ],
                           attrs: { id: "price" },
+                          on: { change: _vm.callFiltering },
                           model: {
                             value: _vm.queryPrice,
                             callback: function($$v) {
@@ -40601,181 +40919,207 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "card" }, [
               _c("div", { staticClass: "card-body" }, [
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "brutto" } }, [
-                    _vm._v("Brutto amount (DKK)")
-                  ]),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.properties.brutto,
-                        expression: "properties.brutto"
-                      }
-                    ],
-                    staticClass: "form-control-range",
-                    attrs: {
-                      type: "range",
-                      min: "100000",
-                      step: "10000",
-                      max: "15000000",
-                      id: "brutto"
-                    },
-                    domProps: { value: _vm.properties.brutto },
-                    on: {
-                      __r: function($event) {
-                        return _vm.$set(
-                          _vm.properties,
-                          "brutto",
-                          $event.target.value
+                _c(
+                  "div",
+                  { staticClass: "form-group" },
+                  [
+                    _c("label", { attrs: { for: "brutto" } }, [
+                      _vm._v("Brutto amount (DKK)")
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "vue-slider",
+                      _vm._b(
+                        {
+                          attrs: { id: "brutto" },
+                          on: { change: _vm.callFiltering },
+                          model: {
+                            value: _vm.queryBrutto,
+                            callback: function($$v) {
+                              _vm.queryBrutto = $$v
+                            },
+                            expression: "queryBrutto"
+                          }
+                        },
+                        "vue-slider",
+                        _vm.bruttoOptions,
+                        false
+                      )
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "row" }, [
+                      _c("div", { staticClass: "col text-left" }, [
+                        _vm._v(
+                          _vm._s(_vm._f("numeral")(_vm.queryBrutto[0], "0,0")) +
+                            " DKK"
                         )
-                      }
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("div", [
-                    _vm._v(
-                      _vm._s(_vm._f("numeral")(_vm.properties.brutto, "0,0"))
-                    )
-                  ])
-                ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col text-right" }, [
+                        _vm._v(
+                          _vm._s(_vm._f("numeral")(_vm.queryBrutto[1], "0,0")) +
+                            " DKK"
+                        )
+                      ])
+                    ])
+                  ],
+                  1
+                )
               ])
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "card" }, [
               _c("div", { staticClass: "card-body" }, [
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "netto" } }, [
-                    _vm._v("Netto amount (DKK)")
-                  ]),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.properties.netto,
-                        expression: "properties.netto"
-                      }
-                    ],
-                    staticClass: "form-control-range",
-                    attrs: {
-                      type: "range",
-                      min: "100000",
-                      step: "10000",
-                      max: "15000000",
-                      id: "netto"
-                    },
-                    domProps: { value: _vm.properties.netto },
-                    on: {
-                      __r: function($event) {
-                        return _vm.$set(
-                          _vm.properties,
-                          "netto",
-                          $event.target.value
+                _c(
+                  "div",
+                  { staticClass: "form-group" },
+                  [
+                    _c("label", { attrs: { for: "netto" } }, [
+                      _vm._v("Netto amount (DKK)")
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "vue-slider",
+                      _vm._b(
+                        {
+                          attrs: { id: "netto" },
+                          on: { change: _vm.callFiltering },
+                          model: {
+                            value: _vm.queryNetto,
+                            callback: function($$v) {
+                              _vm.queryNetto = $$v
+                            },
+                            expression: "queryNetto"
+                          }
+                        },
+                        "vue-slider",
+                        _vm.nettoOptions,
+                        false
+                      )
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "row" }, [
+                      _c("div", { staticClass: "col text-left" }, [
+                        _vm._v(
+                          _vm._s(_vm._f("numeral")(_vm.queryNetto[0], "0,0")) +
+                            " DKK"
                         )
-                      }
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("div", [
-                    _vm._v(
-                      _vm._s(_vm._f("numeral")(_vm.properties.netto, "0,0"))
-                    )
-                  ])
-                ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col text-right" }, [
+                        _vm._v(
+                          _vm._s(_vm._f("numeral")(_vm.queryNetto[1], "0,0")) +
+                            " DKK"
+                        )
+                      ])
+                    ])
+                  ],
+                  1
+                )
               ])
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "card" }, [
               _c("div", { staticClass: "card-body" }, [
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "own_exp" } }, [
-                    _vm._v("Owner expense (DKK)")
-                  ]),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.properties.own_exp,
-                        expression: "properties.own_exp"
-                      }
-                    ],
-                    staticClass: "form-control-range",
-                    attrs: {
-                      type: "range",
-                      id: "own_exp",
-                      min: "1000",
-                      step: "100",
-                      max: "150000"
-                    },
-                    domProps: { value: _vm.properties.own_exp },
-                    on: {
-                      __r: function($event) {
-                        return _vm.$set(
-                          _vm.properties,
-                          "own_exp",
-                          $event.target.value
+                _c(
+                  "div",
+                  { staticClass: "form-group" },
+                  [
+                    _c("label", { attrs: { for: "own_exp" } }, [
+                      _vm._v("Owner expense (DKK)")
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "vue-slider",
+                      _vm._b(
+                        {
+                          attrs: { id: "own_exp" },
+                          on: { change: _vm.callFiltering },
+                          model: {
+                            value: _vm.queryOwnExp,
+                            callback: function($$v) {
+                              _vm.queryOwnExp = $$v
+                            },
+                            expression: "queryOwnExp"
+                          }
+                        },
+                        "vue-slider",
+                        _vm.ownExpOptions,
+                        false
+                      )
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "row" }, [
+                      _c("div", { staticClass: "col text-left" }, [
+                        _vm._v(
+                          _vm._s(_vm._f("numeral")(_vm.queryOwnExp[0], "0,0")) +
+                            " DKK"
                         )
-                      }
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("div", [
-                    _vm._v(
-                      _vm._s(_vm._f("numeral")(_vm.properties.own_exp, "0,0"))
-                    )
-                  ])
-                ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col text-right" }, [
+                        _vm._v(
+                          _vm._s(_vm._f("numeral")(_vm.queryOwnExp[1], "0,0")) +
+                            " DKK"
+                        )
+                      ])
+                    ])
+                  ],
+                  1
+                )
               ])
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "card" }, [
               _c("div", { staticClass: "card-body" }, [
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "sqm_price" } }, [
-                    _vm._v("m² price (DKK)")
-                  ]),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.properties.sqm_price,
-                        expression: "properties.sqm_price"
-                      }
-                    ],
-                    staticClass: "form-control-range",
-                    attrs: {
-                      type: "range",
-                      id: "sqm_price",
-                      min: "100",
-                      step: "100",
-                      max: "10000"
-                    },
-                    domProps: { value: _vm.properties.sqm_price },
-                    on: {
-                      __r: function($event) {
-                        return _vm.$set(
-                          _vm.properties,
-                          "sqm_price",
-                          $event.target.value
+                _c(
+                  "div",
+                  { staticClass: "form-group" },
+                  [
+                    _c("label", { attrs: { for: "sqm_price" } }, [
+                      _vm._v("m² price (DKK)")
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "vue-slider",
+                      _vm._b(
+                        {
+                          attrs: { id: "sqm_price" },
+                          on: { change: _vm.callFiltering },
+                          model: {
+                            value: _vm.querySqmPrice,
+                            callback: function($$v) {
+                              _vm.querySqmPrice = $$v
+                            },
+                            expression: "querySqmPrice"
+                          }
+                        },
+                        "vue-slider",
+                        _vm.sqmPriceOptions,
+                        false
+                      )
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "row" }, [
+                      _c("div", { staticClass: "col text-left" }, [
+                        _vm._v(
+                          _vm._s(
+                            _vm._f("numeral")(_vm.querySqmPrice[0], "0,0")
+                          ) + " DKK"
                         )
-                      }
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("div", [
-                    _vm._v(
-                      _vm._s(_vm._f("numeral")(_vm.properties.sqm_price, "0,0"))
-                    )
-                  ])
-                ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col text-right" }, [
+                        _vm._v(
+                          _vm._s(
+                            _vm._f("numeral")(_vm.querySqmPrice[1], "0,0")
+                          ) + " DKK"
+                        )
+                      ])
+                    ])
+                  ],
+                  1
+                )
               ])
             ])
           ])
@@ -40972,138 +41316,7 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col" }, [
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "", id: "defaultCheck1" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "defaultCheck1" }
-            },
-            [
-              _vm._v(
-                "\n                                    Category 1\n                                "
-              )
-            ]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "", id: "defaultCheck1" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "defaultCheck1" }
-            },
-            [
-              _vm._v(
-                "\n                                    Category 2\n                                "
-              )
-            ]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "", id: "defaultCheck1" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "defaultCheck1" }
-            },
-            [
-              _vm._v(
-                "\n                                    Category 3\n                                "
-              )
-            ]
-          )
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col" }, [
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "", id: "defaultCheck1" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "defaultCheck1" }
-            },
-            [
-              _vm._v(
-                "\n                                    Category 4\n                                "
-              )
-            ]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "", id: "defaultCheck1" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "defaultCheck1" }
-            },
-            [
-              _vm._v(
-                "\n                                    Category 5\n                                "
-              )
-            ]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", value: "", id: "defaultCheck1" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "form-check-label",
-              attrs: { for: "defaultCheck1" }
-            },
-            [
-              _vm._v(
-                "\n                                    Category 6\n                                "
-              )
-            ]
-          )
-        ])
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -54231,51 +54444,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Properties_vue_vue_type_template_id_19612218___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
-
-/***/ }),
-
-/***/ "./resources/js/components/properties/debounce.js":
-/*!********************************************************!*\
-  !*** ./resources/js/components/properties/debounce.js ***!
-  \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = function debounce(fn, delay) {
-  var timeoutID = null;
-  return function () {
-    clearTimeout(timeoutID);
-    var args = arguments;
-    var that = this;
-    timeoutID = setTimeout(function () {
-      fn.apply(that, args);
-    }, delay);
-  };
-};
-
-/***/ }),
-
-/***/ "./resources/js/components/properties/index.js":
-/*!*****************************************************!*\
-  !*** ./resources/js/components/properties/index.js ***!
-  \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var debounce = __webpack_require__(/*! ./debounce */ "./resources/js/components/properties/debounce.js");
-
-directive.debounce = debounce;
-
-function directive(el, binding) {
-  if (binding.value !== binding.oldValue) {
-    // change debounce only if interval has changed
-    el.oninput = directive.debounce(function (evt) {
-      el.dispatchEvent(new Event('change'));
-    }, parseInt(binding.value) || 500);
-  }
-}
-
-module.exports = directive;
 
 /***/ }),
 
