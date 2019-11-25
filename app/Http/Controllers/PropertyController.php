@@ -7,6 +7,7 @@ use App\Property;
 use App\PropertyCategories;
 use Illuminate\Database;
 use Exception;
+use GuzzleHttp\Client;
 
 class PropertyController extends Controller
 {
@@ -17,6 +18,14 @@ class PropertyController extends Controller
 
     protected function indexData()
     {
+
+        $client = new Client();
+        $response = $client->request('GET', '');
+        $statusCode = $response->getStatusCode();
+        $body = $response->getBody()->getContents();
+
+        dd($body);
+
         try {
             $property = Property::with('files')->with('propertycategories')->orderBy('created_at', 'ASC')->paginate(12);
             $response = [
@@ -28,7 +37,8 @@ class PropertyController extends Controller
                     'from' => $property->firstItem(),
                     'to' => $property->lastItem()
                 ],
-                'data' => $property
+                'data' => $property,
+                'bbr' => $body
             ];
         }
         catch (Exception $e) {

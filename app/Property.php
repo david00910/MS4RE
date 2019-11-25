@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use GuzzleHttp\Client;
 
 class Property extends Model
 {
@@ -19,4 +20,6 @@ class Property extends Model
     {
         return $this->hasMany('App\PropertyFiles', 'property_id', 'id');
     }
+
+
 }

@@ -2,29 +2,39 @@
     <div class="container">
         <div class="row justify-content-center">
 
-            <div class="col-md-4">
+            <div class="accordion">
                 <div class="card">
-                    <div class="card-header">Modify your search and find your home!</div>
-                    <div class="card-body">
+                    <div class="card-header">
+                        <button class="btn dropdown-toggle" type="button" data-toggle="collapse" data-target="#filters" aria-expanded="true" aria-controls="filters">
+                        Modify your search and find your home!
+                        </button>
+                    </div>
+                    <div class="card-body" id="filters">
 
                         <div class="row text-center">
                             <div class="col">
                                 <div class="form-check">
-                                    <input class="form-check-input" @change="callFiltering" v-model.lazy="queryCat1" type="checkbox" value="" id="cat1">
+                                    <input class="form-check-input" @change="callFiltering"
+                                           v-model.lazy="checkedCategories" type="checkbox" value="Category 1"
+                                           id="cat1">
                                     <label class="form-check-label" for="cat1">
                                         Category 1
                                     </label>
                                 </div>
 
                                 <div class="form-check">
-                                    <input class="form-check-input" @change="callFiltering" v-model.lazy="queryCat2" type="checkbox" value="" id="cat2">
+                                    <input class="form-check-input" @change="callFiltering"
+                                           v-model.lazy="checkedCategories" type="checkbox" value="Category 2"
+                                           id="cat2">
                                     <label class="form-check-label" for="cat2">
                                         Category 2
                                     </label>
                                 </div>
 
                                 <div class="form-check">
-                                    <input class="form-check-input" @change="callFiltering" v-model.lazy="queryCat3" type="checkbox" value="" id="cat3">
+                                    <input class="form-check-input" @change="callFiltering"
+                                           v-model.lazy="checkedCategories" type="checkbox" value="Category 3"
+                                           id="cat3">
                                     <label class="form-check-label" for="cat3">
                                         Category 3
                                     </label>
@@ -33,14 +43,18 @@
 
                             <div class="col">
                                 <div class="form-check">
-                                    <input class="form-check-input" @change="callFiltering" v-model.lazy="queryCat4" type="checkbox" value="" id="cat4">
+                                    <input class="form-check-input" @change="callFiltering"
+                                           v-model.lazy="checkedCategories" type="checkbox" value="Category 4"
+                                           id="cat4">
                                     <label class="form-check-label" for="cat4">
                                         Category 4
                                     </label>
                                 </div>
 
                                 <div class="form-check">
-                                    <input class="form-check-input" @change="callFiltering" v-model.lazy="queryCat5" type="checkbox" value="" id="cat5">
+                                    <input class="form-check-input" @change="callFiltering"
+                                           v-model.lazy="checkedCategories" type="checkbox" value="Category 5"
+                                           id="cat5">
                                     <label class="form-check-label" for="cat5">
                                         Category 5
                                     </label>
@@ -138,7 +152,7 @@
                         <h5 class="text-danger">Something went wrong. Please try again...</h5>
                     </div>
 
-                    <div class="card-body" v-if="ready">
+                    <div class="card-body" v-if="ready && properties.length">
 
                         <pagination v-if="searchInProgress && pagination.last_page > 1"
                                     :pagination="filteredPagination" :offset="10"
@@ -178,6 +192,7 @@
                             <li class="list-group-item">
                                 <h5>m² price:</h5> {{property.sqm_price | numeral('0,0')}} DKK
                             </li>
+
                             <small>
                                 Updated at: {{property.updated_at}}
 
@@ -192,6 +207,12 @@
                                     :offset="10"
                                     @paginate="indexData()"></pagination>
 
+                    </div>
+
+                    <div class="container" v-else-if="properties.length < 1">
+                        <div class="col text-center mt-2">
+                            <h5 class="text-muted">There are no results with the current search options.</h5>
+                        </div>
                     </div>
 
                 </div>
@@ -209,11 +230,7 @@
         data: function () {
             return {
                 searchInProgress: false, // if this is true, the pagination is rendered for the filtered results only.
-                queryCat1: null,
-                queryCat2: null,
-                queryCat3: null,
-                queryCat4: null,
-                queryCat5: null,
+                checkedCategories: [], // saving the checked categories so we can send it with the filter request (if there are any checked filters, controlled in the fetchFilter() function)
                 queryPrice: [100000, 55000000], // multi-range slider for the price filter query
                 priceOptions: { // array of options for the price slider component
                     min: 100000,
@@ -250,6 +267,10 @@
                     netto: null,
                     own_exp: null,
                     sqm_price: null,
+                    propertycategories: {
+                        category: '',
+                        description: '',
+                    }
                 }],
                 ready: false,
                 pagination: {
@@ -270,6 +291,7 @@
 
         created() {
             this.indexData();
+            //this.getCategories();
         },
 
         methods: {
@@ -278,6 +300,7 @@
                 this.loading = true;
                 axios.get('/properties?page=' + this.pagination.current_page)
                     .then(res => {
+                        console.log(res.data.bbr);
                         this.properties = res.data.data.data;
                         this.pagination = res.data.pagination;
                         this.loading = false;
@@ -292,12 +315,27 @@
                     this.hasError = true;
                 });
             },
-            // when a filter is set, on value change this computed function is getting called first, so it can debounce the trigger, resulting in optimized request time.
+
+            /*getCategories() {
+                axios.get('/categories')
+                    .then(res => {
+                        console.log(res.data);
+                        this.ready = false;
+                        this.categories = res.data;
+                        this.ready = true;
+
+                    }).catch(error => {
+                    this.error = error.data;
+                    this.ready = false;
+                    this.hasError = true;
+                });
+            },*/
+            // this computed property runs when a filter change triggers it, avoiding multiple requests on every single move of the slider pin.
             callFiltering: _.debounce(function () {
                 this.fetchFiltered();
             }, 800),
 
-            fetchFiltered() {
+            fetchFiltered() { // sending the get request with the filter parameters and getting back the results from eloquent.
 
                 this.searchInProgress = true;
                 this.loading = true;
@@ -313,15 +351,11 @@
                         queryOwnExpTo: this.queryOwnExp[1],
                         querySqmPriceFrom: this.querySqmPrice[0],
                         querySqmPriceTo: this.querySqmPrice[1],
-                        queryCategory1: this.queryCat1,
-                        queryCategory2: this.queryCat2,
-                        queryCategory3: this.queryCat3,
-                        queryCategory4: this.queryCat4,
-                        queryCategory5: this.queryCat5,
-
+                        queryCategory: this.checkedCategories.length ? this.checkedCategories : null, // checking with a ternary operator if any of the boxes are checked. If not, send a null value.
                     }
                 })
                     .then(response => {
+                        console.log(this.checkedCategories);
                         console.log(response.data);
                         this.properties = response.data.data.data;
                         this.filteredPagination = response.data.pagination;

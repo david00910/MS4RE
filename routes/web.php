@@ -18,6 +18,7 @@ Auth::routes();
 Route::get('/', 'HomeController@index')->name('home');
 
 Route::get('/properties', 'PropertyController@indexData')->name('properties');
+/*Route::get('/categories', 'SearchController@getCategories')->name('categories');*/
 
 // Search route
 

@@ -2190,6 +2190,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2197,11 +2218,8 @@ __webpack_require__.r(__webpack_exports__);
     return {
       searchInProgress: false,
       // if this is true, the pagination is rendered for the filtered results only.
-      queryCat1: null,
-      queryCat2: null,
-      queryCat3: null,
-      queryCat4: null,
-      queryCat5: null,
+      checkedCategories: [],
+      // saving the checked categories so we can send it with the filter request (if there are any checked filters, controlled in the fetchFilter() function)
       queryPrice: [100000, 55000000],
       // multi-range slider for the price filter query
       priceOptions: {
@@ -2244,7 +2262,11 @@ __webpack_require__.r(__webpack_exports__);
         brutto: null,
         netto: null,
         own_exp: null,
-        sqm_price: null
+        sqm_price: null,
+        propertycategories: {
+          category: '',
+          description: ''
+        }
       }],
       ready: false,
       pagination: {
@@ -2262,7 +2284,7 @@ __webpack_require__.r(__webpack_exports__);
     console.log('Component mounted.');
   },
   created: function created() {
-    this.indexData();
+    this.indexData(); //this.getCategories();
   },
   methods: {
     indexData: function indexData() {
@@ -2271,6 +2293,7 @@ __webpack_require__.r(__webpack_exports__);
       this.searchInProgress = false;
       this.loading = true;
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/properties?page=' + this.pagination.current_page).then(function (res) {
+        console.log(res.data.bbr);
         _this.properties = res.data.data.data;
         _this.pagination = res.data.pagination;
         _this.loading = false;
@@ -2283,13 +2306,28 @@ __webpack_require__.r(__webpack_exports__);
         _this.hasError = true;
       });
     },
-    // when a filter is set, on value change this computed function is getting called first, so it can debounce the trigger, resulting in optimized request time.
+
+    /*getCategories() {
+        axios.get('/categories')
+            .then(res => {
+                console.log(res.data);
+                this.ready = false;
+                this.categories = res.data;
+                this.ready = true;
+             }).catch(error => {
+            this.error = error.data;
+            this.ready = false;
+            this.hasError = true;
+        });
+    },*/
+    // this computed property runs when a filter change triggers it, avoiding multiple requests on every single move of the slider pin.
     callFiltering: lodash__WEBPACK_IMPORTED_MODULE_1___default.a.debounce(function () {
       this.fetchFiltered();
     }, 800),
     fetchFiltered: function fetchFiltered() {
       var _this2 = this;
 
+      // sending the get request with the filter parameters and getting back the results from eloquent.
       this.searchInProgress = true;
       this.loading = true;
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/search?page=' + this.filteredPagination.current_page, {
@@ -2304,13 +2342,11 @@ __webpack_require__.r(__webpack_exports__);
           queryOwnExpTo: this.queryOwnExp[1],
           querySqmPriceFrom: this.querySqmPrice[0],
           querySqmPriceTo: this.querySqmPrice[1],
-          queryCategory1: this.queryCat1,
-          queryCategory2: this.queryCat2,
-          queryCategory3: this.queryCat3,
-          queryCategory4: this.queryCat4,
-          queryCategory5: this.queryCat5
+          queryCategory: this.checkedCategories.length ? this.checkedCategories : null // checking with a ternary operator if any of the boxes are checked. If not, send a null value.
+
         }
       }).then(function (response) {
+        console.log(_this2.checkedCategories);
         console.log(response.data);
         _this2.properties = response.data.data.data;
         _this2.filteredPagination = response.data.pagination;
@@ -40576,13 +40612,11 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
     _c("div", { staticClass: "row justify-content-center" }, [
-      _c("div", { staticClass: "col-md-4" }, [
+      _c("div", { staticClass: "accordion" }, [
         _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header" }, [
-            _vm._v("Modify your search and find your home!")
-          ]),
+          _vm._m(0),
           _vm._v(" "),
-          _c("div", { staticClass: "card-body" }, [
+          _c("div", { staticClass: "card-body", attrs: { id: "filters" } }, [
             _c("div", { staticClass: "row text-center" }, [
               _c("div", { staticClass: "col" }, [
                 _c("div", { staticClass: "form-check" }, [
@@ -40591,37 +40625,42 @@ var render = function() {
                       {
                         name: "model",
                         rawName: "v-model.lazy",
-                        value: _vm.queryCat1,
-                        expression: "queryCat1",
+                        value: _vm.checkedCategories,
+                        expression: "checkedCategories",
                         modifiers: { lazy: true }
                       }
                     ],
                     staticClass: "form-check-input",
-                    attrs: { type: "checkbox", value: "", id: "cat1" },
+                    attrs: {
+                      type: "checkbox",
+                      value: "Category 1",
+                      id: "cat1"
+                    },
                     domProps: {
-                      checked: Array.isArray(_vm.queryCat1)
-                        ? _vm._i(_vm.queryCat1, "") > -1
-                        : _vm.queryCat1
+                      checked: Array.isArray(_vm.checkedCategories)
+                        ? _vm._i(_vm.checkedCategories, "Category 1") > -1
+                        : _vm.checkedCategories
                     },
                     on: {
                       change: [
                         function($event) {
-                          var $$a = _vm.queryCat1,
+                          var $$a = _vm.checkedCategories,
                             $$el = $event.target,
                             $$c = $$el.checked ? true : false
                           if (Array.isArray($$a)) {
-                            var $$v = "",
+                            var $$v = "Category 1",
                               $$i = _vm._i($$a, $$v)
                             if ($$el.checked) {
-                              $$i < 0 && (_vm.queryCat1 = $$a.concat([$$v]))
+                              $$i < 0 &&
+                                (_vm.checkedCategories = $$a.concat([$$v]))
                             } else {
                               $$i > -1 &&
-                                (_vm.queryCat1 = $$a
+                                (_vm.checkedCategories = $$a
                                   .slice(0, $$i)
                                   .concat($$a.slice($$i + 1)))
                             }
                           } else {
-                            _vm.queryCat1 = $$c
+                            _vm.checkedCategories = $$c
                           }
                         },
                         _vm.callFiltering
@@ -40646,37 +40685,42 @@ var render = function() {
                       {
                         name: "model",
                         rawName: "v-model.lazy",
-                        value: _vm.queryCat2,
-                        expression: "queryCat2",
+                        value: _vm.checkedCategories,
+                        expression: "checkedCategories",
                         modifiers: { lazy: true }
                       }
                     ],
                     staticClass: "form-check-input",
-                    attrs: { type: "checkbox", value: "", id: "cat2" },
+                    attrs: {
+                      type: "checkbox",
+                      value: "Category 2",
+                      id: "cat2"
+                    },
                     domProps: {
-                      checked: Array.isArray(_vm.queryCat2)
-                        ? _vm._i(_vm.queryCat2, "") > -1
-                        : _vm.queryCat2
+                      checked: Array.isArray(_vm.checkedCategories)
+                        ? _vm._i(_vm.checkedCategories, "Category 2") > -1
+                        : _vm.checkedCategories
                     },
                     on: {
                       change: [
                         function($event) {
-                          var $$a = _vm.queryCat2,
+                          var $$a = _vm.checkedCategories,
                             $$el = $event.target,
                             $$c = $$el.checked ? true : false
                           if (Array.isArray($$a)) {
-                            var $$v = "",
+                            var $$v = "Category 2",
                               $$i = _vm._i($$a, $$v)
                             if ($$el.checked) {
-                              $$i < 0 && (_vm.queryCat2 = $$a.concat([$$v]))
+                              $$i < 0 &&
+                                (_vm.checkedCategories = $$a.concat([$$v]))
                             } else {
                               $$i > -1 &&
-                                (_vm.queryCat2 = $$a
+                                (_vm.checkedCategories = $$a
                                   .slice(0, $$i)
                                   .concat($$a.slice($$i + 1)))
                             }
                           } else {
-                            _vm.queryCat2 = $$c
+                            _vm.checkedCategories = $$c
                           }
                         },
                         _vm.callFiltering
@@ -40701,37 +40745,42 @@ var render = function() {
                       {
                         name: "model",
                         rawName: "v-model.lazy",
-                        value: _vm.queryCat3,
-                        expression: "queryCat3",
+                        value: _vm.checkedCategories,
+                        expression: "checkedCategories",
                         modifiers: { lazy: true }
                       }
                     ],
                     staticClass: "form-check-input",
-                    attrs: { type: "checkbox", value: "", id: "cat3" },
+                    attrs: {
+                      type: "checkbox",
+                      value: "Category 3",
+                      id: "cat3"
+                    },
                     domProps: {
-                      checked: Array.isArray(_vm.queryCat3)
-                        ? _vm._i(_vm.queryCat3, "") > -1
-                        : _vm.queryCat3
+                      checked: Array.isArray(_vm.checkedCategories)
+                        ? _vm._i(_vm.checkedCategories, "Category 3") > -1
+                        : _vm.checkedCategories
                     },
                     on: {
                       change: [
                         function($event) {
-                          var $$a = _vm.queryCat3,
+                          var $$a = _vm.checkedCategories,
                             $$el = $event.target,
                             $$c = $$el.checked ? true : false
                           if (Array.isArray($$a)) {
-                            var $$v = "",
+                            var $$v = "Category 3",
                               $$i = _vm._i($$a, $$v)
                             if ($$el.checked) {
-                              $$i < 0 && (_vm.queryCat3 = $$a.concat([$$v]))
+                              $$i < 0 &&
+                                (_vm.checkedCategories = $$a.concat([$$v]))
                             } else {
                               $$i > -1 &&
-                                (_vm.queryCat3 = $$a
+                                (_vm.checkedCategories = $$a
                                   .slice(0, $$i)
                                   .concat($$a.slice($$i + 1)))
                             }
                           } else {
-                            _vm.queryCat3 = $$c
+                            _vm.checkedCategories = $$c
                           }
                         },
                         _vm.callFiltering
@@ -40758,37 +40807,42 @@ var render = function() {
                       {
                         name: "model",
                         rawName: "v-model.lazy",
-                        value: _vm.queryCat4,
-                        expression: "queryCat4",
+                        value: _vm.checkedCategories,
+                        expression: "checkedCategories",
                         modifiers: { lazy: true }
                       }
                     ],
                     staticClass: "form-check-input",
-                    attrs: { type: "checkbox", value: "", id: "cat4" },
+                    attrs: {
+                      type: "checkbox",
+                      value: "Category 4",
+                      id: "cat4"
+                    },
                     domProps: {
-                      checked: Array.isArray(_vm.queryCat4)
-                        ? _vm._i(_vm.queryCat4, "") > -1
-                        : _vm.queryCat4
+                      checked: Array.isArray(_vm.checkedCategories)
+                        ? _vm._i(_vm.checkedCategories, "Category 4") > -1
+                        : _vm.checkedCategories
                     },
                     on: {
                       change: [
                         function($event) {
-                          var $$a = _vm.queryCat4,
+                          var $$a = _vm.checkedCategories,
                             $$el = $event.target,
                             $$c = $$el.checked ? true : false
                           if (Array.isArray($$a)) {
-                            var $$v = "",
+                            var $$v = "Category 4",
                               $$i = _vm._i($$a, $$v)
                             if ($$el.checked) {
-                              $$i < 0 && (_vm.queryCat4 = $$a.concat([$$v]))
+                              $$i < 0 &&
+                                (_vm.checkedCategories = $$a.concat([$$v]))
                             } else {
                               $$i > -1 &&
-                                (_vm.queryCat4 = $$a
+                                (_vm.checkedCategories = $$a
                                   .slice(0, $$i)
                                   .concat($$a.slice($$i + 1)))
                             }
                           } else {
-                            _vm.queryCat4 = $$c
+                            _vm.checkedCategories = $$c
                           }
                         },
                         _vm.callFiltering
@@ -40813,37 +40867,42 @@ var render = function() {
                       {
                         name: "model",
                         rawName: "v-model.lazy",
-                        value: _vm.queryCat5,
-                        expression: "queryCat5",
+                        value: _vm.checkedCategories,
+                        expression: "checkedCategories",
                         modifiers: { lazy: true }
                       }
                     ],
                     staticClass: "form-check-input",
-                    attrs: { type: "checkbox", value: "", id: "cat5" },
+                    attrs: {
+                      type: "checkbox",
+                      value: "Category 5",
+                      id: "cat5"
+                    },
                     domProps: {
-                      checked: Array.isArray(_vm.queryCat5)
-                        ? _vm._i(_vm.queryCat5, "") > -1
-                        : _vm.queryCat5
+                      checked: Array.isArray(_vm.checkedCategories)
+                        ? _vm._i(_vm.checkedCategories, "Category 5") > -1
+                        : _vm.checkedCategories
                     },
                     on: {
                       change: [
                         function($event) {
-                          var $$a = _vm.queryCat5,
+                          var $$a = _vm.checkedCategories,
                             $$el = $event.target,
                             $$c = $$el.checked ? true : false
                           if (Array.isArray($$a)) {
-                            var $$v = "",
+                            var $$v = "Category 5",
                               $$i = _vm._i($$a, $$v)
                             if ($$el.checked) {
-                              $$i < 0 && (_vm.queryCat5 = $$a.concat([$$v]))
+                              $$i < 0 &&
+                                (_vm.checkedCategories = $$a.concat([$$v]))
                             } else {
                               $$i > -1 &&
-                                (_vm.queryCat5 = $$a
+                                (_vm.checkedCategories = $$a
                                   .slice(0, $$i)
                                   .concat($$a.slice($$i + 1)))
                             }
                           } else {
-                            _vm.queryCat5 = $$c
+                            _vm.checkedCategories = $$c
                           }
                         },
                         _vm.callFiltering
@@ -41156,7 +41215,7 @@ var render = function() {
               ])
             : _vm._e(),
           _vm._v(" "),
-          _vm.ready
+          _vm.ready && _vm.properties.length
             ? _c(
                 "div",
                 { staticClass: "card-body" },
@@ -41310,13 +41369,51 @@ var render = function() {
                 ],
                 2
               )
+            : _vm.properties.length < 1
+            ? _c("div", { staticClass: "container" }, [_vm._m(1)])
             : _vm._e()
         ])
       ])
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-header" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn dropdown-toggle",
+          attrs: {
+            type: "button",
+            "data-toggle": "collapse",
+            "data-target": "#filters",
+            "aria-expanded": "true",
+            "aria-controls": "filters"
+          }
+        },
+        [
+          _vm._v(
+            "\n                    Modify your search and find your home!\n                    "
+          )
+        ]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col text-center mt-2" }, [
+      _c("h5", { staticClass: "text-muted" }, [
+        _vm._v("There are no results with the current search options.")
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 
