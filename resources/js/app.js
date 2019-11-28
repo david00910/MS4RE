@@ -10,13 +10,17 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+// Local components (own)
 import Pagination from './components/misc/Pagination';
 import User from './components/self_service/User';
 import MyProperties from "./components/self_service/MyProperties";
+import CreateProperties from "./components/properties/CreateProperties";
+
+// Third party, installed components
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
 import VueSlider from 'vue-slider-component';
 import 'vue-slider-component/theme/default.css';
-
+import VueDawa from '@ancaio/vue-dawa/sfc';
 
 // use default options
 // Numeral filter for outputs
@@ -47,7 +51,10 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('pagination', Pagination);
 Vue.component('user', User);
 Vue.component('myproperties', MyProperties);
-Vue.component('vue-slider', VueSlider)
+Vue.component('createproperties', CreateProperties);
+
+Vue.component('vue-slider', VueSlider);
+Vue.component('vue-dawa', VueDawa);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -57,4 +64,5 @@ Vue.component('vue-slider', VueSlider)
 
 const app = new Vue({
     el: '#app',
+
 });

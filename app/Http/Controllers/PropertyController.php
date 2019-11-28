@@ -18,13 +18,12 @@ class PropertyController extends Controller
 
     protected function indexData()
     {
-
         $client = new Client();
-        $response = $client->request('GET', '');
-        $statusCode = $response->getStatusCode();
-        $body = $response->getBody()->getContents();
+        //$response = $client->request('GET', '');// @TODO: Write a script that retrieves data per property from the API based on UnitID, which gets saved in the database on property registration.
+        //$statusCode = $response->getStatusCode();
+        $body = 'bab';//$response->getBody()->getContents();
 
-        dd($body);
+        //dd($body);
 
         try {
             $property = Property::with('files')->with('propertycategories')->orderBy('created_at', 'ASC')->paginate(12);
@@ -50,5 +49,22 @@ class PropertyController extends Controller
         return response()->json(
           $response, 200
         );
+    }
+
+    protected function create() {
+
+        /*$client = new Client();
+        $response = $client->request('GET', '');// Getting the autocomplete function from the DAWA API.
+        $statusCode = $response->getStatusCode();
+        $body =  $response->getBody()->getContents();
+
+        //dd($body);*/
+
+        return view('model.property.create');
+    }
+
+    protected function bbrBaseUrl() {
+
+
     }
 }

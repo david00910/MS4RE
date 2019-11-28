@@ -11,6 +11,8 @@
 |
 */
 
+
+
 // PUBLIC ROUTES
 
 Auth::routes();
@@ -41,6 +43,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('storeSoftDeleteUser', 'SelfServiceController@storeSoftDeleteUser');
     });
 
+    // Authenticated property handling routes (e.g. "create property")
+
+    Route::prefix('property/')->group(function () {
+
+        Route::get('create', 'PropertyController@create')->name('create.property');
+        Route::get('bbrBaseUrl', 'PropertyController@bbrBaseUrl')->name('bbrBaseUrl');
+
+    });
 
 
 });
