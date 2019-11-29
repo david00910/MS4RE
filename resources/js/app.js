@@ -48,6 +48,7 @@ Vue.prototype.$csrf = window.Laravel.csrfToken;
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 Vue.component('properties', require('./components/properties/Properties.vue').default);
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.prototype.$dawa = require('dawa-autocomplete2');
 Vue.component('pagination', Pagination);
 Vue.component('user', User);
 Vue.component('myproperties', MyProperties);
@@ -64,5 +65,8 @@ Vue.component('vue-dawa', VueDawa);
 
 const app = new Vue({
     el: '#app',
+    components: {
+        VueDawa
+    }
 
 });
