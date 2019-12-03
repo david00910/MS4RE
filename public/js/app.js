@@ -2432,29 +2432,209 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      address: null,
-      selectedAddress: null,
-      selectedAddressArray: null
+      addressObject: {
+        addressLine: ''
+      },
+      description: null,
+      price: null,
+      brutto: null,
+      netto: null,
+      own_exp: null,
+      deposit: null,
+      sqm_price: null,
+      errors: [],
+      loading: false
     };
   },
-  mounted: function mounted() {
-    //console.log('Component mounted.');
+  mounted: function mounted() {//console.log('Component mounted.');
     // Getting BBR autocomplete from DAWA API
-    var self = this;
-    this.$dawa.dawaAutocomplete(document.getElementById('dawa-autocomplete-input'), {
-      select: function select(selected) {
-        console.log(selected.tekst);
-        self.selectedAddress = selected.tekst;
-        self.selectedAddressArray = selected.data;
-      }
-    });
+
+    /* var self = this;
+     this.$dawa.dawaAutocomplete(document.getElementById('dawa-autocomplete-input'), {
+         select: function (selected) {
+             console.log(selected.tekst);
+             self.selectedAddress = selected.tekst;
+             self.selectedAddressArray = selected.data;
+         }
+     });*/
   },
   created: function created() {},
-  methods: {}
+  methods: {
+    // handle the select event emitted by vue-dawa
+    selectItem: function selectItem(payload, objectName) {
+      this.$set(this, objectName, this.translateData(payload));
+    },
+    // here the event payload is of the type "adresse"
+    translateData: function translateData(address) {
+      if (!address || !address.data) {
+        return;
+      }
+
+      return {
+        id: address.data.id,
+        street: address.data.vejnavn,
+        streetNumber: address.data.husnr,
+        floor: address.data.etage,
+        door: address.data.dør,
+        zipCode: address.data.postnr,
+        city: address.data.postnrnavn,
+        oneLineAddress: address.tekst
+      };
+    },
+    checkForm: function checkForm(e) {
+      var _this = this;
+
+      if (this.addressObject.id && this.description && this.price && this.brutto && this.netto && this.own_exp && this.deposit && this.sqm_price) {
+        this.loading = true;
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('store', {
+          address_id: this.addressObject.id,
+          description: this.description,
+          price: this.price,
+          brutto: this.brutto,
+          netto: this.netto,
+          own_exp: this.own_exp,
+          deposit: this.deposit,
+          sqm_price: this.sqm_price
+        }).then(function (response) {
+          console.log(response.data);
+          console.log(response.errors);
+          _this.output = response.data;
+          _this.errors = response.errors;
+          _this.loading = false;
+          _this.showEditField = false;
+        })["catch"](function (response) {
+          console.log(response);
+          _this.loading = false;
+        });
+      }
+
+      this.errors = [];
+
+      if (!this.addressObject.id) {
+        this.errors.push('The address field is empty.');
+      }
+
+      if (!this.description) {
+        this.errors.push('The description field is empty.');
+      }
+
+      if (!this.price) {
+        this.errors.push('The price field is empty');
+      }
+
+      if (!this.brutto) {
+        this.errors.push('The brutto price field is empty');
+      }
+
+      if (!this.netto) {
+        this.errors.push('The netto price field is empty');
+      }
+
+      if (!this.own_exp) {
+        this.errors.push("The owner's expense field is empty");
+      }
+
+      if (!this.deposit) {
+        this.errors.push('The deposit field is empty');
+      }
+
+      if (!this.sqm_price) {
+        this.errors.push('The square metre price field is empty');
+      }
+
+      e.preventDefault();
+    }
+  }
 });
 
 /***/ }),
@@ -45243,76 +45423,337 @@ var render = function() {
   return _c("div", { staticClass: "container" }, [
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col" }, [
-        _c("form", [
-          _c("div", { staticClass: "form-group" }, [
-            _c("label", { attrs: { for: "dawa-autocomplete-input" } }, [
-              _vm._v("Address")
-            ]),
-            _vm._v(" "),
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.address,
-                  expression: "address"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: {
-                type: "search",
-                autocomplete: "off",
-                "aria-describedby": "addressHelp",
-                placeholder:
-                  "Start typing the address and select from the list..",
-                id: "dawa-autocomplete-input"
-              },
-              domProps: { value: _vm.address },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.address = $event.target.value
-                }
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "card" }, [
-            _c("div", { staticClass: "card-header" }, [
-              _vm._v("Your property")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "card-body" }, [
-              _c("div", { staticClass: "row" }, [
-                _c("div", { staticClass: "col" }, [
-                  _c("h5", [_vm._v("Address:")]),
-                  _vm._v(
-                    " " +
-                      _vm._s(_vm.selectedAddress) +
-                      "\n                        "
-                  )
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col" }, [
-                  _c("h6", [_vm._v("General information:")]),
-                  _vm._v(
-                    " " +
-                      _vm._s(_vm.selectedAddressArray) +
-                      "\n                        "
+        _c(
+          "form",
+          {
+            attrs: { id: "app", method: "post" },
+            on: { submit: _vm.checkForm }
+          },
+          [
+            _vm.errors.length
+              ? _c("h6", [
+                  _c("p", [_vm._v("Please correct the following error(s):")]),
+                  _vm._v(" "),
+                  _c(
+                    "ul",
+                    _vm._l(_vm.errors, function(error) {
+                      return _c("li", [_vm._v(_vm._s(error))])
+                    }),
+                    0
                   )
                 ])
+              : _vm._e(),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "form-group", attrs: { id: "addressContainer" } },
+              [
+                _c(
+                  "vue-dawa",
+                  {
+                    attrs: {
+                      val: _vm.addressObject.addressLine,
+                      showMax: 10,
+                      placeholder: "Start typing the address",
+                      containerId: "addressContainer",
+                      fieldClasses: "form-control",
+                      fieldId: "address",
+                      fieldName: "address"
+                    },
+                    on: {
+                      select: function($event) {
+                        return _vm.selectItem($event, "addressObject")
+                      }
+                    }
+                  },
+                  [
+                    _c(
+                      "label",
+                      {
+                        attrs: { slot: "label-top", for: "field-2" },
+                        slot: "label-top"
+                      },
+                      [_vm._v("Address")]
+                    )
+                  ]
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "h5",
+              {
+                model: {
+                  value: _vm.addressObject.id,
+                  callback: function($$v) {
+                    _vm.$set(_vm.addressObject, "id", $$v)
+                  },
+                  expression: "addressObject.id"
+                }
+              },
+              [_vm._v(_vm._s(_vm.addressObject.id))]
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "description" } }, [
+                _vm._v("Description")
+              ]),
+              _vm._v(" "),
+              _c("textarea", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.description,
+                    expression: "description"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: {
+                  "aria-describedby": "descriptionHelp",
+                  placeholder: "Describe the property you would like to sell",
+                  id: "description"
+                },
+                domProps: { value: _vm.description },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.description = $event.target.value
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-sm" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "price" } }, [
+                    _vm._v("Price (DKK)")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.price,
+                        expression: "price"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "number",
+                      autocomplete: "off",
+                      "aria-describedby": "priceHelp",
+                      placeholder: "The price in DKK",
+                      id: "price"
+                    },
+                    domProps: { value: _vm.price },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.price = $event.target.value
+                      }
+                    }
+                  })
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-sm" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "brutto" } }, [
+                    _vm._v("Brutto (DKK)")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.brutto,
+                        expression: "brutto"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "number",
+                      autocomplete: "off",
+                      "aria-describedby": "bruttoHelp",
+                      placeholder: "The brutto price in DKK",
+                      id: "brutto"
+                    },
+                    domProps: { value: _vm.brutto },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.brutto = $event.target.value
+                      }
+                    }
+                  })
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-sm" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "netto" } }, [
+                    _vm._v("Netto (DKK)")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.netto,
+                        expression: "netto"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "number",
+                      autocomplete: "off",
+                      "aria-describedby": "nettoHelp",
+                      placeholder: "The netto price in DKK",
+                      id: "netto"
+                    },
+                    domProps: { value: _vm.netto },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.netto = $event.target.value
+                      }
+                    }
+                  })
+                ])
               ])
-            ])
-          ]),
-          _vm._v(" "),
-          _c(
-            "button",
-            { staticClass: "btn btn-primary", attrs: { type: "submit" } },
-            [_vm._v("Submit")]
-          )
-        ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-sm" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "own_exp" } }, [
+                    _vm._v("Owner's Expense (DKK)")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.own_exp,
+                        expression: "own_exp"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "number",
+                      autocomplete: "off",
+                      "aria-describedby": "ownExpHelp",
+                      placeholder: "The owner's expense in DKK",
+                      id: "own_exp"
+                    },
+                    domProps: { value: _vm.own_exp },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.own_exp = $event.target.value
+                      }
+                    }
+                  })
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-sm" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "deposit" } }, [
+                    _vm._v("Deposit (DKK)")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.deposit,
+                        expression: "deposit"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "number",
+                      autocomplete: "off",
+                      "aria-describedby": "depositHelp",
+                      placeholder: "The deposit in DKK",
+                      id: "deposit"
+                    },
+                    domProps: { value: _vm.deposit },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.deposit = $event.target.value
+                      }
+                    }
+                  })
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-sm" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "sqm_price" } }, [
+                    _vm._v("m2 price (DKK)")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.sqm_price,
+                        expression: "sqm_price"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "number",
+                      autocomplete: "off",
+                      "aria-describedby": "sqmPriceHelp",
+                      placeholder: "The square metre price in DKK",
+                      id: "sqm_price"
+                    },
+                    domProps: { value: _vm.sqm_price },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.sqm_price = $event.target.value
+                      }
+                    }
+                  })
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "button",
+              { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+              [_vm._v("Submit")]
+            )
+          ]
+        )
       ])
     ])
   ])

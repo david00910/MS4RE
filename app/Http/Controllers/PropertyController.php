@@ -6,8 +6,11 @@ use Illuminate\Http\Request;
 use App\Property;
 use App\PropertyCategories;
 use Illuminate\Database;
+use App\User;
+use Illuminate\Support\Facades\Auth;
 use Exception;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Validator;
 
 class PropertyController extends Controller
 {
@@ -53,18 +56,53 @@ class PropertyController extends Controller
 
     protected function create() {
 
-        /*$client = new Client();
-        $response = $client->request('GET', '');// Getting the autocomplete function from the DAWA API.
-        $statusCode = $response->getStatusCode();
-        $body =  $response->getBody()->getContents();
-
-        //dd($body);*/
-
         return view('model.property.create');
     }
 
-    protected function bbrBaseUrl() {
+    protected function store(Request $request) {
+
+        $user = Auth::user()->getAuthIdentifier();
+
+        Validator::make($request->all(), [
+            'address_id' => 'required',
+            'description' => 'required',
+            'price' => 'required',
+            'brutto' => 'required',
+            'netto' => 'required',
+            'own_exp' => 'required',
+            'deposit' => 'required',
+            'sqm_price' => 'required',
+        ]);
+
+
+        try {
+
+            $property = new Property();
+            $property->address_id = $request->address_id;
+            $property->description = $request->description;
+            $property->price = $request->price;
+            $property->brutto = $request->brutto;
+            $property->netto = $request->netto;
+            $property->own_exp = $request->own_exp;
+            $property->deposit = $request->deposit;
+            $property->sqm_price = $request->sqm_price;
+            $property->created_by = $user;
+            $property->save();
+
+
+        }
+
+        catch(Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'msg' => $e
+            ], 400);
+
+        }
+
+        return response()->json(['status' => 'You have successfully created your property for sale. We will contact you shortly.'], 200);
 
 
     }
+
 }

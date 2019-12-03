@@ -2,29 +2,115 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <form>
-                    <div class="form-group">
+
+                <form @submit="checkForm" id="app" method="post">
+
+
+                    <h6 v-if="errors.length">
+                        <p>Please correct the following error(s):</p>
+                        <ul>
+                            <li v-for="error in errors">{{ error }}</li>
+                        </ul>
+                    </h6>
+
+                    <!--<div class="form-group" v-if="!selectedAddressArray.id">
                         <label for="dawa-autocomplete-input">Address</label>
                         <input class="form-control" type="search" autocomplete="off" v-model="address"
                                aria-describedby="addressHelp"
-                               placeholder="Start typing the address and select from the list.."
+                               placeholder="Start typing the address"
                                id="dawa-autocomplete-input">
+                    </div>-->
+
+                    <div class="form-group" id="addressContainer">
+                        <vue-dawa @select="selectItem($event, 'addressObject')"
+                                  :val="addressObject.addressLine"
+                                  :showMax="10"
+                                  placeholder="Start typing the address"
+                                  containerId="addressContainer"
+                                  fieldClasses="form-control"
+                                  fieldId="address"
+                                  fieldName="address">
+                            <label slot="label-top" for="field-2">Address</label>
+                        </vue-dawa>
                     </div>
 
-                    <div class="card" >
-                        <div class="card-header">Your property</div>
-                        <div class="card-body">
-                            <div class="row">
-                            <div class="col">
-                            <h5>Address:</h5> {{selectedAddress}}
+                    <h5 v-model="addressObject.id">{{addressObject.id}}</h5>
+
+
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea class="form-control" v-model="description"
+                                  aria-describedby="descriptionHelp"
+                                  placeholder="Describe the property you would like to sell"
+                                  id="description"></textarea>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label for="price">Price (DKK)</label>
+                                <input class="form-control" type="number" autocomplete="off" v-model="price"
+                                       aria-describedby="priceHelp"
+                                       placeholder="The price in DKK"
+                                       id="price">
                             </div>
-                            <div class="col">
-                                <h6>General information:</h6> {{selectedAddressArray}}
+                        </div>
+
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label for="brutto">Brutto (DKK)</label>
+                                <input class="form-control" type="number" autocomplete="off" v-model="brutto"
+                                       aria-describedby="bruttoHelp"
+                                       placeholder="The brutto price in DKK"
+                                       id="brutto">
                             </div>
+                        </div>
+
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label for="netto">Netto (DKK)</label>
+                                <input class="form-control" type="number" autocomplete="off" v-model="netto"
+                                       aria-describedby="nettoHelp"
+                                       placeholder="The netto price in DKK"
+                                       id="netto">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label for="own_exp">Owner's Expense (DKK)</label>
+                                <input class="form-control" type="number" autocomplete="off" v-model="own_exp"
+                                       aria-describedby="ownExpHelp"
+                                       placeholder="The owner's expense in DKK"
+                                       id="own_exp">
+                            </div>
+                        </div>
+
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label for="deposit">Deposit (DKK)</label>
+                                <input class="form-control" type="number" autocomplete="off" v-model="deposit"
+                                       aria-describedby="depositHelp"
+                                       placeholder="The deposit in DKK"
+                                       id="deposit">
+                            </div>
+                        </div>
+
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label for="sqm_price">m2 price (DKK)</label>
+                                <input class="form-control" type="number" autocomplete="off" v-model="sqm_price"
+                                       aria-describedby="sqmPriceHelp"
+                                       placeholder="The square metre price in DKK"
+                                       id="sqm_price">
                             </div>
                         </div>
                     </div>
-
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
             </div>
@@ -40,23 +126,34 @@
 
         data: function () {
             return {
-                address: null,
-                selectedAddress: null,
-                selectedAddressArray: null,
+                addressObject: {
+                    addressLine: ''
+                },
+                description: null,
+                price: null,
+                brutto: null,
+                netto: null,
+                own_exp: null,
+                deposit: null,
+                sqm_price: null,
+
+                errors: [],
+                loading: false,
+
             }
         },
 
         mounted() {
             //console.log('Component mounted.');
             // Getting BBR autocomplete from DAWA API
-            var self = this;
-            this.$dawa.dawaAutocomplete(document.getElementById('dawa-autocomplete-input'), {
-                select: function (selected) {
-                    console.log(selected.tekst);
-                    self.selectedAddress = selected.tekst;
-                    self.selectedAddressArray = selected.data;
-                }
-            });
+            /* var self = this;
+             this.$dawa.dawaAutocomplete(document.getElementById('dawa-autocomplete-input'), {
+                 select: function (selected) {
+                     console.log(selected.tekst);
+                     self.selectedAddress = selected.tekst;
+                     self.selectedAddressArray = selected.data;
+                 }
+             });*/
 
         },
 
@@ -64,7 +161,101 @@
 
         },
 
-        methods: {},
+        methods: {
+
+            // handle the select event emitted by vue-dawa
+            selectItem (payload, objectName) {
+                this.$set(this, objectName, this.translateData(payload))
+            },
+
+            // here the event payload is of the type "adresse"
+            translateData(address) {
+                if (!address || !address.data) {
+                    return
+                }
+                return {
+                    id: address.data.id,
+                    street: address.data.vejnavn,
+                    streetNumber: address.data.husnr,
+                    floor: address.data.etage,
+                    door: address.data.dør,
+                    zipCode: address.data.postnr,
+                    city: address.data.postnrnavn,
+                    oneLineAddress: address.tekst
+                }
+            },
+
+            checkForm: function (e) {
+                if (this.addressObject.id && this.description && this.price && this.brutto && this.netto && this.own_exp && this.deposit && this.sqm_price) {
+
+                        this.loading = true;
+
+                        axios.post('store', {
+                            address_id: this.addressObject.id,
+                            description: this.description,
+                            price: this.price,
+                            brutto: this.brutto,
+                            netto: this.netto,
+                            own_exp: this.own_exp,
+                            deposit: this.deposit,
+                            sqm_price:this.sqm_price
+
+                        })
+
+                            .then(response => {
+                                console.log(response.data);
+                                console.log(response.errors);
+                                this.output = response.data;
+                                this.errors = response.errors;
+                                this.loading = false;
+                                this.showEditField = false;
+
+                            })
+                            .catch(response => {
+                                console.log(response);
+                                this.loading = false;
+                            })
+
+                }
+
+                this.errors = [];
+
+                if (!this.addressObject.id) {
+                    this.errors.push('The address field is empty.')
+                }
+
+                if (!this.description) {
+                    this.errors.push('The description field is empty.')
+                }
+
+                if (!this.price) {
+                    this.errors.push('The price field is empty')
+                }
+
+                if (!this.brutto) {
+                    this.errors.push('The brutto price field is empty')
+                }
+
+                if (!this.netto) {
+                    this.errors.push('The netto price field is empty')
+                }
+
+                if (!this.own_exp) {
+                    this.errors.push("The owner's expense field is empty")
+                }
+
+                if (!this.deposit) {
+                    this.errors.push('The deposit field is empty')
+                }
+
+                if (!this.sqm_price) {
+                    this.errors.push('The square metre price field is empty')
+                }
+                e.preventDefault();
+            },
+
+
+        },
 
 
     }

@@ -47,8 +47,10 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::prefix('property/')->group(function () {
 
+        // Return the create view
         Route::get('create', 'PropertyController@create')->name('create.property');
-        Route::get('bbrBaseUrl', 'PropertyController@bbrBaseUrl')->name('bbrBaseUrl');
+        // Store property
+        Route::post('store', 'PropertyController@store');
 
     });
 
