@@ -23,11 +23,12 @@ class SearchController extends Controller
         $sqmMin = $request->querySqmPriceFrom;
         $sqmMax = $request->querySqmPriceTo;
         $category = $request->queryCategory;
+        $expression = $request->queryExpression;
 
 
         try {
             if($request->queryCategory !== null) {
-                $property = Property::with('files')->with('propertycategories')->orderBy('price', 'ASC')
+                $property = Property::with('files')->with('propertycategories')->with('address')->orderBy('price', 'ASC')
                     ->whereBetween('price', [$priceMin, $priceMax])
                     ->WhereBetween('brutto', [$bruttoMin, $bruttoMax])
                     ->WhereBetween('netto', [$nettoMin, $nettoMax])
@@ -49,8 +50,73 @@ class SearchController extends Controller
                     'data' => $property
                 ];
             }
-            else { // @TODO: LATER FIND A BETTER SOLUTION FOR CHECKING IF THERE IS A CATEGORY REQUEST!!!
-                $property = Property::with('files')->with('propertycategories')->orderBy('price', 'ASC')
+            elseif ($request->queryExpression !== null) {
+                $property = Property::with('files')->with('propertycategories')->with('address')->orderBy('price', 'ASC')
+                    ->whereBetween('price', [$priceMin, $priceMax])
+                    ->WhereBetween('brutto', [$bruttoMin, $bruttoMax])
+                    ->WhereBetween('netto', [$nettoMin, $nettoMax])
+                    ->WhereBetween('own_exp', [$ownExpMin, $ownExpMax])
+                    ->WhereBetween('sqm_price', [$sqmMin, $sqmMax])
+                    ->where('description', 'LIKE', "%{$expression}%")
+                    ->orWhereHas('address', function ($q) use ($expression) {
+                        $q->where('fulladdress', 'LIKE', "%{$expression}");
+                        $q->orWhere('street', 'LIKE', "%{$expression}%");
+                        $q->orWhere('door', 'LIKE', "%{$expression}%");
+                        $q->orWhere('floor', 'LIKE', "%{$expression}%");
+                        $q->orWhere('housenr', 'LIKE', "%{$expression}%");
+                        $q->orWhere('postcode', 'LIKE', "%{$expression}%");
+                        $q->orWhere('city', 'LIKE', "%{$expression}%");
+                    })
+                    ->paginate(12);
+                $response = [
+                    'pagination' => [
+                        'total' => $property->total(),
+                        'per_page' => $property->perPage(),
+                        'current_page' => $property->currentPage(),
+                        'last_page' => $property->lastPage(),
+                        'from' => $property->firstItem(),
+                        'to' => $property->lastItem()
+                    ],
+                    'data' => $property
+                ];
+            }
+
+            elseif ($request->queryExpression !== null && $request->queryCategory !== null) {
+                $property = Property::with('files')->with('propertycategories')->with('address')->orderBy('price', 'ASC')
+                    ->whereBetween('price', [$priceMin, $priceMax])
+                    ->WhereBetween('brutto', [$bruttoMin, $bruttoMax])
+                    ->WhereBetween('netto', [$nettoMin, $nettoMax])
+                    ->WhereBetween('own_exp', [$ownExpMin, $ownExpMax])
+                    ->WhereBetween('sqm_price', [$sqmMin, $sqmMax])
+                    ->where('description', 'LIKE', "%{$expression}%")
+                    ->orWhereHas('address', function ($q) use ($expression) {
+                        $q->where('fulladdress', 'LIKE', "%{$expression}");
+                        $q->orWhere('street', 'LIKE', "%{$expression}%");
+                        $q->orWhere('door', 'LIKE', "%{$expression}%");
+                        $q->orWhere('floor', 'LIKE', "%{$expression}%");
+                        $q->orWhere('housenr', 'LIKE', "%{$expression}%");
+                        $q->orWhere('postcode', 'LIKE', "%{$expression}%");
+                        $q->orWhere('city', 'LIKE', "%{$expression}%");
+                    })
+                    ->whereHas('propertycategories', function ($q) use ($category) {
+                        $q->whereIn('category', $category);
+                    })
+                    ->paginate(12);
+                $response = [
+                    'pagination' => [
+                        'total' => $property->total(),
+                        'per_page' => $property->perPage(),
+                        'current_page' => $property->currentPage(),
+                        'last_page' => $property->lastPage(),
+                        'from' => $property->firstItem(),
+                        'to' => $property->lastItem()
+                    ],
+                    'data' => $property
+                ];
+            }
+
+            else {
+                $property = Property::with('files')->with('propertycategories')->with('address')->orderBy('price', 'ASC')
                     ->whereBetween('price', [$priceMin, $priceMax])
                     ->WhereBetween('brutto', [$bruttoMin, $bruttoMax])
                     ->WhereBetween('netto', [$nettoMin, $nettoMax])

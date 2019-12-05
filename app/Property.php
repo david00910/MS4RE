@@ -21,5 +21,9 @@ class Property extends Model
         return $this->hasMany('App\PropertyFiles', 'property_id', 'id');
     }
 
+    public function address() {
+        return $this->hasOne('App\Address', 'id');
+    }
+
 
 }

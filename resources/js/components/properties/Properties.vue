@@ -5,11 +5,24 @@
             <div class="accordion">
                 <div class="card">
                     <div class="card-header">
-                        <button class="btn dropdown-toggle" type="button" data-toggle="collapse" data-target="#filters" aria-expanded="true" aria-controls="filters">
-                        Modify your search and find your home!
+                        <button class="btn dropdown-toggle" type="button" data-toggle="collapse" data-target="#filters"
+                                aria-expanded="true" aria-controls="filters">
+                            Modify your search and find your home!
                         </button>
                     </div>
                     <div class="card-body" id="filters">
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <i class="fas fa-search"></i>
+                                    <input class="form-control" @input="callFiltering"
+                                           v-model.lazy="expressionQuery" type="text"
+                                           id="expressionQuery" placeholder="Search by address: street, door, house nr., city, postcode, etc...">
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
 
                         <div class="row text-center">
                             <div class="col">
@@ -169,9 +182,11 @@
                             </li>-->
 
                             <li class="list-group-item">
-                                <h5>ID:</h5> {{ property.id }}
+                                <h5>Address:</h5> {{ property.address.street }} {{property.address.housenr}},
+                                {{property.address.floor}}. {{property.address.door}}, {{property.address.zipCode}}
+                                {{property.address.city}}
                             </li>
-                            <li class="list-group-item">
+                            <li class="list-group-item" style="white-space: pre-wrap !important;">
                                 <h5>Description:</h5> {{ property.description}}
                             </li>
                             <li class="list-group-item" v-for="category in property.propertycategories">
@@ -230,30 +245,31 @@
         data: function () {
             return {
                 searchInProgress: false, // if this is true, the pagination is rendered for the filtered results only.
+                expressionQuery: '', // Main search query
                 checkedCategories: [], // saving the checked categories so we can send it with the filter request (if there are any checked filters, controlled in the fetchFilter() function)
                 queryPrice: [100000, 55000000], // multi-range slider for the price filter query
                 priceOptions: { // array of options for the price slider component
                     min: 100000,
                     max: 55000000,
-                    minRange: 100000
+                    minRange: 1000000
                 },
                 queryBrutto: [100000, 55000000],
                 bruttoOptions: { // array of options for the brutto price slider component
                     min: 100000,
                     max: 55000000,
-                    minRange: 100000
+                    minRange: 1000000
                 },
                 queryNetto: [100000, 55000000],
                 nettoOptions: { // array of options for the netto price slider component
                     min: 100000,
                     max: 55000000,
-                    minRange: 100000
+                    minRange: 1000000
                 },
                 queryOwnExp: [1000, 500000],
                 ownExpOptions: { // array of options for the owner expense price slider component
                     min: 1000,
                     max: 500000,
-                    minRange: 1000
+                    minRange: 10000
                 },
                 querySqmPrice: [100, 20000],
                 sqmPriceOptions: { // array of options for the sqm price price slider component
@@ -268,8 +284,19 @@
                     own_exp: null,
                     sqm_price: null,
                     propertycategories: {
-                        category: '',
-                        description: '',
+                        category: null,
+                        description: null,
+                        address: {
+                            street: null,
+                            door: null,
+                            floor: null,
+                            housenr: null,
+                            zipCode: null,
+                            city: null,
+                            //status: null,
+                            //x: null,
+                            //y: null
+                        },
                     }
                 }],
                 ready: false,
@@ -300,7 +327,7 @@
                 this.loading = true;
                 axios.get('/properties?page=' + this.pagination.current_page)
                     .then(res => {
-                        console.log(res.data.bbr);
+                        //console.log(res.data.data);
                         this.properties = res.data.data.data;
                         this.pagination = res.data.pagination;
                         this.loading = false;
@@ -316,20 +343,7 @@
                 });
             },
 
-            /*getCategories() {
-                axios.get('/categories')
-                    .then(res => {
-                        console.log(res.data);
-                        this.ready = false;
-                        this.categories = res.data;
-                        this.ready = true;
 
-                    }).catch(error => {
-                    this.error = error.data;
-                    this.ready = false;
-                    this.hasError = true;
-                });
-            },*/
             // this computed property runs when a filter change triggers it, avoiding multiple requests on every single move of the slider pin.
             callFiltering: _.debounce(function () {
                 this.fetchFiltered();
@@ -352,6 +366,7 @@
                         querySqmPriceFrom: this.querySqmPrice[0],
                         querySqmPriceTo: this.querySqmPrice[1],
                         queryCategory: this.checkedCategories.length ? this.checkedCategories : null, // checking with a ternary operator if any of the boxes are checked. If not, send a null value.
+                        queryExpression: this.expressionQuery.length ? this.expressionQuery : null
                     }
                 })
                     .then(response => {

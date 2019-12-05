@@ -192,6 +192,12 @@
 
                         axios.post('store', {
                             address_id: this.addressObject.id,
+                            street: this.addressObject.street,
+                            door: this.addressObject.door,
+                            floor: this.addressObject.floor,
+                            housenr: this.addressObject.streetNumber,
+                            postcode: this.addressObject.zipCode,
+                            city: this.addressObject.city,
                             description: this.description,
                             price: this.price,
                             brutto: this.brutto,

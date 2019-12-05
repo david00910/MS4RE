@@ -2578,6 +2578,12 @@ __webpack_require__.r(__webpack_exports__);
         this.loading = true;
         axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('store', {
           address_id: this.addressObject.id,
+          street: this.addressObject.street,
+          door: this.addressObject.door,
+          floor: this.addressObject.floor,
+          housenr: this.addressObject.streetNumber,
+          postcode: this.addressObject.zipCode,
+          city: this.addressObject.city,
           description: this.description,
           price: this.price,
           brutto: this.brutto,
@@ -2875,6 +2881,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2882,6 +2903,8 @@ __webpack_require__.r(__webpack_exports__);
     return {
       searchInProgress: false,
       // if this is true, the pagination is rendered for the filtered results only.
+      expressionQuery: '',
+      // Main search query
       checkedCategories: [],
       // saving the checked categories so we can send it with the filter request (if there are any checked filters, controlled in the fetchFilter() function)
       queryPrice: [100000, 55000000],
@@ -2890,28 +2913,28 @@ __webpack_require__.r(__webpack_exports__);
         // array of options for the price slider component
         min: 100000,
         max: 55000000,
-        minRange: 100000
+        minRange: 1000000
       },
       queryBrutto: [100000, 55000000],
       bruttoOptions: {
         // array of options for the brutto price slider component
         min: 100000,
         max: 55000000,
-        minRange: 100000
+        minRange: 1000000
       },
       queryNetto: [100000, 55000000],
       nettoOptions: {
         // array of options for the netto price slider component
         min: 100000,
         max: 55000000,
-        minRange: 100000
+        minRange: 1000000
       },
       queryOwnExp: [1000, 500000],
       ownExpOptions: {
         // array of options for the owner expense price slider component
         min: 1000,
         max: 500000,
-        minRange: 1000
+        minRange: 10000
       },
       querySqmPrice: [100, 20000],
       sqmPriceOptions: {
@@ -2928,8 +2951,19 @@ __webpack_require__.r(__webpack_exports__);
         own_exp: null,
         sqm_price: null,
         propertycategories: {
-          category: '',
-          description: ''
+          category: null,
+          description: null,
+          address: {
+            street: null,
+            door: null,
+            floor: null,
+            housenr: null,
+            zipCode: null,
+            city: null //status: null,
+            //x: null,
+            //y: null
+
+          }
         }
       }],
       ready: false,
@@ -2957,7 +2991,7 @@ __webpack_require__.r(__webpack_exports__);
       this.searchInProgress = false;
       this.loading = true;
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/properties?page=' + this.pagination.current_page).then(function (res) {
-        console.log(res.data.bbr);
+        //console.log(res.data.data);
         _this.properties = res.data.data.data;
         _this.pagination = res.data.pagination;
         _this.loading = false;
@@ -2970,20 +3004,6 @@ __webpack_require__.r(__webpack_exports__);
         _this.hasError = true;
       });
     },
-
-    /*getCategories() {
-        axios.get('/categories')
-            .then(res => {
-                console.log(res.data);
-                this.ready = false;
-                this.categories = res.data;
-                this.ready = true;
-             }).catch(error => {
-            this.error = error.data;
-            this.ready = false;
-            this.hasError = true;
-        });
-    },*/
     // this computed property runs when a filter change triggers it, avoiding multiple requests on every single move of the slider pin.
     callFiltering: lodash__WEBPACK_IMPORTED_MODULE_1___default.a.debounce(function () {
       this.fetchFiltered();
@@ -3006,8 +3026,9 @@ __webpack_require__.r(__webpack_exports__);
           queryOwnExpTo: this.queryOwnExp[1],
           querySqmPriceFrom: this.querySqmPrice[0],
           querySqmPriceTo: this.querySqmPrice[1],
-          queryCategory: this.checkedCategories.length ? this.checkedCategories : null // checking with a ternary operator if any of the boxes are checked. If not, send a null value.
-
+          queryCategory: this.checkedCategories.length ? this.checkedCategories : null,
+          // checking with a ternary operator if any of the boxes are checked. If not, send a null value.
+          queryExpression: this.expressionQuery.length ? this.expressionQuery : null
         }
       }).then(function (response) {
         console.log(_this2.checkedCategories);
@@ -45787,6 +45808,42 @@ var render = function() {
           _vm._m(0),
           _vm._v(" "),
           _c("div", { staticClass: "card-body", attrs: { id: "filters" } }, [
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("i", { staticClass: "fas fa-search" }),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model.lazy",
+                        value: _vm.expressionQuery,
+                        expression: "expressionQuery",
+                        modifiers: { lazy: true }
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      id: "expressionQuery",
+                      placeholder:
+                        "Search by address: street, door, house nr., city, postcode, etc..."
+                    },
+                    domProps: { value: _vm.expressionQuery },
+                    on: {
+                      input: _vm.callFiltering,
+                      change: function($event) {
+                        _vm.expressionQuery = $event.target.value
+                      }
+                    }
+                  })
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
             _c("div", { staticClass: "row text-center" }, [
               _c("div", { staticClass: "col" }, [
                 _c("div", { staticClass: "form-check" }, [
@@ -46419,22 +46476,41 @@ var render = function() {
                       { staticClass: "list-group" },
                       [
                         _c("li", { staticClass: "list-group-item" }, [
-                          _c("h5", [_vm._v("ID:")]),
+                          _c("h5", [_vm._v("Address:")]),
                           _vm._v(
                             " " +
-                              _vm._s(property.id) +
+                              _vm._s(property.address.street) +
+                              " " +
+                              _vm._s(property.address.housenr) +
+                              ",\n                            " +
+                              _vm._s(property.address.floor) +
+                              ". " +
+                              _vm._s(property.address.door) +
+                              ", " +
+                              _vm._s(property.address.zipCode) +
+                              "\n                            " +
+                              _vm._s(property.address.city) +
                               "\n                        "
                           )
                         ]),
                         _vm._v(" "),
-                        _c("li", { staticClass: "list-group-item" }, [
-                          _c("h5", [_vm._v("Description:")]),
-                          _vm._v(
-                            " " +
-                              _vm._s(property.description) +
-                              "\n                        "
-                          )
-                        ]),
+                        _c(
+                          "li",
+                          {
+                            staticClass: "list-group-item",
+                            staticStyle: {
+                              "white-space": "pre-wrap !important"
+                            }
+                          },
+                          [
+                            _c("h5", [_vm._v("Description:")]),
+                            _vm._v(
+                              " " +
+                                _vm._s(property.description) +
+                                "\n                        "
+                            )
+                          ]
+                        ),
                         _vm._v(" "),
                         _vm._l(property.propertycategories, function(category) {
                           return _c("li", { staticClass: "list-group-item" }, [
@@ -46567,7 +46643,7 @@ var staticRenderFns = [
         },
         [
           _vm._v(
-            "\n                    Modify your search and find your home!\n                    "
+            "\n                        Modify your search and find your home!\n                    "
           )
         ]
       )

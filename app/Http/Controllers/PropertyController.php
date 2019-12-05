@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Address;
+use App\Http\Resources\PropertyResource;
 use Illuminate\Http\Request;
 use App\Property;
 use App\PropertyCategories;
@@ -9,6 +11,7 @@ use Illuminate\Database;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Exception;
+
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Validator;
 
@@ -21,15 +24,11 @@ class PropertyController extends Controller
 
     protected function indexData()
     {
-        $client = new Client();
-        //$response = $client->request('GET', '');// @TODO: Write a script that retrieves data per property from the API based on UnitID, which gets saved in the database on property registration.
-        //$statusCode = $response->getStatusCode();
-        $body = 'bab';//$response->getBody()->getContents();
-
-        //dd($body);
 
         try {
-            $property = Property::with('files')->with('propertycategories')->orderBy('created_at', 'ASC')->paginate(12);
+            $property = Property::with('files')->with('propertycategories')->with('address')->orderBy('created_at', 'ASC')->paginate(12);
+            //$property = PropertyResource::collection(Property::orderBy('updated_at', 'DESC')->paginate(12));
+
             $response = [
                 'pagination' => [
                     'total' => $property->total(),
@@ -40,8 +39,8 @@ class PropertyController extends Controller
                     'to' => $property->lastItem()
                 ],
                 'data' => $property,
-                'bbr' => $body
             ];
+
         }
         catch (Exception $e) {
             return response()->json([
@@ -65,6 +64,12 @@ class PropertyController extends Controller
 
         Validator::make($request->all(), [
             'address_id' => 'required',
+            'street' => 'required',
+            'door',
+            'floor',
+            'housenr' => 'required',
+            'postcode' => 'required',
+            'city' => 'required',
             'description' => 'required',
             'price' => 'required',
             'brutto' => 'required',
@@ -77,8 +82,18 @@ class PropertyController extends Controller
 
         try {
 
+            $address = new Address();
+            $address->address_uuid = $request->address_id;
+            $address->street = $request->street;
+            $address->fulladdress = $request->street.' '.$request->housenr.' '.$request->floor.' '.$request->door.' '.$request->postcode.' '.$request->city;
+            $address->door = $request->door;
+            $address->floor = $request->floor;
+            $address->housenr = $request->housenr;
+            $address->postcode = $request->postcode;
+            $address->city = $request->city;
+            $address->save();
+
             $property = new Property();
-            $property->address_id = $request->address_id;
             $property->description = $request->description;
             $property->price = $request->price;
             $property->brutto = $request->brutto;
@@ -87,6 +102,7 @@ class PropertyController extends Controller
             $property->deposit = $request->deposit;
             $property->sqm_price = $request->sqm_price;
             $property->created_by = $user;
+            $property->address_id = $address->id;
             $property->save();
 
 
