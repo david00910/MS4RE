@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use http\Env\Response;
 use Illuminate\Http\Request;
 use App\Property;
+use Laravel\Scout\Searchable;
 use App\PropertyCategories;
 
 
 class SearchController extends Controller
 {
+
     protected function search(Request $request) {
 
         $priceMin = $request->queryPriceFrom;
@@ -22,18 +24,21 @@ class SearchController extends Controller
         $ownExpMax = $request->queryOwnExpTo;
         $sqmMin = $request->querySqmPriceFrom;
         $sqmMax = $request->querySqmPriceTo;
+        $depositMin = $request->queryDepositFrom;
+        $depositMax = $request->queryDepositTo;
         $category = $request->queryCategory;
         $expression = $request->queryExpression;
 
 
         try {
             if($request->queryCategory !== null) {
-                $property = Property::with('files')->with('propertycategories')->with('address')->orderBy('price', 'ASC')
+                $property = Property::with('files')->with('propertycategories')->with('address')->orderBy('created_at', 'DESC')
                     ->whereBetween('price', [$priceMin, $priceMax])
                     ->WhereBetween('brutto', [$bruttoMin, $bruttoMax])
                     ->WhereBetween('netto', [$nettoMin, $nettoMax])
                     ->WhereBetween('own_exp', [$ownExpMin, $ownExpMax])
                     ->WhereBetween('sqm_price', [$sqmMin, $sqmMax])
+                    ->WhereBetween('deposit', [$depositMin, $depositMax])
                     ->whereHas('propertycategories', function ($q) use ($category) {
                         $q->whereIn('category', $category);
                     })
@@ -51,14 +56,15 @@ class SearchController extends Controller
                 ];
             }
             elseif ($request->queryExpression !== null) {
-                $property = Property::with('files')->with('propertycategories')->with('address')->orderBy('price', 'ASC')
+                $property = Property::with('files')->with('propertycategories')->with('address')->orderBy('created_at', 'DESC')
                     ->whereBetween('price', [$priceMin, $priceMax])
                     ->WhereBetween('brutto', [$bruttoMin, $bruttoMax])
                     ->WhereBetween('netto', [$nettoMin, $nettoMax])
                     ->WhereBetween('own_exp', [$ownExpMin, $ownExpMax])
                     ->WhereBetween('sqm_price', [$sqmMin, $sqmMax])
-                    ->where('description', 'LIKE', "%{$expression}%")
-                    ->orWhereHas('address', function ($q) use ($expression) {
+                    ->WhereBetween('deposit', [$depositMin, $depositMax])
+
+                    ->whereHas('address', function ($q) use ($expression) {
                         $q->where('fulladdress', 'LIKE', "%{$expression}");
                         $q->orWhere('street', 'LIKE', "%{$expression}%");
                         $q->orWhere('door', 'LIKE', "%{$expression}%");
@@ -80,16 +86,16 @@ class SearchController extends Controller
                     'data' => $property
                 ];
             }
-
             elseif ($request->queryExpression !== null && $request->queryCategory !== null) {
-                $property = Property::with('files')->with('propertycategories')->with('address')->orderBy('price', 'ASC')
+                $property = Property::with('files')->with('propertycategories')->with('address')->orderBy('created_at', 'DESC')
                     ->whereBetween('price', [$priceMin, $priceMax])
                     ->WhereBetween('brutto', [$bruttoMin, $bruttoMax])
                     ->WhereBetween('netto', [$nettoMin, $nettoMax])
                     ->WhereBetween('own_exp', [$ownExpMin, $ownExpMax])
                     ->WhereBetween('sqm_price', [$sqmMin, $sqmMax])
-                    ->where('description', 'LIKE', "%{$expression}%")
-                    ->orWhereHas('address', function ($q) use ($expression) {
+                    ->WhereBetween('deposit', [$depositMin, $depositMax])
+
+                    ->whereHas('address', function ($q) use ($expression) {
                         $q->where('fulladdress', 'LIKE', "%{$expression}");
                         $q->orWhere('street', 'LIKE', "%{$expression}%");
                         $q->orWhere('door', 'LIKE', "%{$expression}%");
@@ -114,14 +120,15 @@ class SearchController extends Controller
                     'data' => $property
                 ];
             }
-
             else {
-                $property = Property::with('files')->with('propertycategories')->with('address')->orderBy('price', 'ASC')
+                $property = Property::with('files')->with('propertycategories')->with('address')->orderBy('created_at', 'DESC')
                     ->whereBetween('price', [$priceMin, $priceMax])
                     ->WhereBetween('brutto', [$bruttoMin, $bruttoMax])
                     ->WhereBetween('netto', [$nettoMin, $nettoMax])
                     ->WhereBetween('own_exp', [$ownExpMin, $ownExpMax])
                     ->WhereBetween('sqm_price', [$sqmMin, $sqmMax])
+                    ->WhereBetween('deposit', [$depositMin, $depositMax])
+
                     ->paginate(12);
                 $response = [
                     'pagination' => [
@@ -143,14 +150,5 @@ class SearchController extends Controller
         return response()->json($response);
     }
 
-    /*protected function getCategories() {
-        try {
-            $categories = PropertyCategories::all();
 
-            return response()->json($categories);
-        }
-        catch (Exception $e) {
-            return response()->json($e);
-        }
-    }*/
 }

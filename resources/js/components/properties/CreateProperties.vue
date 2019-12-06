@@ -3,6 +3,16 @@
         <div class="row">
             <div class="col">
 
+                <div class="card alert-success" v-if="output">
+                    <div class="card-header">Property registered for sale</div>
+                    <div class="card-body">{{output}}</div>
+                </div>
+
+                <div class="card alert-danger" v-if="errormsg">
+                    <div class="card-header">An error has occured</div>
+                    <div class="card-body">{{errormsg}}</div>
+                </div>
+
                 <form @submit="checkForm" id="app" method="post">
 
 
@@ -137,7 +147,9 @@
                 deposit: null,
                 sqm_price: null,
 
+                output: null,
                 errors: [],
+                errormsg: null,
                 loading: false,
 
             }
@@ -211,14 +223,15 @@
                             .then(response => {
                                 console.log(response.data);
                                 console.log(response.errors);
-                                this.output = response.data;
+                                this.output = response.status;
                                 this.errors = response.errors;
                                 this.loading = false;
                                 this.showEditField = false;
 
                             })
                             .catch(response => {
-                                console.log(response);
+                                console.log(response.msg);
+                                this.errormsg = response.msg;
                                 this.loading = false;
                             })
 

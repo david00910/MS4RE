@@ -21,6 +21,9 @@ import vueNumeralFilterInstaller from 'vue-numeral-filter';
 import VueSlider from 'vue-slider-component';
 import 'vue-slider-component/theme/default.css';
 import VueDawa from '@ancaio/vue-dawa/sfc';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 // use default options
 // Numeral filter for outputs

@@ -13,7 +13,7 @@ $factory->define(Property::class, function (Faker $faker) {
         'brutto' => rand(1000000, 50000000),
         'netto' => rand(100000, 5000000),
         'own_exp' => rand(10000, 500000),
-        'deposit' => rand(1000, 50000),
+        'deposit' => rand(1000, 5000),
         'sqm_price' => rand(100, 5000),
     ];
 });

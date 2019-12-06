@@ -26,7 +26,8 @@ class PropertyController extends Controller
     {
 
         try {
-            $property = Property::with('files')->with('propertycategories')->with('address')->orderBy('created_at', 'ASC')->paginate(12);
+
+            $property = Property::with('files')->with('propertycategories')->with('address')->orderBy('created_at', 'DESC')->paginate(12);
             //$property = PropertyResource::collection(Property::orderBy('updated_at', 'DESC')->paginate(12));
 
             $response = [
@@ -38,7 +39,8 @@ class PropertyController extends Controller
                     'from' => $property->firstItem(),
                     'to' => $property->lastItem()
                 ],
-                'data' => $property,
+                'data' => $property
+
             ];
 
         }
@@ -118,6 +120,26 @@ class PropertyController extends Controller
 
         return response()->json(['status' => 'You have successfully created your property for sale. We will contact you shortly.'], 200);
 
+
+    }
+
+    protected function show() {
+
+        try {
+
+            $property = Property::find('1');
+
+            $property->getBBR();  //@TODO: THIS COMES UP NEXT
+
+            return response()->json($property);
+
+        }
+        catch(Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'msg' => $e
+            ]);
+        }
 
     }
 

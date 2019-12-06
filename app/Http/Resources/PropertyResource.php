@@ -27,21 +27,6 @@ class PropertyResource extends JsonResource
 
         return [
 
-            'id' => $this->id,
-            'description' => $this->description,
-            'price' => $this->price,
-            'brutto' => $this->brutto,
-            'netto' => $this->netto,
-            'own_exp' => $this->own_exp,
-            'deposit' => $this->deposit,
-            'sqm_price' => $this->sqm_price,
-            //'category' => $this->propertycategories(),
-            //'files' => $this->files(),
-            'address' => json_decode($body),
-            'api_status' => $statusCode,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
-
         ];
     }
 }

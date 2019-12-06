@@ -15,10 +15,10 @@
                         <div class="row">
                             <div class="col">
                                 <div class="form-group">
-                                    <i class="fas fa-search"></i>
-                                    <input class="form-control" @input="callFiltering"
+                                    <input class="form-control" @change="callFiltering"
                                            v-model.lazy="expressionQuery" type="text"
                                            id="expressionQuery" placeholder="Search by address: street, door, house nr., city, postcode, etc...">
+                                        <button class="btn btn-sm btn-outline-primary">Search</button>
                                 </div>
                             </div>
                         </div>
@@ -146,6 +146,20 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="deposit">Deposit (DKK)</label>
+                                    <vue-slider v-bind="depositOptions" @change="callFiltering"
+                                                v-model.lazy="queryDeposit" id="deposit"></vue-slider>
+                                    <div class="row">
+                                        <div class="col text-left">{{queryDeposit[0] | numeral('0,0')}} DKK</div>
+                                        <div class="col text-right">{{queryDeposit[1] | numeral('0,0')}} DKK</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -182,8 +196,8 @@
                             </li>-->
 
                             <li class="list-group-item">
-                                <h5>Address:</h5> {{ property.address.street }} {{property.address.housenr}},
-                                {{property.address.floor}}. {{property.address.door}}, {{property.address.zipCode}}
+                                <h5>Address:</h5> {{ property.address.street }} {{property.address.housenr}}
+                                {{property.address.floor}} {{property.address.door}} {{property.address.zipCode}}
                                 {{property.address.city}}
                             </li>
                             <li class="list-group-item" style="white-space: pre-wrap !important;">
@@ -203,6 +217,9 @@
                             </li>
                             <li class="list-group-item">
                                 <h5>Price:</h5> {{property.price | numeral('0,0')}} DKK
+                            </li>
+                            <li class="list-group-item">
+                                <h5>Deposit:</h5> {{property.deposit | numeral('0,0')}} DKK
                             </li>
                             <li class="list-group-item">
                                 <h5>m² price:</h5> {{property.sqm_price | numeral('0,0')}} DKK
@@ -245,7 +262,7 @@
         data: function () {
             return {
                 searchInProgress: false, // if this is true, the pagination is rendered for the filtered results only.
-                expressionQuery: '', // Main search query
+                expressionQuery: null, // Main search query
                 checkedCategories: [], // saving the checked categories so we can send it with the filter request (if there are any checked filters, controlled in the fetchFilter() function)
                 queryPrice: [100000, 55000000], // multi-range slider for the price filter query
                 priceOptions: { // array of options for the price slider component
@@ -253,23 +270,23 @@
                     max: 55000000,
                     minRange: 1000000
                 },
-                queryBrutto: [100000, 55000000],
+                queryBrutto: [1000, 100000],
                 bruttoOptions: { // array of options for the brutto price slider component
-                    min: 100000,
-                    max: 55000000,
-                    minRange: 1000000
+                    min: 1000,
+                    max: 100000,
+                    minRange: 1000
                 },
-                queryNetto: [100000, 55000000],
+                queryNetto: [1000, 100000],
                 nettoOptions: { // array of options for the netto price slider component
-                    min: 100000,
-                    max: 55000000,
-                    minRange: 1000000
+                    min: 1000,
+                    max: 100000,
+                    minRange: 1000
                 },
-                queryOwnExp: [1000, 500000],
+                queryOwnExp: [1000, 50000],
                 ownExpOptions: { // array of options for the owner expense price slider component
                     min: 1000,
-                    max: 500000,
-                    minRange: 10000
+                    max: 50000,
+                    minRange: 1000
                 },
                 querySqmPrice: [100, 20000],
                 sqmPriceOptions: { // array of options for the sqm price price slider component
@@ -277,26 +294,34 @@
                     max: 20000,
                     minRange: 200
                 },
+                queryDeposit: [1000, 500000],
+                depositOptions: { // array of options for the deposit slider component
+                    min: 1000,
+                    max: 500000,
+                    minRange: 10000
+                },
                 properties: [null, { // this is where the properties with all their props are getting saved from the request
                     price: null,
                     brutto: null,
                     netto: null,
                     own_exp: null,
                     sqm_price: null,
+                    deposit: null,
+                    address: {
+                        street: null,
+                        door: null,
+                        floor: null,
+                        housenr: null,
+                        zipCode: null,
+                        city: null,
+                        //status: null,
+                        //x: null,
+                        //y: null
+                    },
                     propertycategories: {
                         category: null,
                         description: null,
-                        address: {
-                            street: null,
-                            door: null,
-                            floor: null,
-                            housenr: null,
-                            zipCode: null,
-                            city: null,
-                            //status: null,
-                            //x: null,
-                            //y: null
-                        },
+
                     }
                 }],
                 ready: false,
@@ -365,8 +390,10 @@
                         queryOwnExpTo: this.queryOwnExp[1],
                         querySqmPriceFrom: this.querySqmPrice[0],
                         querySqmPriceTo: this.querySqmPrice[1],
+                        queryDepositFrom: this.queryDeposit[0],
+                        queryDepositTo: this.queryDeposit[1],
                         queryCategory: this.checkedCategories.length ? this.checkedCategories : null, // checking with a ternary operator if any of the boxes are checked. If not, send a null value.
-                        queryExpression: this.expressionQuery.length ? this.expressionQuery : null
+                        queryExpression: this.expressionQuery ? this.expressionQuery : null
                     }
                 })
                     .then(response => {
