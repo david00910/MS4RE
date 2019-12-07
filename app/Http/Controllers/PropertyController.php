@@ -46,7 +46,8 @@ class PropertyController extends Controller
         }
         catch (Exception $e) {
             return response()->json([
-                'status' => $e
+                'status' => $e->getCode(),
+                'msg' => $e->getMessage()
             ], 400);
         }
 
@@ -112,8 +113,8 @@ class PropertyController extends Controller
 
         catch(Exception $e) {
             return response()->json([
-                'status' => 'error',
-                'msg' => $e
+                'status' => $e->getCode(),
+                'msg' => $e->getMessage()
             ], 400);
 
         }
@@ -125,20 +126,34 @@ class PropertyController extends Controller
 
     protected function show() {
 
+        return view('model.property.show');
+
+    }
+
+    protected function singlePropertyData() {
+
         try {
 
-            $property = Property::find('1');
+            $property = Property::with('address')->find(2);
 
-            $property->getBBR();  //@TODO: THIS COMES UP NEXT
+            $address_id = $property->address->address_uuid;
 
-            return response()->json($property);
+            $client = new Client();
+            $response = $client->request('GET', 'https://dawa.aws.dk/bbrlight/enheder?adresseid='.$address_id.'&struktur=mini');
+            $statusCode = $response->getStatusCode();
+            $body = $response->getBody()->getContents();
+
+            return response()->json([
+                'data' => $property,
+                'bbr' => json_decode($body)
+            ]);
 
         }
         catch(Exception $e) {
             return response()->json([
-                'status' => 'error',
-                'msg' => $e
-            ]);
+                'status' => $e->getCode(),
+                'msg' => $e->getMessage()
+            ], 400);
         }
 
     }

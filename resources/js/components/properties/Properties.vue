@@ -15,7 +15,7 @@
                         <div class="row">
                             <div class="col">
                                 <div class="form-group">
-                                    <input class="form-control" @change="callFiltering"
+                                    <input  class="form-control" @change="callFiltering"
                                            v-model.lazy="expressionQuery" type="text"
                                            id="expressionQuery" placeholder="Search by address: street, door, house nr., city, postcode, etc...">
                                         <button class="btn btn-sm btn-outline-primary">Search</button>
@@ -409,6 +409,7 @@
                         console.log(error);
                     })
             },
+
 
         },
 

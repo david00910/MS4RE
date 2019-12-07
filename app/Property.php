@@ -27,16 +27,6 @@ class Property extends Model
         return $this->hasOne('App\Address', 'id');
     }
 
-    public function getBBR() {
-        $address_id = $this->address()->address_uuid;
-
-        $client = new Client();
-        $response = $client->request('GET', 'https://dawa.aws.dk/bbrlight/enheder?adresseid='.$address_id.'?struktur=mini');
-        $statusCode = $response->getStatusCode();
-        $body = $response->getBody()->getContents();
-
-        return response()->json($body);
-    }
 
 
 }

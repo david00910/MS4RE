@@ -51,6 +51,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('create', 'PropertyController@create')->name('create.property');
         // Store property
         Route::post('store', 'PropertyController@store');
+        // Show single property page
+        Route::get('show', 'PropertyController@show')->name('show');
+        // Return data for single paroperty
+        Route::get('showProperty', 'PropertyController@singlePropertyData');
 
     });
 
