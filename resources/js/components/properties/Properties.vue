@@ -1,9 +1,9 @@
 <template>
-    <div class="container">
+    <div class="container-fluid py-3">
         <div class="row justify-content-center">
 
             <div class="accordion">
-                <div class="card">
+                <div class="card bg-brand-white">
                     <div class="card-header">
                         <button class="btn dropdown-toggle" type="button" data-toggle="collapse" data-target="#filters"
                                 aria-expanded="true" aria-controls="filters">
@@ -15,10 +15,11 @@
                         <div class="row">
                             <div class="col">
                                 <div class="form-group">
-                                    <input  class="form-control" @change="callFiltering"
+                                    <input class="form-control" @change="callFiltering"
                                            v-model.lazy="expressionQuery" type="text"
-                                           id="expressionQuery" placeholder="Search by address: street, door, house nr., city, postcode, etc...">
-                                        <button class="btn btn-sm btn-outline-primary">Search</button>
+                                           id="expressionQuery"
+                                           placeholder="Search by address: street, door, house nr., city, postcode, etc...">
+                                    <button class="btn btn-sm btn-outline-primary">Search</button>
                                 </div>
                             </div>
                         </div>
@@ -188,50 +189,34 @@
                                     :offset="10"
                                     @paginate="indexData()"></pagination>
 
-                        <ul class="list-group" v-for="property in properties">
+                        <div class="cardContainer" v-for="property in properties">
 
-                            <!--<li class="list-group-item" style="padding: 0px !important;" v-for="file in property.files">
-                                  TEMPORARY IMAGE OUTPUT
-                                 <img class="img-fluid" v-if="property.files.length" :src="'../images/'+file.url" alt="">
-                            </li>-->
+                            <div class="row">
+                                <div class="col-4">
+                                    <img class="img-fluid"  :src="'../images/example.jpg'/*'../images/'+file.url*/"
+                                         alt="Property thumbnail image">
+                                </div>
 
-                            <li class="list-group-item">
-                                <h5>Address:</h5> {{ property.address.street }} {{property.address.housenr}}
-                                {{property.address.floor}} {{property.address.door}} {{property.address.zipCode}}
-                                {{property.address.city}}
-                            </li>
-                            <li class="list-group-item" style="white-space: pre-wrap !important;">
-                                <h5>Description:</h5> {{ property.description}}
-                            </li>
-                            <li class="list-group-item" v-for="category in property.propertycategories">
-                                <h5>Category:</h5> {{ category.category }}
-                            </li>
-                            <li class="list-group-item">
-                                <h5>Brutto:</h5> {{property.brutto | numeral('0,0')}} DKK
-                            </li>
-                            <li class="list-group-item">
-                                <h5>Netto:</h5> {{property.netto | numeral('0,0')}} DKK
-                            </li>
-                            <li class="list-group-item">
-                                <h5>Owner expense:</h5> {{property.own_exp | numeral('0,0')}} DKK
-                            </li>
-                            <li class="list-group-item">
-                                <h5>Price:</h5> {{property.price | numeral('0,0')}} DKK
-                            </li>
-                            <li class="list-group-item">
-                                <h5>Deposit:</h5> {{property.deposit | numeral('0,0')}} DKK
-                            </li>
-                            <li class="list-group-item">
-                                <h5>m² price:</h5> {{property.sqm_price | numeral('0,0')}} DKK
-                            </li>
+                                <div class="col">
+                                    <h5 class="h5 text-brand-primary">
+                                        {{property.address.street}}
+                                        {{property.address.housenr}},
+                                        {{property.address.floor}}
+                                        {{property.address.door}}
+                                    </h5>
+                                    <h5 class="h5 text-brand-primary">{{property.address.city}}</h5>
+                                </div>
+                                <div class="col" style="border-left: 1px solid rgba(0, 60, 15, 0.1) !important;">
+                                    <h6 class="text-brand-slate">Price: </h6>
+                                    <h5 class="text-brand-charleston">{{property.price | numeral('0,0')}}</h5>
 
-                            <small>
-                                Updated at: {{property.updated_at}}
+                                    <h6 class="text-brand-slate">Brutto:</h6>
+                                    <h5 class="text-brand-slate">{{property.brutto | numeral('0,0')}}</h5>
+                                </div>
+                            </div>
+                            <hr>
 
-                                Created at: {{property.created_at}}
-                            </small>
-                            <hr/>
-                        </ul>
+                        </div>
                         <pagination v-if="searchInProgress && pagination.last_page > 1"
                                     :pagination="filteredPagination" :offset="10"
                                     @paginate="fetchFiltered()"></pagination>

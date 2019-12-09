@@ -9,6 +9,12 @@ class Address extends Model
 {
     use Searchable;
     protected $table = 'addresses';
+    protected $casts = [
+        'coordinate_x' => 'float',
+        'coordinate_y' => 'float',
+
+    ];
+
 
     public function toSearchableArray()
     {

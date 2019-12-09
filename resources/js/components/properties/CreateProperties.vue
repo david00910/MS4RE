@@ -137,7 +137,7 @@
         data: function () {
             return {
                 addressObject: {
-                    addressLine: ''
+                    addressLine: '',
                 },
                 description: null,
                 price: null,
@@ -193,12 +193,15 @@
                     door: address.data.dør,
                     zipCode: address.data.postnr,
                     city: address.data.postnrnavn,
-                    oneLineAddress: address.tekst
+                    oneLineAddress: address.tekst,
+                    x: address.data.x,
+                    y: address.data.y
                 }
             },
 
             checkForm: function (e) {
-                if (this.addressObject.id && this.description && this.price && this.brutto && this.netto && this.own_exp && this.deposit && this.sqm_price) {
+                if (this.addressObject.id && this.description && this.price && this.brutto && this.netto &&
+                    this.own_exp && this.deposit && this.sqm_price) {
 
                         this.loading = true;
 
@@ -216,7 +219,9 @@
                             netto: this.netto,
                             own_exp: this.own_exp,
                             deposit: this.deposit,
-                            sqm_price:this.sqm_price
+                            sqm_price:this.sqm_price,
+                            x: this.addressObject.x,
+                            y: this.addressObject.y
 
                         })
 

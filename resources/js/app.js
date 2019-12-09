@@ -22,14 +22,17 @@ import vueNumeralFilterInstaller from 'vue-numeral-filter';
 import VueSlider from 'vue-slider-component';
 import 'vue-slider-component/theme/default.css';
 import VueDawa from '@ancaio/vue-dawa/sfc';
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import * as VueGoogleMaps from 'vue2-google-maps'
 
 // use default options
 // Numeral filter for outputs
 Vue.use(vueNumeralFilterInstaller);
-
+Vue.use(VueGoogleMaps, {
+    load: {
+        key: 'AIzaSyDiuzgWa9UMFgyTb7rn-cZVnPkGjVpnHVY',
+        libraries: 'places',
+    },
+});
 // Use debouncer for search queries
 
 

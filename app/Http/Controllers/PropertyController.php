@@ -9,6 +9,7 @@ use App\Property;
 use App\PropertyCategories;
 use Illuminate\Database;
 use App\User;
+use DB;
 use Illuminate\Support\Facades\Auth;
 use Exception;
 
@@ -82,6 +83,7 @@ class PropertyController extends Controller
             'sqm_price' => 'required',
         ]);
 
+        DB::beginTransaction();
 
         try {
 
@@ -94,6 +96,8 @@ class PropertyController extends Controller
             $address->housenr = $request->housenr;
             $address->postcode = $request->postcode;
             $address->city = $request->city;
+            $address->coordinate_y = $request->y;
+            $address->coordinate_x = $request->x;
             $address->save();
 
             $property = new Property();
@@ -108,10 +112,13 @@ class PropertyController extends Controller
             $property->address_id = $address->id;
             $property->save();
 
+            DB::commit();
+
 
         }
 
         catch(Exception $e) {
+            DB::rollback();
             return response()->json([
                 'status' => $e->getCode(),
                 'msg' => $e->getMessage()
@@ -139,7 +146,7 @@ class PropertyController extends Controller
             $address_id = $property->address->address_uuid;
 
             $client = new Client();
-            $response = $client->request('GET', 'https://dawa.aws.dk/bbrlight/enheder?adresseid='.$address_id.'&struktur=mini');
+            $response = $client->request('GET', 'https://dawa.aws.dk/bbrlight/enheder?adresseid='.$address_id);
             $statusCode = $response->getStatusCode();
             $body = $response->getBody()->getContents();
 
