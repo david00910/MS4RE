@@ -4,8 +4,8 @@
 
             <div class="accordion">
                 <div class="card bg-brand-white">
-                    <div class="card-header">
-                        <button class="btn dropdown-toggle" type="button" data-toggle="collapse" data-target="#filters"
+                    <div class="card-header bg-brand-primary text-white">
+                        <button class="btn text-brand-white dropdown-toggle" type="button" data-toggle="collapse" data-target="#filters"
                                 aria-expanded="true" aria-controls="filters">
                             Modify your search and find your home!
                         </button>
@@ -167,10 +167,10 @@
 
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">List of properties</div>
+                    <div class="card-header bg-brand-primary text-white">List of properties</div>
 
                     <div class="progress" v-if="loading">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated"
+                        <div class="progress-bar progress-bar-striped bg-brand-greenish progress-bar-animated"
                              role="progressbar"
                              aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
                              style="width: 100%"></div>
@@ -180,7 +180,7 @@
                         <h5 class="text-danger">Something went wrong. Please try again...</h5>
                     </div>
 
-                    <div class="card-body" v-if="ready && properties.length">
+                    <div class="card-body bg-brand-white p-3 text-brand-greenish" v-if="ready && properties.length">
 
                         <pagination v-if="searchInProgress && pagination.last_page > 1"
                                     :pagination="filteredPagination" :offset="10"
@@ -189,15 +189,17 @@
                                     :offset="10"
                                     @paginate="indexData()"></pagination>
 
-                        <div class="cardContainer" v-for="property in properties">
+                        <div class="cardContainer p-3" v-for="property in properties">
 
-                            <div class="row">
-                                <div class="col-4">
+
+                            <div class="row propertyDesign" @click="showProperty(property.id)">
+                                <div class="col-4-sm">
                                     <img class="img-fluid"  :src="'../images/example.jpg'/*'../images/'+file.url*/"
                                          alt="Property thumbnail image">
                                 </div>
 
-                                <div class="col">
+
+                                <div class="col mt-3">
                                     <h5 class="h5 text-brand-primary">
                                         {{property.address.street}}
                                         {{property.address.housenr}},
@@ -206,15 +208,27 @@
                                     </h5>
                                     <h5 class="h5 text-brand-primary">{{property.address.city}}</h5>
                                 </div>
-                                <div class="col" style="border-left: 1px solid rgba(0, 60, 15, 0.1) !important;">
+                                <div class="col mt-3" style="border-left: 1px solid rgba(0, 60, 15, 0.1) !important;">
                                     <h6 class="text-brand-slate">Price: </h6>
-                                    <h5 class="text-brand-charleston">{{property.price | numeral('0,0')}}</h5>
+                                    <h5 class="text-brand-charleston">{{property.price | numeral('0,0')}} DKK</h5>
 
-                                    <h6 class="text-brand-slate">Brutto:</h6>
-                                    <h5 class="text-brand-slate">{{property.brutto | numeral('0,0')}}</h5>
+                                    <small class="text-brand-slate">Brutto:</small>
+                                    <p class="text-brand-slate">{{property.brutto | numeral('0,0')}} DKK</p>
+                                    <small class="text-brand-slate">Netto:</small>
+                                    <p class="text-brand-slate">{{property.netto | numeral('0,0')}} DKK</p>
                                 </div>
+
+                                <div class="col mt-3">
+                                    <small class="text-brand-slate">Deposit:</small>
+                                    <p class="text-brand-slate">{{property.deposit | numeral('0,0')}} DKK</p>
+                                    <small class="text-brand-slate">m²:</small>
+                                    <p class="text-brand-slate">{{property.sqm_price | numeral('0,0')}} DKK</p>
+                                    <small class="text-brand-slate">Owner's expense:</small>
+                                    <p class="text-brand-slate">{{property.own_exp | numeral('0,0')}} DKK</p>
+                                </div>
+
                             </div>
-                            <hr>
+                            <hr class="bg-brand-slate">
 
                         </div>
                         <pagination v-if="searchInProgress && pagination.last_page > 1"
@@ -253,7 +267,7 @@
                 priceOptions: { // array of options for the price slider component
                     min: 100000,
                     max: 55000000,
-                    minRange: 1000000
+                    minRange: 1000000,
                 },
                 queryBrutto: [1000, 100000],
                 bruttoOptions: { // array of options for the brutto price slider component
@@ -395,9 +409,21 @@
                     })
             },
 
+            showProperty(id) {
+                window.location.href = `/property/show/${id}`;
+            }
+
 
         },
 
 
     }
 </script>
+
+<style scoped>
+
+  .propertyDesign:hover {
+      box-shadow: rgba(0, 0, 0, 0.3) 2px 2px 3px !important;
+      cursor:pointer;
+  }
+</style>

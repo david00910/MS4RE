@@ -30,10 +30,10 @@
 </head>
 <body class="bg-brand-white">
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
+        <nav class="navbar navbar-expand-md navbar-dark bg-brand-greenish shadow-sm">
+            <div class="container-fluid">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                    <img class="img-fluid" src="{{ asset('./images/logo.png') }}" alt="Main Solution for Real Estate logo">
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -46,28 +46,28 @@
                     </ul>
 
                     <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
+                    <ul class="navbar-nav  ml-auto">
 
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('home') }}">{{ __('Home') }}</a>
+                            <a class="nav-link text-brand-grey" href="{{ route('home') }}">{{ __('Home') }}</a>
                         </li>
                         <!-- Authentication Links -->
                         @guest
-                            <li class="nav-item" style="border-left: 1px solid grey !important">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                            <li class="nav-item" style="border-left: 1px solid rgba(255,255,255,0.2) !important">
+                                <a class="nav-link text-brand-grey" href="{{ route('login') }}">{{ __('Login') }}</a>
                             </li>
                             @if (Route::has('register'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                    <a class="nav-link text-brand-grey" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>
                             @endif
                         @else
-                            <li class="nav-item dropdown" style="border-left: 1px solid rgba(0, 0, 0, 0.2) !important">
+                            <li class="nav-item dropdown" style="border-left: 1px solid rgba(255, 255, 255, 0.2) !important">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->first_name }} <span class="caret"></span>
                                 </a>
 
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <div class="dropdown-menu dropdown-menu-right bg-brand-greenish" aria-labelledby="navbarDropdown">
 
                                     <a class="dropdown-item" href="{{ route('self_service.index') }}">
                                         {{ __('Self-service') }}
@@ -91,10 +91,14 @@
                 </div>
             </div>
         </nav>
-
         <main>
             @yield('content')
         </main>
+
+        <v-footer></v-footer>
+
     </div>
+
 </body>
+
 </html>

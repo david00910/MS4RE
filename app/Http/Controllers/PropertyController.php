@@ -137,11 +137,11 @@ class PropertyController extends Controller
 
     }
 
-    protected function singlePropertyData() {
+    protected function singlePropertyData($id) {
 
         try {
 
-            $property = Property::with('address')->find(2);
+            $property = Property::with('address')->find($id);
 
             $address_id = $property->address->address_uuid;
 

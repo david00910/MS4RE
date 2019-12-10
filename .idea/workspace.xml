@@ -2,18 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="194c585d-efab-437c-b7c7-343e71abc0c5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/database/migrations/2019_12_09_082611_add_column_coordinates_to_addresses_table.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2019_12_09_083952_change_data_type_description_column_on_properties_table.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2019_12_09_101928_change_data_type_coordinates_on_addresses_table.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/example.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/exampleHD.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/MessageController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Mail/SendMail.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/js/components/misc/Footer.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/views/layouts/contact_mail_template.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Address.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Address.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PropertyController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PropertyController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/mail.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/mail.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/css/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/app.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/bradybunchhouse_sc11.jpg" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/components/properties/CreateProperties.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/properties/CreateProperties.vue" afterDir="false" />
@@ -21,6 +18,7 @@
       <change beforePath="$PROJECT_DIR$/resources/js/components/properties/ShowProperty.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/properties/ShowProperty.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/sass/_variables.scss" beforeDir="false" afterPath="$PROJECT_DIR$/resources/sass/_variables.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -230,7 +228,8 @@
       <workItem from="1575529485538" duration="22379000" />
       <workItem from="1575618091705" duration="21159000" />
       <workItem from="1575723023205" duration="11215000" />
-      <workItem from="1575875316816" duration="25272000" />
+      <workItem from="1575875316816" duration="25528000" />
+      <workItem from="1575960989939" duration="24486000" />
     </task>
     <servers />
   </component>

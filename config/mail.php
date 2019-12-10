@@ -44,6 +44,8 @@ return [
 
     'port' => env('MAIL_PORT', 587),
 
+    'app_email' => env('APP_EMAIL', 'da@main-solution.dk'),
+
     /*
     |--------------------------------------------------------------------------
     | Global "From" Address

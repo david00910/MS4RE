@@ -16,7 +16,7 @@
                 <form @submit="checkForm" id="app" method="post">
 
 
-                    <h6 v-if="errors.length">
+                    <h6 v-if=" errors && errors.length">
                         <p>Please correct the following error(s):</p>
                         <ul>
                             <li v-for="error in errors">{{ error }}</li>

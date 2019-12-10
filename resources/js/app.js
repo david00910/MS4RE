@@ -16,6 +16,7 @@ import User from './components/self_service/User';
 import MyProperties from "./components/self_service/MyProperties";
 import CreateProperties from "./components/properties/CreateProperties";
 import ShowProperty from "./components/properties/ShowProperty";
+import Footer from "./components/misc/Footer";
 
 // Third party, installed components
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
@@ -61,7 +62,7 @@ Vue.component('user', User);
 Vue.component('myproperties', MyProperties);
 Vue.component('createproperties', CreateProperties);
 Vue.component('showproperty', ShowProperty);
-
+Vue.component('v-footer', Footer);
 Vue.component('vue-slider', VueSlider);
 Vue.component('vue-dawa', VueDawa);
 

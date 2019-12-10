@@ -19,12 +19,14 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
 
+// Get all the properties
 Route::get('/properties', 'PropertyController@indexData')->name('properties');
-/*Route::get('/categories', 'SearchController@getCategories')->name('categories');*/
 
 // Search route
-
 Route::get('search', 'SearchController@search');
+
+// Contact send message route
+Route::post('contactUs', 'MessageController@contactUs');
 
 // AUTHENTICATED ROUTES
 
@@ -52,11 +54,12 @@ Route::group(['middleware' => 'auth'], function () {
         // Store property
         Route::post('store', 'PropertyController@store');
         // Show single property page
-        Route::get('show', 'PropertyController@show')->name('show');
+        Route::get('show/{id}', 'PropertyController@show')->name('show');
         // Return data for single paroperty
-        Route::get('showProperty', 'PropertyController@singlePropertyData');
+        Route::get('show/showProperty/{id}', 'PropertyController@singlePropertyData');
 
     });
+
 
 
 });
