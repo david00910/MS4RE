@@ -31,7 +31,7 @@
 <body class="bg-brand-white">
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-dark bg-brand-greenish shadow-sm">
-            <div class="container-fluid">
+            <div class="container-fluid pl-4 pr-4">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     <img class="img-fluid" src="{{ asset('./images/logo.png') }}" alt="Main Solution for Real Estate logo">
                 </a>

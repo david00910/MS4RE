@@ -13,13 +13,13 @@
                     <div class="card-body">{{errormsg}}</div>
                 </div>
 
-                <form @submit="checkForm" id="app" method="post">
+                <form @submit="checkForm" id="app" enctype="multipart/form-data" method="post">
 
 
                     <h6 v-if=" errors && errors.length">
                         <p>Please correct the following error(s):</p>
-                        <ul>
-                            <li v-for="error in errors">{{ error }}</li>
+                        <ul class="list-group-flush">
+                            <li class="list-group-item text-danger" v-for="error in errors">{{ error }}</li>
                         </ul>
                     </h6>
 
@@ -37,7 +37,7 @@
                                   :showMax="10"
                                   placeholder="Start typing the address"
                                   containerId="addressContainer"
-                                  fieldClasses="form-control"
+                                  fieldClasses="form-control border-brand-greenish"
                                   fieldId="address"
                                   fieldName="address">
                             <label slot="label-top" for="field-2">Address</label>
@@ -49,7 +49,7 @@
 
                     <div class="form-group">
                         <label for="description">Description</label>
-                        <textarea class="form-control" v-model="description"
+                        <textarea class="form-control border-brand-greenish" v-model="description"
                                   aria-describedby="descriptionHelp"
                                   placeholder="Describe the property you would like to sell"
                                   id="description"></textarea>
@@ -60,7 +60,7 @@
                         <div class="col-sm">
                             <div class="form-group">
                                 <label for="price">Price (DKK)</label>
-                                <input class="form-control" type="number" autocomplete="off" v-model="price"
+                                <input class="form-control border-brand-greenish" type="number" autocomplete="off" v-model="price"
                                        aria-describedby="priceHelp"
                                        placeholder="The price in DKK"
                                        id="price">
@@ -70,7 +70,7 @@
                         <div class="col-sm">
                             <div class="form-group">
                                 <label for="brutto">Brutto (DKK)</label>
-                                <input class="form-control" type="number" autocomplete="off" v-model="brutto"
+                                <input class="form-control border-brand-greenish" type="number" autocomplete="off" v-model="brutto"
                                        aria-describedby="bruttoHelp"
                                        placeholder="The brutto price in DKK"
                                        id="brutto">
@@ -80,7 +80,7 @@
                         <div class="col-sm">
                             <div class="form-group">
                                 <label for="netto">Netto (DKK)</label>
-                                <input class="form-control" type="number" autocomplete="off" v-model="netto"
+                                <input class="form-control border-brand-greenish" type="number" autocomplete="off" v-model="netto"
                                        aria-describedby="nettoHelp"
                                        placeholder="The netto price in DKK"
                                        id="netto">
@@ -94,7 +94,7 @@
                         <div class="col-sm">
                             <div class="form-group">
                                 <label for="own_exp">Owner's Expense (DKK)</label>
-                                <input class="form-control" type="number" autocomplete="off" v-model="own_exp"
+                                <input class="form-control border-brand-greenish" type="number" autocomplete="off" v-model="own_exp"
                                        aria-describedby="ownExpHelp"
                                        placeholder="The owner's expense in DKK"
                                        id="own_exp">
@@ -104,7 +104,7 @@
                         <div class="col-sm">
                             <div class="form-group">
                                 <label for="deposit">Deposit (DKK)</label>
-                                <input class="form-control" type="number" autocomplete="off" v-model="deposit"
+                                <input class="form-control border-brand-greenish" type="number" autocomplete="off" v-model="deposit"
                                        aria-describedby="depositHelp"
                                        placeholder="The deposit in DKK"
                                        id="deposit">
@@ -114,14 +114,31 @@
                         <div class="col-sm">
                             <div class="form-group">
                                 <label for="sqm_price">m2 price (DKK)</label>
-                                <input class="form-control" type="number" autocomplete="off" v-model="sqm_price"
+                                <input class="form-control border-brand-greenish" type="number" autocomplete="off" v-model="sqm_price"
                                        aria-describedby="sqmPriceHelp"
                                        placeholder="The square metre price in DKK"
                                        id="sqm_price">
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+
+                    <div class="row">
+                        <div class="col">
+                            <label for="images">Images</label>
+                                <input type="file" multiple placeholder="Upload images of your propery" class="form-control border-brand-greenish" id="images" ref="images" v-on:change="checkImage"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col p-3">
+                            <h6 v-if=" imageError && imageError.length">
+                                <p>There are error(s) with the file upload:</p>
+                                <ul class="list-group-flush">
+                                    <li class="list-group-item text-danger" v-for="iError in imageError">{{ iError }}</li>
+                                </ul>
+                            </h6>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-brand-primary mt-3">Submit</button>
                 </form>
             </div>
         </div>
@@ -151,6 +168,8 @@
                 errors: [],
                 errormsg: null,
                 loading: false,
+                imageError: [],
+                imageUpload: [],
 
             }
         },
@@ -199,11 +218,16 @@
                 }
             },
 
+
+
             checkForm: function (e) {
+
+                console.log(this.imageUpload);
                 if (this.addressObject.id && this.description && this.price && this.brutto && this.netto &&
                     this.own_exp && this.deposit && this.sqm_price) {
 
                         this.loading = true;
+
 
                         axios.post('store', {
                             address_id: this.addressObject.id,
@@ -221,7 +245,7 @@
                             deposit: this.deposit,
                             sqm_price:this.sqm_price,
                             x: this.addressObject.x,
-                            y: this.addressObject.y
+                            y: this.addressObject.y,
 
                         })
 
@@ -275,6 +299,7 @@
                 if (!this.sqm_price) {
                     this.errors.push('The square metre price field is empty')
                 }
+
                 e.preventDefault();
             },
 

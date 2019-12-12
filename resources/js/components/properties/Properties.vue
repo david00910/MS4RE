@@ -3,7 +3,7 @@
         <div class="row justify-content-center">
 
             <div class="accordion">
-                <div class="card bg-brand-white">
+                <div class="card bg-brand-white border-brand-greenish">
                     <div class="card-header bg-brand-primary text-white">
                         <button class="btn text-brand-white dropdown-toggle" type="button" data-toggle="collapse" data-target="#filters"
                                 aria-expanded="true" aria-controls="filters">
@@ -15,15 +15,15 @@
                         <div class="row">
                             <div class="col">
                                 <div class="form-group">
-                                    <input class="form-control" @change="callFiltering"
+                                    <input class="form-control border-brand-greenish" @change="callFiltering"
                                            v-model.lazy="expressionQuery" type="text"
                                            id="expressionQuery"
                                            placeholder="Search by address: street, door, house nr., city, postcode, etc...">
-                                    <button class="btn btn-sm btn-outline-primary">Search</button>
+                                    <button class="btn btn-sm btn-outline-brand-greenish mt-2">Search</button>
                                 </div>
                             </div>
                         </div>
-                        <hr>
+                        <hr class="bg-brand-greenish">
 
                         <div class="row text-center">
                             <div class="col">
@@ -77,8 +77,8 @@
                             </div>
                         </div>
 
-                        <hr>
-                        <div class="card">
+                        <hr class="bg-brand-greenish">
+                        <div class="card border-brand-greenish">
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="price">Price (DKK)</label>
@@ -92,7 +92,7 @@
                             </div>
                         </div>
 
-                        <div class="card">
+                        <div class="card border-brand-greenish">
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="brutto">Brutto amount (DKK)</label>
@@ -106,7 +106,7 @@
                             </div>
                         </div>
 
-                        <div class="card">
+                        <div class="card border-brand-greenish">
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="netto">Netto amount (DKK)</label>
@@ -120,7 +120,7 @@
                             </div>
                         </div>
 
-                        <div class="card">
+                        <div class="card border-brand-greenish">
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="own_exp">Owner expense (DKK)</label>
@@ -134,7 +134,7 @@
                             </div>
                         </div>
 
-                        <div class="card">
+                        <div class="card border-brand-greenish">
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="sqm_price">m² price (DKK)</label>
@@ -148,7 +148,7 @@
                             </div>
                         </div>
 
-                        <div class="card">
+                        <div class="card border-brand-greenish">
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="deposit">Deposit (DKK)</label>
@@ -166,7 +166,7 @@
             </div>
 
             <div class="col-md-8">
-                <div class="card">
+                <div class="card border-brand-greenish">
                     <div class="card-header bg-brand-primary text-white">List of properties</div>
 
                     <div class="progress" v-if="loading">
@@ -193,7 +193,11 @@
 
 
                             <div class="row propertyDesign" @click="showProperty(property.id)">
-                                <div class="col-4-sm">
+                                <div class="col-4 d-none d-sm-block pl-0">
+                                    <img class="img-fluid"  :src="'../images/example.jpg'/*'../images/'+file.url*/"
+                                         alt="Property thumbnail image">
+                                </div>
+                                <div class="col-4-sm d-block d-sm-none">
                                     <img class="img-fluid"  :src="'../images/example.jpg'/*'../images/'+file.url*/"
                                          alt="Property thumbnail image">
                                 </div>
@@ -268,36 +272,73 @@
                     min: 100000,
                     max: 55000000,
                     minRange: 1000000,
+                    processStyle: {
+                        backgroundColor: '#42a191'
+                    },
+                    tooltipStyle: {
+                        backgroundColor: '#42a191'
+                    }
+
                 },
                 queryBrutto: [1000, 100000],
                 bruttoOptions: { // array of options for the brutto price slider component
                     min: 1000,
                     max: 100000,
-                    minRange: 1000
+                    minRange: 1000,
+                    processStyle: {
+                        backgroundColor: '#42a191'
+                    },
+                    tooltipStyle: {
+                        backgroundColor: '#42a191'
+                    }
                 },
                 queryNetto: [1000, 100000],
                 nettoOptions: { // array of options for the netto price slider component
                     min: 1000,
                     max: 100000,
-                    minRange: 1000
+                    minRange: 1000,
+                    processStyle: {
+                        backgroundColor: '#42a191'
+                    },
+                    tooltipStyle: {
+                        backgroundColor: '#42a191'
+                    }
                 },
                 queryOwnExp: [1000, 50000],
                 ownExpOptions: { // array of options for the owner expense price slider component
                     min: 1000,
                     max: 50000,
-                    minRange: 1000
+                    minRange: 1000,
+                    processStyle: {
+                        backgroundColor: '#42a191'
+                    },
+                    tooltipStyle: {
+                        backgroundColor: '#42a191'
+                    }
                 },
                 querySqmPrice: [100, 20000],
                 sqmPriceOptions: { // array of options for the sqm price price slider component
                     min: 100,
                     max: 20000,
-                    minRange: 200
+                    minRange: 200,
+                    processStyle: {
+                        backgroundColor: '#42a191'
+                    },
+                    tooltipStyle: {
+                        backgroundColor: '#42a191'
+                    }
                 },
                 queryDeposit: [1000, 500000],
                 depositOptions: { // array of options for the deposit slider component
                     min: 1000,
                     max: 500000,
-                    minRange: 10000
+                    minRange: 10000,
+                    processStyle: {
+                        backgroundColor: '#42a191'
+                    },
+                    tooltipStyle: {
+                        backgroundColor: '#42a191'
+                    }
                 },
                 properties: [null, { // this is where the properties with all their props are getting saved from the request
                     price: null,
@@ -423,7 +464,9 @@
 <style scoped>
 
   .propertyDesign:hover {
-      box-shadow: rgba(0, 0, 0, 0.3) 2px 2px 3px !important;
+      -webkit-box-shadow: 7px 6px 8px 1px rgba(171,169,171,1) !important;
+      -moz-box-shadow: 7px 6px 8px 1px rgba(171,169,171,1) !important;
+      box-shadow: 7px 6px 8px 1px rgba(171,169,171,1) !important;
       cursor:pointer;
   }
 </style>

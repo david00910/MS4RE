@@ -11,7 +11,7 @@
             </div>
             <div class="col-sm p-3">
                 <div class="h5 text-center">Contact us</div>
-                <form @submit="checkForm" id="app" method="post">
+                <form @submit="checkForm" id="footer" method="post">
 
 
 

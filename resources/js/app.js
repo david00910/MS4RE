@@ -23,7 +23,9 @@ import vueNumeralFilterInstaller from 'vue-numeral-filter';
 import VueSlider from 'vue-slider-component';
 import 'vue-slider-component/theme/default.css';
 import VueDawa from '@ancaio/vue-dawa/sfc';
-import * as VueGoogleMaps from 'vue2-google-maps'
+import * as VueGoogleMaps from 'vue2-google-maps';
+import vue2Dropzone from 'vue2-dropzone'
+import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 
 // use default options
 // Numeral filter for outputs
@@ -65,6 +67,7 @@ Vue.component('showproperty', ShowProperty);
 Vue.component('v-footer', Footer);
 Vue.component('vue-slider', VueSlider);
 Vue.component('vue-dawa', VueDawa);
+Vue.component('vue-dropzone', vue2Dropzone);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

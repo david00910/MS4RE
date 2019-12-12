@@ -32,6 +32,7 @@
         "lodash.debounce": "^4.0.8",
         "vue-numeral-filter": "^1.1.1",
         "vue-slider-component": "^3.0.43",
+        "vue2-dropzone": "^3.6.0",
         "vue2-google-maps": "^0.10.7"
     }
 }
