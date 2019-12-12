@@ -124,8 +124,7 @@
 
                     <div class="row">
                         <div class="col">
-                            <label for="images">Images</label>
-                                <input type="file" multiple placeholder="Upload images of your propery" class="form-control border-brand-greenish" id="images" ref="images" v-on:change="checkImage"/>
+                        <vue-dropzone id="dropzone" :options="config"></vue-dropzone>
                         </div>
                     </div>
                     <div class="row">
@@ -153,6 +152,16 @@
 
         data: function () {
             return {
+                config: {
+                    url: "#",
+                    maxFilesize: 5, // MB
+                    maxFiles: 10,
+                    chunking: true,
+                    chunkSize: 400, // Bytes
+                    thumbnailWidth: 150, // px
+                    thumbnailHeight: 150,
+                    addRemoveLinks: true
+                },
                 addressObject: {
                     addressLine: '',
                 },

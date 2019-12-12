@@ -2,23 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="194c585d-efab-437c-b7c7-343e71abc0c5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/config/image.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/MS4RE.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MS4RE.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PropertyController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PropertyController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/app.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/app.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/components/misc/Footer.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/misc/Footer.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/components/properties/CreateProperties.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/properties/CreateProperties.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/components/properties/Properties.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/properties/Properties.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/model/property/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/model/property/create.blade.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -232,7 +217,7 @@
       <workItem from="1575875316816" duration="25528000" />
       <workItem from="1575960989939" duration="24723000" />
       <workItem from="1576144737599" duration="3183000" />
-      <workItem from="1576148040931" duration="23647000" />
+      <workItem from="1576148040931" duration="23902000" />
     </task>
     <servers />
   </component>

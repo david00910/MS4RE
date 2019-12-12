@@ -2715,11 +2715,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      config: {
+        url: "#",
+        maxFilesize: 5,
+        // MB
+        maxFiles: 10,
+        chunking: true,
+        chunkSize: 400,
+        // Bytes
+        thumbnailWidth: 150,
+        // px
+        thumbnailHeight: 150,
+        addRemoveLinks: true
+      },
       addressObject: {
         addressLine: ''
       },
@@ -47056,21 +47068,16 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "row" }, [
-              _c("div", { staticClass: "col" }, [
-                _c("label", { attrs: { for: "images" } }, [_vm._v("Images")]),
-                _vm._v(" "),
-                _c("input", {
-                  ref: "images",
-                  staticClass: "form-control border-brand-greenish",
-                  attrs: {
-                    type: "file",
-                    multiple: "",
-                    placeholder: "Upload images of your propery",
-                    id: "images"
-                  },
-                  on: { change: _vm.checkImage }
-                })
-              ])
+              _c(
+                "div",
+                { staticClass: "col" },
+                [
+                  _c("vue-dropzone", {
+                    attrs: { id: "dropzone", options: _vm.config }
+                  })
+                ],
+                1
+              )
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "row" }, [
