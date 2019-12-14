@@ -57,6 +57,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('show/{id}', 'PropertyController@show')->name('show');
         // Return data for single paroperty
         Route::get('show/showProperty/{id}', 'PropertyController@singlePropertyData');
+        // Upload images after creation
+        Route::post('storeUpload', 'PropertyController@storeImage');
 
     });
 

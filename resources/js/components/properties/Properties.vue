@@ -193,12 +193,12 @@
 
 
                             <div class="row propertyDesign" @click="showProperty(property.id)">
-                                <div class="col-4 d-none d-sm-block pl-0">
-                                    <img class="img-fluid"  :src="'../images/example.jpg'/*'../images/'+file.url*/"
+                                <div class="col-4 d-none d-sm-block pl-0" v-for="pf in property.files">
+                                    <img class="img-fluid"  :src="'storage/'+pf.thumbnail_url"
                                          alt="Property thumbnail image">
                                 </div>
-                                <div class="col-4-sm d-block d-sm-none">
-                                    <img class="img-fluid"  :src="'../images/example.jpg'/*'../images/'+file.url*/"
+                                <div class="col-4-sm d-block d-sm-none" v-for="pf in property.files">
+                                    <img class="img-fluid"  :src="'storage/'+pf.thumbnail_url"
                                          alt="Property thumbnail image">
                                 </div>
 

@@ -19,15 +19,9 @@
                     <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
                     <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
                 </ol>
-                <div class="carousel-inner" style="max-height: 1080px !important;">
+                <div class="carousel-inner" v-for="pf in property.files" style="max-height: 1080px !important;">
                     <div class="carousel-item active">
-                        <img class="d-block w-100" :src="'/images/exampleHD.jpg'" alt="First slide">
-                    </div>
-                    <div class="carousel-item">
-                        <img class="d-block w-100" :src="'/images/exampleHD.jpg'" alt="Second slide">
-                    </div>
-                    <div class="carousel-item">
-                        <img class="d-block w-100" :src="'/images/exampleHD.jpg'" alt="Third slide">
+                        <img class="d-block w-100" :src="'/storage/'+pf.url" alt="First slide">
                     </div>
                 </div>
                 <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button"

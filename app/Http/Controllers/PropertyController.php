@@ -84,7 +84,7 @@ class PropertyController extends Controller
             'own_exp' => 'required',
             'deposit' => 'required',
             'sqm_price' => 'required',
-            'uploadFile[]' => 'file|mimes:png,jpg|max:4000000'
+
         ]);
 
 
@@ -117,65 +117,99 @@ class PropertyController extends Controller
             $property->created_by = $user;
             $property->address_id = $address->id;
             $property->save();
+            DB::commit();
 
-            // File upload
-
-                $photo = $request->input('uploadFile');
-
-                $storagePaths = [];
-
-                    $originalImage = Image::make($photo)->orientate();
-
-                    /**
-                     * HD image
-                     */
-                    $HDImage = Image::make($originalImage)->resize(null, 1080, function ($constraint) {
-                        $constraint->aspectRatio();
-                        $constraint->upsize();
-                    });
-                    $HDImagePath = $photo->hashName('images/property/' . $property->id . '/2k');
-
-                    Storage::put($HDImagePath, $HDImage->encode('jpg', 75));
-                    $storagePaths[] = $HDImagePath;
-
-                    /**
-                     * Thumbnail image
-                     */
-                    $thumbImage = Image::make($HDImage)->fit(300, 300, function ($constraint) {
-                        $constraint->aspectRatio();
-                        $constraint->upsize();
-                    });
-                    $thumbImagePath = $photo->hashName('images/meta/' . $property->id . '/thumbnail');
-
-                    Storage::put($thumbImagePath, $thumbImage->encode('jpg', 75));
-                    $storagePaths[] = $thumbImagePath;
-
-                    $file = new PropertyFiles();
-                    $file->property_id = $property->id;
-                    $file->type = 'image';
-                    $file->name = $file->hashName();
-                    $file->filetype = $originalImage->mime();
-                    if ($storagePaths[0]) {
-                        $file->url = $HDImagePath;
-                    } elseif ($storagePaths[1]) {
-                        $file->url = $thumbImagePath;
-                    }
-                    if (!$file->save()) {
-                        return response()->json([
-                            'status' => 'error',
-                            'message' => 'An image could not be saved. Please try again'
-                        ]);
-                    }
-
-
-                    DB::commit();
-
-
-
-           return response()->json(['status' => 'You have successfully created your property for sale. We will contact you shortly.'], 200);
+           return response()->json([
+               'status' => 'You have successfully created your property for sale. We will contact you shortly.',
+               'id' => $property->id
+           ], 200);
 
         }
 
+        catch(Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'status' => $e->getCode(),
+                'msg' => $e->getMessage()
+            ], 400);
+
+        }
+
+    }
+
+    protected function storeImage(Request $request) {
+
+
+        /*Validator::make($request->all(), [
+
+            'uploadFile[]' => 'file|mimes:png,jpg|max:4000000'
+
+        ]);*/
+
+        DB::beginTransaction();
+
+        try {
+
+
+            // File upload
+
+            $property = $request->propertyId;
+
+            $photo = $request->file('file');
+            $storagePaths = [];
+
+                $originalImage = Image::make($photo)->orientate();
+
+                /**
+                 * HD image
+                 */
+                $HDImage = Image::make($originalImage)->resize(2048, 1920, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
+                $HDImagePath = $photo->hashName('public/images/property/' . $property . '/2k');
+
+                Storage::disk('local')->put($HDImagePath, $HDImage->encode('jpg', 75));
+                array_push($storagePaths, $HDImagePath);
+
+
+                /**
+                 * Thumbnail image
+                 */
+                $thumbImage = Image::make($HDImage)->resize(600, 400, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
+                $thumbImagePath = $photo->hashName('public/images/property/' . $property . '/thumbnail');
+
+                Storage::disk('local')->put($thumbImagePath, $thumbImage->encode('jpg', 75));
+                array_push($storagePaths, $thumbImagePath);
+
+                $file = new PropertyFiles();
+                $file->property_id = $property;
+                $file->type = 'image';
+                $file->name = $photo->hashName();
+                $file->filetype = $originalImage->mime();
+                $file->url = $HDImagePath;
+                $file->thumbnail_url = $thumbImagePath;
+                if (!$file->save()) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'An image could not be saved. Please try again'
+                    ]);
+                }
+
+                DB::commit();
+
+
+
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'You have successfully upload the image(s).'
+            ]);
+
+        }
         catch(Exception $e) {
             DB::rollback();
             return response()->json([
@@ -197,7 +231,7 @@ class PropertyController extends Controller
 
         try {
 
-            $property = Property::with('address')->find($id);
+            $property = Property::with('address')->with('files')->find($id);
 
             $address_id = $property->address->address_uuid;
 

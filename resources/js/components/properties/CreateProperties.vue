@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container" v-if="propertyCreated === false">
         <div class="row">
             <div class="col">
 
@@ -122,26 +122,25 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col">
-                        <vue-dropzone id="dropzone" :options="config"></vue-dropzone>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col p-3">
-                            <h6 v-if=" imageError && imageError.length">
-                                <p>There are error(s) with the file upload:</p>
-                                <ul class="list-group-flush">
-                                    <li class="list-group-item text-danger" v-for="iError in imageError">{{ iError }}</li>
-                                </ul>
-                            </h6>
-                        </div>
-                    </div>
                     <button type="submit" class="btn btn-primary btn-brand-primary mt-3">Submit</button>
                 </form>
             </div>
         </div>
     </div>
+
+    <div class="container" v-else-if="propertyCreated">
+        <div class="row">
+            <div class="col">
+                Property ID: {{newPropertyID}}
+                <div class="row">
+                    <div class="col">
+                        <vue-dropzone id="dropzone" v-on:vdropzone-sending="sendingEvent" :options="config"></vue-dropzone>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </template>
 
 <script>
@@ -153,14 +152,16 @@
         data: function () {
             return {
                 config: {
-                    url: "#",
+                    url: "storeUpload",
                     maxFilesize: 5, // MB
                     maxFiles: 10,
                     chunking: true,
-                    chunkSize: 400, // Bytes
                     thumbnailWidth: 150, // px
                     thumbnailHeight: 150,
-                    addRemoveLinks: true
+                    addRemoveLinks: true,
+                    headers: {
+                        "X-CSRF-TOKEN": document.head.querySelector("[name=csrf-token]").content
+                    },
                 },
                 addressObject: {
                     addressLine: '',
@@ -177,8 +178,8 @@
                 errors: [],
                 errormsg: null,
                 loading: false,
-                imageError: [],
-                imageUpload: [],
+                newPropertyID: null,
+                propertyCreated: false,
 
             }
         },
@@ -202,6 +203,11 @@
         },
 
         methods: {
+
+            //Sending property id with the img upload request
+            sendingEvent (file, xhr, formData) {
+                formData.append('propertyId', this.newPropertyID);
+            },
 
             // handle the select event emitted by vue-dawa
             selectItem (payload, objectName) {
@@ -231,7 +237,6 @@
 
             checkForm: function (e) {
 
-                console.log(this.imageUpload);
                 if (this.addressObject.id && this.description && this.price && this.brutto && this.netto &&
                     this.own_exp && this.deposit && this.sqm_price) {
 
@@ -264,7 +269,8 @@
                                 this.output = response.status;
                                 this.errors = response.errors;
                                 this.loading = false;
-                                this.showEditField = false;
+                                this.newPropertyID = response.data.id;
+                                this.propertyCreated = true;
 
                             })
                             .catch(response => {

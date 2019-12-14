@@ -2714,23 +2714,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       config: {
-        url: "#",
+        url: "storeUpload",
         maxFilesize: 5,
         // MB
         maxFiles: 10,
         chunking: true,
-        chunkSize: 400,
-        // Bytes
         thumbnailWidth: 150,
         // px
         thumbnailHeight: 150,
-        addRemoveLinks: true
+        addRemoveLinks: true,
+        headers: {
+          "X-CSRF-TOKEN": document.head.querySelector("[name=csrf-token]").content
+        }
       },
       addressObject: {
         addressLine: ''
@@ -2746,8 +2746,8 @@ __webpack_require__.r(__webpack_exports__);
       errors: [],
       errormsg: null,
       loading: false,
-      imageError: [],
-      imageUpload: []
+      newPropertyID: null,
+      propertyCreated: false
     };
   },
   mounted: function mounted() {//console.log('Component mounted.');
@@ -2764,6 +2764,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {},
   methods: {
+    //Sending property id with the img upload request
+    sendingEvent: function sendingEvent(file, xhr, formData) {
+      formData.append('propertyId', this.newPropertyID);
+    },
     // handle the select event emitted by vue-dawa
     selectItem: function selectItem(payload, objectName) {
       this.$set(this, objectName, this.translateData(payload));
@@ -2790,8 +2794,6 @@ __webpack_require__.r(__webpack_exports__);
     checkForm: function checkForm(e) {
       var _this = this;
 
-      console.log(this.imageUpload);
-
       if (this.addressObject.id && this.description && this.price && this.brutto && this.netto && this.own_exp && this.deposit && this.sqm_price) {
         this.loading = true;
         axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('store', {
@@ -2817,7 +2819,8 @@ __webpack_require__.r(__webpack_exports__);
           _this.output = response.status;
           _this.errors = response.errors;
           _this.loading = false;
-          _this.showEditField = false;
+          _this.newPropertyID = response.data.id;
+          _this.propertyCreated = true;
         })["catch"](function (response) {
           console.log(response.msg);
           _this.errormsg = response.msg;
@@ -3345,12 +3348,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -46707,417 +46704,412 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
-    _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col" }, [
-        _vm.output
-          ? _c("div", { staticClass: "card alert-success" }, [
-              _c("div", { staticClass: "card-header" }, [
-                _vm._v("Property registered for sale")
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "card-body" }, [
-                _vm._v(_vm._s(_vm.output))
-              ])
-            ])
-          : _vm._e(),
-        _vm._v(" "),
-        _vm.errormsg
-          ? _c("div", { staticClass: "card alert-danger" }, [
-              _c("div", { staticClass: "card-header" }, [
-                _vm._v("An error has occured")
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "card-body" }, [
-                _vm._v(_vm._s(_vm.errormsg))
-              ])
-            ])
-          : _vm._e(),
-        _vm._v(" "),
-        _c(
-          "form",
-          {
-            attrs: {
-              id: "app",
-              enctype: "multipart/form-data",
-              method: "post"
-            },
-            on: { submit: _vm.checkForm }
-          },
-          [
-            _vm.errors && _vm.errors.length
-              ? _c("h6", [
-                  _c("p", [_vm._v("Please correct the following error(s):")]),
+  return _vm.propertyCreated === false
+    ? _c("div", { staticClass: "container" }, [
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col" }, [
+            _vm.output
+              ? _c("div", { staticClass: "card alert-success" }, [
+                  _c("div", { staticClass: "card-header" }, [
+                    _vm._v("Property registered for sale")
+                  ]),
                   _vm._v(" "),
-                  _c(
-                    "ul",
-                    { staticClass: "list-group-flush" },
-                    _vm._l(_vm.errors, function(error) {
-                      return _c(
-                        "li",
-                        { staticClass: "list-group-item text-danger" },
-                        [_vm._v(_vm._s(error))]
-                      )
-                    }),
-                    0
-                  )
+                  _c("div", { staticClass: "card-body" }, [
+                    _vm._v(_vm._s(_vm.output))
+                  ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.errormsg
+              ? _c("div", { staticClass: "card alert-danger" }, [
+                  _c("div", { staticClass: "card-header" }, [
+                    _vm._v("An error has occured")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "card-body" }, [
+                    _vm._v(_vm._s(_vm.errormsg))
+                  ])
                 ])
               : _vm._e(),
             _vm._v(" "),
             _c(
-              "div",
-              { staticClass: "form-group", attrs: { id: "addressContainer" } },
+              "form",
+              {
+                attrs: {
+                  id: "app",
+                  enctype: "multipart/form-data",
+                  method: "post"
+                },
+                on: { submit: _vm.checkForm }
+              },
               [
+                _vm.errors && _vm.errors.length
+                  ? _c("h6", [
+                      _c("p", [
+                        _vm._v("Please correct the following error(s):")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "ul",
+                        { staticClass: "list-group-flush" },
+                        _vm._l(_vm.errors, function(error) {
+                          return _c(
+                            "li",
+                            { staticClass: "list-group-item text-danger" },
+                            [_vm._v(_vm._s(error))]
+                          )
+                        }),
+                        0
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
                 _c(
-                  "vue-dawa",
+                  "div",
                   {
-                    attrs: {
-                      val: _vm.addressObject.addressLine,
-                      showMax: 10,
-                      placeholder: "Start typing the address",
-                      containerId: "addressContainer",
-                      fieldClasses: "form-control border-brand-greenish",
-                      fieldId: "address",
-                      fieldName: "address"
-                    },
-                    on: {
-                      select: function($event) {
-                        return _vm.selectItem($event, "addressObject")
-                      }
-                    }
+                    staticClass: "form-group",
+                    attrs: { id: "addressContainer" }
                   },
                   [
                     _c(
-                      "label",
+                      "vue-dawa",
                       {
-                        attrs: { slot: "label-top", for: "field-2" },
-                        slot: "label-top"
+                        attrs: {
+                          val: _vm.addressObject.addressLine,
+                          showMax: 10,
+                          placeholder: "Start typing the address",
+                          containerId: "addressContainer",
+                          fieldClasses: "form-control border-brand-greenish",
+                          fieldId: "address",
+                          fieldName: "address"
+                        },
+                        on: {
+                          select: function($event) {
+                            return _vm.selectItem($event, "addressObject")
+                          }
+                        }
                       },
-                      [_vm._v("Address")]
+                      [
+                        _c(
+                          "label",
+                          {
+                            attrs: { slot: "label-top", for: "field-2" },
+                            slot: "label-top"
+                          },
+                          [_vm._v("Address")]
+                        )
+                      ]
                     )
-                  ]
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "h5",
-              {
-                model: {
-                  value: _vm.addressObject.id,
-                  callback: function($$v) {
-                    _vm.$set(_vm.addressObject, "id", $$v)
-                  },
-                  expression: "addressObject.id"
-                }
-              },
-              [_vm._v(_vm._s(_vm.addressObject.id))]
-            ),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "description" } }, [
-                _vm._v("Description")
-              ]),
-              _vm._v(" "),
-              _c("textarea", {
-                directives: [
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "h5",
                   {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.description,
-                    expression: "description"
-                  }
-                ],
-                staticClass: "form-control border-brand-greenish",
-                attrs: {
-                  "aria-describedby": "descriptionHelp",
-                  placeholder: "Describe the property you would like to sell",
-                  id: "description"
-                },
-                domProps: { value: _vm.description },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
+                    model: {
+                      value: _vm.addressObject.id,
+                      callback: function($$v) {
+                        _vm.$set(_vm.addressObject, "id", $$v)
+                      },
+                      expression: "addressObject.id"
                     }
-                    _vm.description = $event.target.value
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "row" }, [
-              _c("div", { staticClass: "col-sm" }, [
+                  },
+                  [_vm._v(_vm._s(_vm.addressObject.id))]
+                ),
+                _vm._v(" "),
                 _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "price" } }, [
-                    _vm._v("Price (DKK)")
+                  _c("label", { attrs: { for: "description" } }, [
+                    _vm._v("Description")
                   ]),
                   _vm._v(" "),
-                  _c("input", {
+                  _c("textarea", {
                     directives: [
                       {
                         name: "model",
                         rawName: "v-model",
-                        value: _vm.price,
-                        expression: "price"
+                        value: _vm.description,
+                        expression: "description"
                       }
                     ],
                     staticClass: "form-control border-brand-greenish",
                     attrs: {
-                      type: "number",
-                      autocomplete: "off",
-                      "aria-describedby": "priceHelp",
-                      placeholder: "The price in DKK",
-                      id: "price"
+                      "aria-describedby": "descriptionHelp",
+                      placeholder:
+                        "Describe the property you would like to sell",
+                      id: "description"
                     },
-                    domProps: { value: _vm.price },
+                    domProps: { value: _vm.description },
                     on: {
                       input: function($event) {
                         if ($event.target.composing) {
                           return
                         }
-                        _vm.price = $event.target.value
+                        _vm.description = $event.target.value
                       }
                     }
                   })
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-sm" }, [
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "brutto" } }, [
-                    _vm._v("Brutto (DKK)")
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-sm" }, [
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "price" } }, [
+                        _vm._v("Price (DKK)")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.price,
+                            expression: "price"
+                          }
+                        ],
+                        staticClass: "form-control border-brand-greenish",
+                        attrs: {
+                          type: "number",
+                          autocomplete: "off",
+                          "aria-describedby": "priceHelp",
+                          placeholder: "The price in DKK",
+                          id: "price"
+                        },
+                        domProps: { value: _vm.price },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.price = $event.target.value
+                          }
+                        }
+                      })
+                    ])
                   ]),
                   _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.brutto,
-                        expression: "brutto"
-                      }
-                    ],
-                    staticClass: "form-control border-brand-greenish",
-                    attrs: {
-                      type: "number",
-                      autocomplete: "off",
-                      "aria-describedby": "bruttoHelp",
-                      placeholder: "The brutto price in DKK",
-                      id: "brutto"
-                    },
-                    domProps: { value: _vm.brutto },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
+                  _c("div", { staticClass: "col-sm" }, [
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "brutto" } }, [
+                        _vm._v("Brutto (DKK)")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.brutto,
+                            expression: "brutto"
+                          }
+                        ],
+                        staticClass: "form-control border-brand-greenish",
+                        attrs: {
+                          type: "number",
+                          autocomplete: "off",
+                          "aria-describedby": "bruttoHelp",
+                          placeholder: "The brutto price in DKK",
+                          id: "brutto"
+                        },
+                        domProps: { value: _vm.brutto },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.brutto = $event.target.value
+                          }
                         }
-                        _vm.brutto = $event.target.value
-                      }
-                    }
-                  })
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-sm" }, [
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "netto" } }, [
-                    _vm._v("Netto (DKK)")
+                      })
+                    ])
                   ]),
                   _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.netto,
-                        expression: "netto"
-                      }
-                    ],
-                    staticClass: "form-control border-brand-greenish",
-                    attrs: {
-                      type: "number",
-                      autocomplete: "off",
-                      "aria-describedby": "nettoHelp",
-                      placeholder: "The netto price in DKK",
-                      id: "netto"
-                    },
-                    domProps: { value: _vm.netto },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
+                  _c("div", { staticClass: "col-sm" }, [
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "netto" } }, [
+                        _vm._v("Netto (DKK)")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.netto,
+                            expression: "netto"
+                          }
+                        ],
+                        staticClass: "form-control border-brand-greenish",
+                        attrs: {
+                          type: "number",
+                          autocomplete: "off",
+                          "aria-describedby": "nettoHelp",
+                          placeholder: "The netto price in DKK",
+                          id: "netto"
+                        },
+                        domProps: { value: _vm.netto },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.netto = $event.target.value
+                          }
                         }
-                        _vm.netto = $event.target.value
-                      }
-                    }
-                  })
-                ])
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "row" }, [
-              _c("div", { staticClass: "col-sm" }, [
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "own_exp" } }, [
-                    _vm._v("Owner's Expense (DKK)")
+                      })
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-sm" }, [
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "own_exp" } }, [
+                        _vm._v("Owner's Expense (DKK)")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.own_exp,
+                            expression: "own_exp"
+                          }
+                        ],
+                        staticClass: "form-control border-brand-greenish",
+                        attrs: {
+                          type: "number",
+                          autocomplete: "off",
+                          "aria-describedby": "ownExpHelp",
+                          placeholder: "The owner's expense in DKK",
+                          id: "own_exp"
+                        },
+                        domProps: { value: _vm.own_exp },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.own_exp = $event.target.value
+                          }
+                        }
+                      })
+                    ])
                   ]),
                   _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.own_exp,
-                        expression: "own_exp"
-                      }
-                    ],
-                    staticClass: "form-control border-brand-greenish",
-                    attrs: {
-                      type: "number",
-                      autocomplete: "off",
-                      "aria-describedby": "ownExpHelp",
-                      placeholder: "The owner's expense in DKK",
-                      id: "own_exp"
-                    },
-                    domProps: { value: _vm.own_exp },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
+                  _c("div", { staticClass: "col-sm" }, [
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "deposit" } }, [
+                        _vm._v("Deposit (DKK)")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.deposit,
+                            expression: "deposit"
+                          }
+                        ],
+                        staticClass: "form-control border-brand-greenish",
+                        attrs: {
+                          type: "number",
+                          autocomplete: "off",
+                          "aria-describedby": "depositHelp",
+                          placeholder: "The deposit in DKK",
+                          id: "deposit"
+                        },
+                        domProps: { value: _vm.deposit },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.deposit = $event.target.value
+                          }
                         }
-                        _vm.own_exp = $event.target.value
-                      }
-                    }
-                  })
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-sm" }, [
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "deposit" } }, [
-                    _vm._v("Deposit (DKK)")
+                      })
+                    ])
                   ]),
                   _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.deposit,
-                        expression: "deposit"
-                      }
-                    ],
-                    staticClass: "form-control border-brand-greenish",
-                    attrs: {
-                      type: "number",
-                      autocomplete: "off",
-                      "aria-describedby": "depositHelp",
-                      placeholder: "The deposit in DKK",
-                      id: "deposit"
-                    },
-                    domProps: { value: _vm.deposit },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
+                  _c("div", { staticClass: "col-sm" }, [
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "sqm_price" } }, [
+                        _vm._v("m2 price (DKK)")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.sqm_price,
+                            expression: "sqm_price"
+                          }
+                        ],
+                        staticClass: "form-control border-brand-greenish",
+                        attrs: {
+                          type: "number",
+                          autocomplete: "off",
+                          "aria-describedby": "sqmPriceHelp",
+                          placeholder: "The square metre price in DKK",
+                          id: "sqm_price"
+                        },
+                        domProps: { value: _vm.sqm_price },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.sqm_price = $event.target.value
+                          }
                         }
-                        _vm.deposit = $event.target.value
-                      }
-                    }
-                  })
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-sm" }, [
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "sqm_price" } }, [
-                    _vm._v("m2 price (DKK)")
-                  ]),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.sqm_price,
-                        expression: "sqm_price"
-                      }
-                    ],
-                    staticClass: "form-control border-brand-greenish",
-                    attrs: {
-                      type: "number",
-                      autocomplete: "off",
-                      "aria-describedby": "sqmPriceHelp",
-                      placeholder: "The square metre price in DKK",
-                      id: "sqm_price"
-                    },
-                    domProps: { value: _vm.sqm_price },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.sqm_price = $event.target.value
-                      }
-                    }
-                  })
-                ])
-              ])
-            ]),
-            _vm._v(" "),
+                      })
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary btn-brand-primary mt-3",
+                    attrs: { type: "submit" }
+                  },
+                  [_vm._v("Submit")]
+                )
+              ]
+            )
+          ])
+        ])
+      ])
+    : _vm.propertyCreated
+    ? _c("div", { staticClass: "container" }, [
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col" }, [
+            _vm._v(
+              "\n            Property ID: " +
+                _vm._s(_vm.newPropertyID) +
+                "\n            "
+            ),
             _c("div", { staticClass: "row" }, [
               _c(
                 "div",
                 { staticClass: "col" },
                 [
                   _c("vue-dropzone", {
-                    attrs: { id: "dropzone", options: _vm.config }
+                    attrs: { id: "dropzone", options: _vm.config },
+                    on: { "vdropzone-sending": _vm.sendingEvent }
                   })
                 ],
                 1
               )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "row" }, [
-              _c("div", { staticClass: "col p-3" }, [
-                _vm.imageError && _vm.imageError.length
-                  ? _c("h6", [
-                      _c("p", [
-                        _vm._v("There are error(s) with the file upload:")
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "ul",
-                        { staticClass: "list-group-flush" },
-                        _vm._l(_vm.imageError, function(iError) {
-                          return _c(
-                            "li",
-                            { staticClass: "list-group-item text-danger" },
-                            [_vm._v(_vm._s(iError))]
-                          )
-                        }),
-                        0
-                      )
-                    ])
-                  : _vm._e()
-              ])
-            ]),
-            _vm._v(" "),
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-primary btn-brand-primary mt-3",
-                attrs: { type: "submit" }
-              },
-              [_vm._v("Submit")]
-            )
-          ]
-        )
+            ])
+          ])
+        ])
       ])
-    ])
-  ])
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -47917,35 +47909,37 @@ var render = function() {
                           }
                         },
                         [
-                          _c(
-                            "div",
-                            { staticClass: "col-4 d-none d-sm-block pl-0" },
-                            [
-                              _c("img", {
-                                staticClass: "img-fluid",
-                                attrs: {
-                                  src:
-                                    "../images/example.jpg" /*'../images/'+file.url*/,
-                                  alt: "Property thumbnail image"
-                                }
-                              })
-                            ]
-                          ),
+                          _vm._l(property.files, function(pf) {
+                            return _c(
+                              "div",
+                              { staticClass: "col-4 d-none d-sm-block pl-0" },
+                              [
+                                _c("img", {
+                                  staticClass: "img-fluid",
+                                  attrs: {
+                                    src: "storage/" + pf.thumbnail_url,
+                                    alt: "Property thumbnail image"
+                                  }
+                                })
+                              ]
+                            )
+                          }),
                           _vm._v(" "),
-                          _c(
-                            "div",
-                            { staticClass: "col-4-sm d-block d-sm-none" },
-                            [
-                              _c("img", {
-                                staticClass: "img-fluid",
-                                attrs: {
-                                  src:
-                                    "../images/example.jpg" /*'../images/'+file.url*/,
-                                  alt: "Property thumbnail image"
-                                }
-                              })
-                            ]
-                          ),
+                          _vm._l(property.files, function(pf) {
+                            return _c(
+                              "div",
+                              { staticClass: "col-4-sm d-block d-sm-none" },
+                              [
+                                _c("img", {
+                                  staticClass: "img-fluid",
+                                  attrs: {
+                                    src: "storage/" + pf.thumbnail_url,
+                                    alt: "Property thumbnail image"
+                                  }
+                                })
+                              ]
+                            )
+                          }),
                           _vm._v(" "),
                           _c("div", { staticClass: "col mt-3" }, [
                             _c("h5", { staticClass: "h5 text-brand-primary" }, [
@@ -48056,7 +48050,8 @@ var render = function() {
                               )
                             ])
                           ])
-                        ]
+                        ],
+                        2
                       ),
                       _vm._v(" "),
                       _c("hr", { staticClass: "bg-brand-slate" })
@@ -48191,40 +48186,29 @@ var render = function() {
         [
           _vm._m(0),
           _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass: "carousel-inner",
-              staticStyle: { "max-height": "1080px !important" }
-            },
-            [
-              _c("div", { staticClass: "carousel-item active" }, [
-                _c("img", {
-                  staticClass: "d-block w-100",
-                  attrs: { src: "/images/exampleHD.jpg", alt: "First slide" }
-                })
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "carousel-item" }, [
-                _c("img", {
-                  staticClass: "d-block w-100",
-                  attrs: { src: "/images/exampleHD.jpg", alt: "Second slide" }
-                })
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "carousel-item" }, [
-                _c("img", {
-                  staticClass: "d-block w-100",
-                  attrs: { src: "/images/exampleHD.jpg", alt: "Third slide" }
-                })
-              ])
-            ]
-          ),
+          _vm._l(_vm.property.files, function(pf) {
+            return _c(
+              "div",
+              {
+                staticClass: "carousel-inner",
+                staticStyle: { "max-height": "1080px !important" }
+              },
+              [
+                _c("div", { staticClass: "carousel-item active" }, [
+                  _c("img", {
+                    staticClass: "d-block w-100",
+                    attrs: { src: "/storage/" + pf.url, alt: "First slide" }
+                  })
+                ])
+              ]
+            )
+          }),
           _vm._v(" "),
           _vm._m(1),
           _vm._v(" "),
           _vm._m(2)
-        ]
+        ],
+        2
       )
     ]),
     _vm._v(" "),
