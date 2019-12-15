@@ -168,6 +168,7 @@ class PropertyController extends Controller
                     $constraint->upsize();
                 });
                 $HDImagePath = $photo->hashName('public/images/property/' . $property . '/2k');
+                $HDPathToSave =$photo->hashName('images/property/' . $property . '/2k');
 
                 Storage::disk('local')->put($HDImagePath, $HDImage->encode('jpg', 75));
                 array_push($storagePaths, $HDImagePath);
@@ -181,6 +182,7 @@ class PropertyController extends Controller
                     $constraint->upsize();
                 });
                 $thumbImagePath = $photo->hashName('public/images/property/' . $property . '/thumbnail');
+            $thumbPathToSave =$photo->hashName('images/property/' . $property . '/thumbnail');
 
                 Storage::disk('local')->put($thumbImagePath, $thumbImage->encode('jpg', 75));
                 array_push($storagePaths, $thumbImagePath);
@@ -190,8 +192,8 @@ class PropertyController extends Controller
                 $file->type = 'image';
                 $file->name = $photo->hashName();
                 $file->filetype = $originalImage->mime();
-                $file->url = $HDImagePath;
-                $file->thumbnail_url = $thumbImagePath;
+                $file->url = $HDPathToSave;
+                $file->thumbnail_url = $thumbPathToSave;
                 if (!$file->save()) {
                     return response()->json([
                         'status' => 'error',

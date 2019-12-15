@@ -11,33 +11,25 @@
             </div>
         </div>
 
-        <div class="row">
-
-            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                <ol class="carousel-indicators">
-                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-                </ol>
-                <div class="carousel-inner" v-for="pf in property.files" style="max-height: 1080px !important;">
-                    <div class="carousel-item active">
-                        <img class="d-block w-100" :src="'/storage/'+pf.url" alt="First slide">
+        <div class="row bg-brand-primary">
+            <div id="carouselExampleIndicators" class="carousel slide"  data-ride="carousel">
+                <div class="carousel-inner" style="max-height: 1080px !important;">
+                    <div class="carousel-item" v-for="(pf, p) in property.files" :class="{ active: p==0}">
+                        <img class="d-block w-100" :src="'/storage/'+pf.url" alt="Property images on the property show page">
                     </div>
+
                 </div>
-                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button"
-                   data-slide="prev">
-                    <span class="carousel-control-prev-icon text-brand-greenish" aria-hidden="true"></span>
+                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon shadow-lg" aria-hidden="true"></span>
                     <span class="sr-only">Previous</span>
                 </a>
-                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button"
-                   data-slide="next">
+                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     <span class="sr-only">Next</span>
                 </a>
             </div>
 
         </div>
-
 
         <div class="row p-5">
 
@@ -155,6 +147,7 @@
                 loading: false,
                 hasError: false,
                 ready: false,
+                hover: false,
             }
 
         },
@@ -202,3 +195,8 @@
         }
     }
 </script>
+
+<style scoped>
+
+
+</style>

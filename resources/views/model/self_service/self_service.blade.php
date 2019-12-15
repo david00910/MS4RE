@@ -21,9 +21,12 @@
                             </div>
 
                             <div class="col-lg-8">
-                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="collapse" data-target="#myProperties" aria-expanded="false" aria-controls="myProperties">
+                                <button class="btn btn-brand-greenish dropdown-toggle" type="button" data-toggle="collapse" data-target="#myProperties" aria-expanded="false" aria-controls="myProperties">
                                     My Properties
                                 </button>
+                                <a class="btn btn-outline-brand-greenish" href="{{route('create.property')}}">
+                                    + New Property
+                                </a>
                                 <div class="collapse" id="myProperties">
                                     <myproperties></myproperties>
                                 </div>

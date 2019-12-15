@@ -192,18 +192,51 @@
                         <div class="cardContainer p-3" v-for="property in properties">
 
 
-                            <div class="row propertyDesign" @click="showProperty(property.id)">
-                                <div class="col-4 d-none d-sm-block pl-0" v-for="pf in property.files">
-                                    <img class="img-fluid"  :src="'storage/'+pf.thumbnail_url"
-                                         alt="Property thumbnail image">
+                            <div class="row propertyDesign">
+                                <div class="col-4 d-none d-sm-block pl-0">
+
+                                    <div id="carouselExampleIndicators" class="carousel slide"  data-ride="carousel">
+                                        <ol class="carousel-indicators">
+                                            <li data-target="#carouselExampleIndicators" data-slide-to="0"></li>
+                                        </ol>
+                                        <div class="carousel-inner">
+                                            <div class="carousel-item" v-for="(pf, p) in property.files" :class="{ active: p==0}">
+                                                <img class="d-block w-100" :src="'storage/'+pf.thumbnail_url" alt="Property images on the property show page">
+                                            </div>
+                                        </div>
+                                        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Next</span>
+                                        </a>
+                                    </div>
                                 </div>
                                 <div class="col-4-sm d-block d-sm-none" v-for="pf in property.files">
-                                    <img class="img-fluid"  :src="'storage/'+pf.thumbnail_url"
-                                         alt="Property thumbnail image">
+                                    <div id="carouselExampleIndicators2" class="carousel slide"  data-ride="carousel">
+                                        <ol class="carousel-indicators">
+                                            <li data-target="#carouselExampleIndicators" data-slide-to="0"></li>
+                                        </ol>
+                                        <div class="carousel-inner">
+                                            <div class="carousel-item" v-for="(pf, p) in property.files" :class="{ active: p==0}">
+                                                <img class="d-block w-100" :src="'storage/'+pf.thumbnail_url" alt="Property images on the property show page">
+                                            </div>
+                                        </div>
+                                        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Next</span>
+                                        </a>
+                                    </div>
                                 </div>
 
 
-                                <div class="col mt-3">
+                                <div class="col mt-3" @click="showProperty(property.id)">
                                     <h5 class="h5 text-brand-primary">
                                         {{property.address.street}}
                                         {{property.address.housenr}},
@@ -212,7 +245,7 @@
                                     </h5>
                                     <h5 class="h5 text-brand-primary">{{property.address.city}}</h5>
                                 </div>
-                                <div class="col mt-3" style="border-left: 1px solid rgba(0, 60, 15, 0.1) !important;">
+                                <div class="col mt-3" style="border-left: 1px solid rgba(0, 60, 15, 0.1) !important;" @click="showProperty(property.id)">
                                     <h6 class="text-brand-slate">Price: </h6>
                                     <h5 class="text-brand-charleston">{{property.price | numeral('0,0')}} DKK</h5>
 
@@ -222,7 +255,7 @@
                                     <p class="text-brand-slate">{{property.netto | numeral('0,0')}} DKK</p>
                                 </div>
 
-                                <div class="col mt-3">
+                                <div class="col mt-3" @click="showProperty(property.id)">
                                     <small class="text-brand-slate">Deposit:</small>
                                     <p class="text-brand-slate">{{property.deposit | numeral('0,0')}} DKK</p>
                                     <small class="text-brand-slate">m²:</small>

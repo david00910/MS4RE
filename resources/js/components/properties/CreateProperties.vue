@@ -131,7 +131,11 @@
     <div class="container" v-else-if="propertyCreated">
         <div class="row">
             <div class="col">
-                Property ID: {{newPropertyID}}
+                <h5 class="text-brand-primary">Upload images of your property or <a href="#" class="text-brand-greenish">Have us take photos of your property for you.</a>
+                </h5>
+                <p class="text-brand-greenish">Max filesize: 4 MB/image</p>
+                <p class="text-brand-greenish">Maximum 4 images</p>
+                <p class="text-brand-greenish">Supported filetypes are JPEG or PNG</p>
                 <div class="row">
                     <div class="col">
                         <vue-dropzone id="dropzone" v-on:vdropzone-sending="sendingEvent" :options="config"></vue-dropzone>
@@ -154,8 +158,7 @@
                 config: {
                     url: "storeUpload",
                     maxFilesize: 5, // MB
-                    maxFiles: 10,
-                    chunking: true,
+                    maxFiles: 4,
                     thumbnailWidth: 150, // px
                     thumbnailHeight: 150,
                     addRemoveLinks: true,

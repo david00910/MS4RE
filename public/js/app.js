@@ -2714,6 +2714,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2722,8 +2726,7 @@ __webpack_require__.r(__webpack_exports__);
         url: "storeUpload",
         maxFilesize: 5,
         // MB
-        maxFiles: 10,
-        chunking: true,
+        maxFiles: 4,
         thumbnailWidth: 150,
         // px
         thumbnailHeight: 150,
@@ -2882,6 +2885,39 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3474,14 +3510,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3502,7 +3530,8 @@ __webpack_require__.r(__webpack_exports__);
       },
       loading: false,
       hasError: false,
-      ready: false
+      ready: false,
+      hover: false
     };
   },
   created: function created() {
@@ -47088,11 +47117,20 @@ var render = function() {
     ? _c("div", { staticClass: "container" }, [
         _c("div", { staticClass: "row" }, [
           _c("div", { staticClass: "col" }, [
-            _vm._v(
-              "\n            Property ID: " +
-                _vm._s(_vm.newPropertyID) +
-                "\n            "
-            ),
+            _vm._m(0),
+            _vm._v(" "),
+            _c("p", { staticClass: "text-brand-greenish" }, [
+              _vm._v("Max filesize: 4 MB/image")
+            ]),
+            _vm._v(" "),
+            _c("p", { staticClass: "text-brand-greenish" }, [
+              _vm._v("Maximum 4 images")
+            ]),
+            _vm._v(" "),
+            _c("p", { staticClass: "text-brand-greenish" }, [
+              _vm._v("Supported filetypes are JPEG or PNG")
+            ]),
+            _vm._v(" "),
             _c("div", { staticClass: "row" }, [
               _c(
                 "div",
@@ -47111,7 +47149,19 @@ var render = function() {
       ])
     : _vm._e()
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h5", { staticClass: "text-brand-primary" }, [
+      _vm._v("Upload images of your property or "),
+      _c("a", { staticClass: "text-brand-greenish", attrs: { href: "#" } }, [
+        _vm._v("Have us take photos of your property for you.")
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -47900,66 +47950,146 @@ var render = function() {
                     return _c("div", { staticClass: "cardContainer p-3" }, [
                       _c(
                         "div",
-                        {
-                          staticClass: "row propertyDesign",
-                          on: {
-                            click: function($event) {
-                              return _vm.showProperty(property.id)
-                            }
-                          }
-                        },
+                        { staticClass: "row propertyDesign" },
                         [
-                          _vm._l(property.files, function(pf) {
-                            return _c(
-                              "div",
-                              { staticClass: "col-4 d-none d-sm-block pl-0" },
-                              [
-                                _c("img", {
-                                  staticClass: "img-fluid",
+                          _c(
+                            "div",
+                            { staticClass: "col-4 d-none d-sm-block pl-0" },
+                            [
+                              _c(
+                                "div",
+                                {
+                                  staticClass: "carousel slide",
                                   attrs: {
-                                    src: "storage/" + pf.thumbnail_url,
-                                    alt: "Property thumbnail image"
+                                    id: "carouselExampleIndicators",
+                                    "data-ride": "carousel"
                                   }
-                                })
-                              ]
-                            )
-                          }),
+                                },
+                                [
+                                  _vm._m(1, true),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    { staticClass: "carousel-inner" },
+                                    _vm._l(property.files, function(pf, p) {
+                                      return _c(
+                                        "div",
+                                        {
+                                          staticClass: "carousel-item",
+                                          class: { active: p == 0 }
+                                        },
+                                        [
+                                          _c("img", {
+                                            staticClass: "d-block w-100",
+                                            attrs: {
+                                              src:
+                                                "storage/" + pf.thumbnail_url,
+                                              alt:
+                                                "Property images on the property show page"
+                                            }
+                                          })
+                                        ]
+                                      )
+                                    }),
+                                    0
+                                  ),
+                                  _vm._v(" "),
+                                  _vm._m(2, true),
+                                  _vm._v(" "),
+                                  _vm._m(3, true)
+                                ]
+                              )
+                            ]
+                          ),
                           _vm._v(" "),
                           _vm._l(property.files, function(pf) {
                             return _c(
                               "div",
                               { staticClass: "col-4-sm d-block d-sm-none" },
                               [
-                                _c("img", {
-                                  staticClass: "img-fluid",
-                                  attrs: {
-                                    src: "storage/" + pf.thumbnail_url,
-                                    alt: "Property thumbnail image"
-                                  }
-                                })
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass: "carousel slide",
+                                    attrs: {
+                                      id: "carouselExampleIndicators2",
+                                      "data-ride": "carousel"
+                                    }
+                                  },
+                                  [
+                                    _vm._m(4, true),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "carousel-inner" },
+                                      _vm._l(property.files, function(pf, p) {
+                                        return _c(
+                                          "div",
+                                          {
+                                            staticClass: "carousel-item",
+                                            class: { active: p == 0 }
+                                          },
+                                          [
+                                            _c("img", {
+                                              staticClass: "d-block w-100",
+                                              attrs: {
+                                                src:
+                                                  "storage/" + pf.thumbnail_url,
+                                                alt:
+                                                  "Property images on the property show page"
+                                              }
+                                            })
+                                          ]
+                                        )
+                                      }),
+                                      0
+                                    ),
+                                    _vm._v(" "),
+                                    _vm._m(5, true),
+                                    _vm._v(" "),
+                                    _vm._m(6, true)
+                                  ]
+                                )
                               ]
                             )
                           }),
                           _vm._v(" "),
-                          _c("div", { staticClass: "col mt-3" }, [
-                            _c("h5", { staticClass: "h5 text-brand-primary" }, [
-                              _vm._v(
-                                "\n                                    " +
-                                  _vm._s(property.address.street) +
-                                  "\n                                    " +
-                                  _vm._s(property.address.housenr) +
-                                  ",\n                                    " +
-                                  _vm._s(property.address.floor) +
-                                  "\n                                    " +
-                                  _vm._s(property.address.door) +
-                                  "\n                                "
+                          _c(
+                            "div",
+                            {
+                              staticClass: "col mt-3",
+                              on: {
+                                click: function($event) {
+                                  return _vm.showProperty(property.id)
+                                }
+                              }
+                            },
+                            [
+                              _c(
+                                "h5",
+                                { staticClass: "h5 text-brand-primary" },
+                                [
+                                  _vm._v(
+                                    "\n                                    " +
+                                      _vm._s(property.address.street) +
+                                      "\n                                    " +
+                                      _vm._s(property.address.housenr) +
+                                      ",\n                                    " +
+                                      _vm._s(property.address.floor) +
+                                      "\n                                    " +
+                                      _vm._s(property.address.door) +
+                                      "\n                                "
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "h5",
+                                { staticClass: "h5 text-brand-primary" },
+                                [_vm._v(_vm._s(property.address.city))]
                               )
-                            ]),
-                            _vm._v(" "),
-                            _c("h5", { staticClass: "h5 text-brand-primary" }, [
-                              _vm._v(_vm._s(property.address.city))
-                            ])
-                          ]),
+                            ]
+                          ),
                           _vm._v(" "),
                           _c(
                             "div",
@@ -47968,6 +48098,11 @@ var render = function() {
                               staticStyle: {
                                 "border-left":
                                   "1px solid rgba(0, 60, 15, 0.1) !important"
+                              },
+                              on: {
+                                click: function($event) {
+                                  return _vm.showProperty(property.id)
+                                }
                               }
                             },
                             [
@@ -48013,43 +48148,54 @@ var render = function() {
                             ]
                           ),
                           _vm._v(" "),
-                          _c("div", { staticClass: "col mt-3" }, [
-                            _c("small", { staticClass: "text-brand-slate" }, [
-                              _vm._v("Deposit:")
-                            ]),
-                            _vm._v(" "),
-                            _c("p", { staticClass: "text-brand-slate" }, [
-                              _vm._v(
-                                _vm._s(
-                                  _vm._f("numeral")(property.deposit, "0,0")
-                                ) + " DKK"
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("small", { staticClass: "text-brand-slate" }, [
-                              _vm._v("m²:")
-                            ]),
-                            _vm._v(" "),
-                            _c("p", { staticClass: "text-brand-slate" }, [
-                              _vm._v(
-                                _vm._s(
-                                  _vm._f("numeral")(property.sqm_price, "0,0")
-                                ) + " DKK"
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("small", { staticClass: "text-brand-slate" }, [
-                              _vm._v("Owner's expense:")
-                            ]),
-                            _vm._v(" "),
-                            _c("p", { staticClass: "text-brand-slate" }, [
-                              _vm._v(
-                                _vm._s(
-                                  _vm._f("numeral")(property.own_exp, "0,0")
-                                ) + " DKK"
-                              )
-                            ])
-                          ])
+                          _c(
+                            "div",
+                            {
+                              staticClass: "col mt-3",
+                              on: {
+                                click: function($event) {
+                                  return _vm.showProperty(property.id)
+                                }
+                              }
+                            },
+                            [
+                              _c("small", { staticClass: "text-brand-slate" }, [
+                                _vm._v("Deposit:")
+                              ]),
+                              _vm._v(" "),
+                              _c("p", { staticClass: "text-brand-slate" }, [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm._f("numeral")(property.deposit, "0,0")
+                                  ) + " DKK"
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("small", { staticClass: "text-brand-slate" }, [
+                                _vm._v("m²:")
+                              ]),
+                              _vm._v(" "),
+                              _c("p", { staticClass: "text-brand-slate" }, [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm._f("numeral")(property.sqm_price, "0,0")
+                                  ) + " DKK"
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("small", { staticClass: "text-brand-slate" }, [
+                                _vm._v("Owner's expense:")
+                              ]),
+                              _vm._v(" "),
+                              _c("p", { staticClass: "text-brand-slate" }, [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm._f("numeral")(property.own_exp, "0,0")
+                                  ) + " DKK"
+                                )
+                              ])
+                            ]
+                          )
                         ],
                         2
                       ),
@@ -48084,7 +48230,7 @@ var render = function() {
                 2
               )
             : _vm.properties.length < 1
-            ? _c("div", { staticClass: "container" }, [_vm._m(1)])
+            ? _c("div", { staticClass: "container" }, [_vm._m(7)])
             : _vm._e()
         ])
       ])
@@ -48125,6 +48271,128 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c("ol", { staticClass: "carousel-indicators" }, [
+      _c("li", {
+        attrs: {
+          "data-target": "#carouselExampleIndicators",
+          "data-slide-to": "0"
+        }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "a",
+      {
+        staticClass: "carousel-control-prev",
+        attrs: {
+          href: "#carouselExampleIndicators",
+          role: "button",
+          "data-slide": "prev"
+        }
+      },
+      [
+        _c("span", {
+          staticClass: "carousel-control-prev-icon",
+          attrs: { "aria-hidden": "true" }
+        }),
+        _vm._v(" "),
+        _c("span", { staticClass: "sr-only" }, [_vm._v("Previous")])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "a",
+      {
+        staticClass: "carousel-control-next",
+        attrs: {
+          href: "#carouselExampleIndicators",
+          role: "button",
+          "data-slide": "next"
+        }
+      },
+      [
+        _c("span", {
+          staticClass: "carousel-control-next-icon",
+          attrs: { "aria-hidden": "true" }
+        }),
+        _vm._v(" "),
+        _c("span", { staticClass: "sr-only" }, [_vm._v("Next")])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("ol", { staticClass: "carousel-indicators" }, [
+      _c("li", {
+        attrs: {
+          "data-target": "#carouselExampleIndicators",
+          "data-slide-to": "0"
+        }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "a",
+      {
+        staticClass: "carousel-control-prev",
+        attrs: {
+          href: "#carouselExampleIndicators",
+          role: "button",
+          "data-slide": "prev"
+        }
+      },
+      [
+        _c("span", {
+          staticClass: "carousel-control-prev-icon",
+          attrs: { "aria-hidden": "true" }
+        }),
+        _vm._v(" "),
+        _c("span", { staticClass: "sr-only" }, [_vm._v("Previous")])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "a",
+      {
+        staticClass: "carousel-control-next",
+        attrs: {
+          href: "#carouselExampleIndicators",
+          role: "button",
+          "data-slide": "next"
+        }
+      },
+      [
+        _c("span", {
+          staticClass: "carousel-control-next-icon",
+          attrs: { "aria-hidden": "true" }
+        }),
+        _vm._v(" "),
+        _c("span", { staticClass: "sr-only" }, [_vm._v("Next")])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "col text-center mt-2" }, [
       _c("h5", { staticClass: "text-muted" }, [
         _vm._v("There are no results with the current search options.")
@@ -48138,10 +48406,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/properties/ShowProperty.vue?vue&type=template&id=2346981a&":
-/*!**************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/properties/ShowProperty.vue?vue&type=template&id=2346981a& ***!
-  \**************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/properties/ShowProperty.vue?vue&type=template&id=2346981a&scoped=true&":
+/*!**************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/properties/ShowProperty.vue?vue&type=template&id=2346981a&scoped=true& ***!
+  \**************************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -48176,7 +48444,7 @@ var render = function() {
       )
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "row" }, [
+    _c("div", { staticClass: "row bg-brand-primary" }, [
       _c(
         "div",
         {
@@ -48184,31 +48452,34 @@ var render = function() {
           attrs: { id: "carouselExampleIndicators", "data-ride": "carousel" }
         },
         [
-          _vm._m(0),
-          _vm._v(" "),
-          _vm._l(_vm.property.files, function(pf) {
-            return _c(
-              "div",
-              {
-                staticClass: "carousel-inner",
-                staticStyle: { "max-height": "1080px !important" }
-              },
-              [
-                _c("div", { staticClass: "carousel-item active" }, [
+          _c(
+            "div",
+            {
+              staticClass: "carousel-inner",
+              staticStyle: { "max-height": "1080px !important" }
+            },
+            _vm._l(_vm.property.files, function(pf, p) {
+              return _c(
+                "div",
+                { staticClass: "carousel-item", class: { active: p == 0 } },
+                [
                   _c("img", {
                     staticClass: "d-block w-100",
-                    attrs: { src: "/storage/" + pf.url, alt: "First slide" }
+                    attrs: {
+                      src: "/storage/" + pf.url,
+                      alt: "Property images on the property show page"
+                    }
                   })
-                ])
-              ]
-            )
-          }),
+                ]
+              )
+            }),
+            0
+          ),
           _vm._v(" "),
-          _vm._m(1),
+          _vm._m(0),
           _vm._v(" "),
-          _vm._m(2)
-        ],
-        2
+          _vm._m(1)
+        ]
       )
     ]),
     _vm._v(" "),
@@ -48367,7 +48638,7 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _vm._m(3)
+      _vm._m(2)
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
@@ -48417,34 +48688,6 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("ol", { staticClass: "carousel-indicators" }, [
-      _c("li", {
-        staticClass: "active",
-        attrs: {
-          "data-target": "#carouselExampleIndicators",
-          "data-slide-to": "0"
-        }
-      }),
-      _vm._v(" "),
-      _c("li", {
-        attrs: {
-          "data-target": "#carouselExampleIndicators",
-          "data-slide-to": "1"
-        }
-      }),
-      _vm._v(" "),
-      _c("li", {
-        attrs: {
-          "data-target": "#carouselExampleIndicators",
-          "data-slide-to": "2"
-        }
-      })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c(
       "a",
       {
@@ -48457,7 +48700,7 @@ var staticRenderFns = [
       },
       [
         _c("span", {
-          staticClass: "carousel-control-prev-icon text-brand-greenish",
+          staticClass: "carousel-control-prev-icon shadow-lg",
           attrs: { "aria-hidden": "true" }
         }),
         _vm._v(" "),
@@ -64441,7 +64684,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _ShowProperty_vue_vue_type_template_id_2346981a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ShowProperty.vue?vue&type=template&id=2346981a& */ "./resources/js/components/properties/ShowProperty.vue?vue&type=template&id=2346981a&");
+/* harmony import */ var _ShowProperty_vue_vue_type_template_id_2346981a_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ShowProperty.vue?vue&type=template&id=2346981a&scoped=true& */ "./resources/js/components/properties/ShowProperty.vue?vue&type=template&id=2346981a&scoped=true&");
 /* harmony import */ var _ShowProperty_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ShowProperty.vue?vue&type=script&lang=js& */ "./resources/js/components/properties/ShowProperty.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
@@ -64453,11 +64696,11 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
   _ShowProperty_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _ShowProperty_vue_vue_type_template_id_2346981a___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _ShowProperty_vue_vue_type_template_id_2346981a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _ShowProperty_vue_vue_type_template_id_2346981a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ShowProperty_vue_vue_type_template_id_2346981a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
-  null,
+  "2346981a",
   null
   
 )
@@ -64483,19 +64726,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/properties/ShowProperty.vue?vue&type=template&id=2346981a&":
-/*!********************************************************************************************!*\
-  !*** ./resources/js/components/properties/ShowProperty.vue?vue&type=template&id=2346981a& ***!
-  \********************************************************************************************/
+/***/ "./resources/js/components/properties/ShowProperty.vue?vue&type=template&id=2346981a&scoped=true&":
+/*!********************************************************************************************************!*\
+  !*** ./resources/js/components/properties/ShowProperty.vue?vue&type=template&id=2346981a&scoped=true& ***!
+  \********************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ShowProperty_vue_vue_type_template_id_2346981a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./ShowProperty.vue?vue&type=template&id=2346981a& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/properties/ShowProperty.vue?vue&type=template&id=2346981a&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ShowProperty_vue_vue_type_template_id_2346981a___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ShowProperty_vue_vue_type_template_id_2346981a_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./ShowProperty.vue?vue&type=template&id=2346981a&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/properties/ShowProperty.vue?vue&type=template&id=2346981a&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ShowProperty_vue_vue_type_template_id_2346981a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ShowProperty_vue_vue_type_template_id_2346981a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ShowProperty_vue_vue_type_template_id_2346981a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
