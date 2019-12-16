@@ -20,11 +20,6 @@
 
                         <ul class="list-group" v-for="property in properties">
 
-                            <li class="list-group-item" style="padding: 0px !important;" v-for="file in property.files">
-                                <!-- TEMPORARY IMAGE OUTPUT -->
-                                <img class="img-fluid" v-if="property.files.length" :src="'../images/'+file.url" alt="">
-                            </li>
-
                             <li class="list-group-item">
                                 <h5>ID:</h5> {{ property.id }}
                             </li>

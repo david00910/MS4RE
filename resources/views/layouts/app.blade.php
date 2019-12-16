@@ -64,7 +64,7 @@
                         @else
                             <li class="nav-item dropdown" style="border-left: 1px solid rgba(255, 255, 255, 0.2) !important">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->first_name }} <span class="caret"></span>
+                                    {{ Auth::user()->first_name }} @if(auth()->user()->is_admin === 1)(Admin) @endif <span class="caret"></span>
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right bg-brand-greenish" aria-labelledby="navbarDropdown">
@@ -72,6 +72,12 @@
                                     <a class="dropdown-item" href="{{ route('self_service.index') }}">
                                         {{ __('Self-service') }}
                                     </a>
+
+                                    @if(auth()->user()->is_admin === 1)
+                                    <a class="dropdown-item" href="{{ route('admin-dashboard') }}">
+                                        {{ __('Admin Dashboard') }}
+                                    </a>
+                                    @endif
 
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();

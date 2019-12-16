@@ -26,51 +26,51 @@
                         <hr class="bg-brand-greenish">
 
                         <div class="row text-center">
-                            <div class="col">
+                            <div class="col text-left">
                                 <div class="form-check">
                                     <input class="form-check-input" @change="callFiltering"
-                                           v-model.lazy="checkedCategories" type="checkbox" value="Category 1"
+                                           v-model.lazy="checkedCategories" type="checkbox" value="Apartment"
                                            id="cat1">
                                     <label class="form-check-label" for="cat1">
-                                        Category 1
+                                        Apartment
                                     </label>
                                 </div>
 
                                 <div class="form-check">
                                     <input class="form-check-input" @change="callFiltering"
-                                           v-model.lazy="checkedCategories" type="checkbox" value="Category 2"
+                                           v-model.lazy="checkedCategories" type="checkbox" value="Villa"
                                            id="cat2">
                                     <label class="form-check-label" for="cat2">
-                                        Category 2
+                                        Villa
                                     </label>
                                 </div>
 
                                 <div class="form-check">
                                     <input class="form-check-input" @change="callFiltering"
-                                           v-model.lazy="checkedCategories" type="checkbox" value="Category 3"
+                                           v-model.lazy="checkedCategories" type="checkbox" value="House"
                                            id="cat3">
                                     <label class="form-check-label" for="cat3">
-                                        Category 3
+                                        House
                                     </label>
                                 </div>
                             </div>
 
-                            <div class="col">
+                            <div class="col text-left">
                                 <div class="form-check">
                                     <input class="form-check-input" @change="callFiltering"
-                                           v-model.lazy="checkedCategories" type="checkbox" value="Category 4"
+                                           v-model.lazy="checkedCategories" type="checkbox" value="Recreational unit"
                                            id="cat4">
                                     <label class="form-check-label" for="cat4">
-                                        Category 4
+                                        Recreational unit
                                     </label>
                                 </div>
 
                                 <div class="form-check">
                                     <input class="form-check-input" @change="callFiltering"
-                                           v-model.lazy="checkedCategories" type="checkbox" value="Category 5"
+                                           v-model.lazy="checkedCategories" type="checkbox" value="Other"
                                            id="cat5">
                                     <label class="form-check-label" for="cat5">
-                                        Category 5
+                                        Other
                                     </label>
                                 </div>
 
@@ -192,18 +192,32 @@
                         <div class="cardContainer p-3" v-for="property in properties">
 
 
-                            <div class="row propertyDesign" @click="showProperty(property.id)">
-                                <div class="col-4 d-none d-sm-block pl-0">
-                                    <img class="img-fluid"  :src="'../images/example.jpg'/*'../images/'+file.url*/"
-                                         alt="Property thumbnail image">
+                            <div class="row propertyDesign">
+                                <div class="col-4 d-none d-sm-block p-0">
+
+                                    <div id="carouselExampleIndicators" class="carousel slide"  data-ride="carousel">
+
+                                        <div class="carousel-inner">
+                                            <div class="carousel-item" v-for="(pf, p) in property.files" :class="{ active: p==0}">
+                                                <img class="d-block w-100" :src="'storage/'+pf.thumbnail_url" alt="Property images on the property show page">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-4-sm d-block d-sm-none">
-                                    <img class="img-fluid"  :src="'../images/example.jpg'/*'../images/'+file.url*/"
-                                         alt="Property thumbnail image">
+                                <div class="col-4-sm d-block d-sm-none" v-for="pf in property.files">
+                                    <div id="carouselExampleIndicators2" class="carousel slide"  data-ride="carousel">
+
+                                        <div class="carousel-inner">
+                                            <div class="carousel-item" v-for="(pf, p) in property.files" :class="{ active: p==0}">
+                                                <img class="d-block w-100" :src="'storage/'+pf.thumbnail_url" alt="Property images on the property show page">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
 
-                                <div class="col mt-3">
+                                <div class="col mt-3" @click="showProperty(property.id)">
+                                    <h6 class="pb-2 pt-2 text-brand-charleston" v-for="pc in property.propertycategories">{{pc.category}}</h6>
                                     <h5 class="h5 text-brand-primary">
                                         {{property.address.street}}
                                         {{property.address.housenr}},
@@ -212,7 +226,7 @@
                                     </h5>
                                     <h5 class="h5 text-brand-primary">{{property.address.city}}</h5>
                                 </div>
-                                <div class="col mt-3" style="border-left: 1px solid rgba(0, 60, 15, 0.1) !important;">
+                                <div class="col mt-3" style="border-left: 1px solid rgba(0, 60, 15, 0.1) !important;" @click="showProperty(property.id)">
                                     <h6 class="text-brand-slate">Price: </h6>
                                     <h5 class="text-brand-charleston">{{property.price | numeral('0,0')}} DKK</h5>
 
@@ -222,7 +236,7 @@
                                     <p class="text-brand-slate">{{property.netto | numeral('0,0')}} DKK</p>
                                 </div>
 
-                                <div class="col mt-3">
+                                <div class="col mt-3" @click="showProperty(property.id)">
                                     <small class="text-brand-slate">Deposit:</small>
                                     <p class="text-brand-slate">{{property.deposit | numeral('0,0')}} DKK</p>
                                     <small class="text-brand-slate">m²:</small>
@@ -232,7 +246,7 @@
                                 </div>
 
                             </div>
-                            <hr class="bg-brand-slate">
+                            <hr class="bg-brand-greenish">
 
                         </div>
                         <pagination v-if="searchInProgress && pagination.last_page > 1"

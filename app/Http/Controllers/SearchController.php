@@ -29,10 +29,12 @@ class SearchController extends Controller
         $category = $request->queryCategory;
         $expression = $request->queryExpression;
 
+        $fromAdmin = $request->fromAdmin;
+
 
         try {
             if($request->queryCategory !== null) {
-                $property = Property::with('files')->with('propertycategories')->with('address')->orderBy('created_at', 'DESC')
+                $property = Property::with('files')->with('propertycategories')->with('address')->orderBy('price', 'ASC')
                     ->whereBetween('price', [$priceMin, $priceMax])
                     ->WhereBetween('brutto', [$bruttoMin, $bruttoMax])
                     ->WhereBetween('netto', [$nettoMin, $nettoMax])
@@ -42,7 +44,7 @@ class SearchController extends Controller
                     ->whereHas('propertycategories', function ($q) use ($category) {
                         $q->whereIn('category', $category);
                     })
-                    ->paginate(12);
+                    ->paginate(6);
                 $response = [
                     'pagination' => [
                         'total' => $property->total(),
@@ -56,7 +58,7 @@ class SearchController extends Controller
                 ];
             }
             elseif ($request->queryExpression !== null) {
-                $property = Property::with('files')->with('propertycategories')->with('address')->orderBy('created_at', 'DESC')
+                $property = Property::with('files')->with('propertycategories')->with('address')->orderBy('price', 'ASC')
                     ->whereBetween('price', [$priceMin, $priceMax])
                     ->WhereBetween('brutto', [$bruttoMin, $bruttoMax])
                     ->WhereBetween('netto', [$nettoMin, $nettoMax])
@@ -73,7 +75,45 @@ class SearchController extends Controller
                         $q->orWhere('postcode', 'LIKE', "%{$expression}%");
                         $q->orWhere('city', 'LIKE', "%{$expression}%");
                     })
-                    ->paginate(12);
+                    ->paginate(6);
+                $response = [
+                    'pagination' => [
+                        'total' => $property->total(),
+                        'per_page' => $property->perPage(),
+                        'current_page' => $property->currentPage(),
+                        'last_page' => $property->lastPage(),
+                        'from' => $property->firstItem(),
+                        'to' => $property->lastItem()
+                    ],
+                    'data' => $property
+                ];
+            }
+            elseif ($fromAdmin == 1 && $request->queryExpression !== null) {
+                $property = Property::with('files')->with('propertycategories')->with('address')->orderBy('price', 'ASC')
+                    ->whereHas('address', function ($q) use ($expression) {
+                        $q->where('fulladdress', 'LIKE', "%{$expression}");
+                        $q->orWhere('street', 'LIKE', "%{$expression}%");
+                        $q->orWhere('door', 'LIKE', "%{$expression}%");
+                        $q->orWhere('floor', 'LIKE', "%{$expression}%");
+                        $q->orWhere('housenr', 'LIKE', "%{$expression}%");
+                        $q->orWhere('postcode', 'LIKE', "%{$expression}%");
+                        $q->orWhere('city', 'LIKE', "%{$expression}%");
+                    })
+                    ->paginate(6);
+                $response = [
+                    'pagination' => [
+                        'total' => $property->total(),
+                        'per_page' => $property->perPage(),
+                        'current_page' => $property->currentPage(),
+                        'last_page' => $property->lastPage(),
+                        'from' => $property->firstItem(),
+                        'to' => $property->lastItem()
+                    ],
+                    'data' => $property
+                ];
+            }
+            elseif ($fromAdmin == 1) {
+                $property = Property::with('files')->with('propertycategories')->with('address')->orderBy('price', 'ASC')->paginate(6);
                 $response = [
                     'pagination' => [
                         'total' => $property->total(),
@@ -87,7 +127,7 @@ class SearchController extends Controller
                 ];
             }
             elseif ($request->queryExpression !== null && $request->queryCategory !== null) {
-                $property = Property::with('files')->with('propertycategories')->with('address')->orderBy('created_at', 'DESC')
+                $property = Property::with('files')->with('propertycategories')->with('address')->orderBy('price', 'ASC')
                     ->whereBetween('price', [$priceMin, $priceMax])
                     ->WhereBetween('brutto', [$bruttoMin, $bruttoMax])
                     ->WhereBetween('netto', [$nettoMin, $nettoMax])
@@ -107,7 +147,7 @@ class SearchController extends Controller
                     ->whereHas('propertycategories', function ($q) use ($category) {
                         $q->whereIn('category', $category);
                     })
-                    ->paginate(12);
+                    ->paginate(6);
                 $response = [
                     'pagination' => [
                         'total' => $property->total(),
@@ -121,7 +161,7 @@ class SearchController extends Controller
                 ];
             }
             else {
-                $property = Property::with('files')->with('propertycategories')->with('address')->orderBy('created_at', 'DESC')
+                $property = Property::with('files')->with('propertycategories')->with('address')->orderBy('price', 'ASC')
                     ->whereBetween('price', [$priceMin, $priceMax])
                     ->WhereBetween('brutto', [$bruttoMin, $bruttoMax])
                     ->WhereBetween('netto', [$nettoMin, $nettoMax])
@@ -129,7 +169,7 @@ class SearchController extends Controller
                     ->WhereBetween('sqm_price', [$sqmMin, $sqmMax])
                     ->WhereBetween('deposit', [$depositMin, $depositMax])
 
-                    ->paginate(12);
+                    ->paginate(6);
                 $response = [
                     'pagination' => [
                         'total' => $property->total(),

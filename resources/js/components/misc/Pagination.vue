@@ -2,7 +2,7 @@
 
     <ul class="pagination justify-content-center">
         <li v-for="page in pages"  class="page-item">
-            <a style="cursor:pointer !important;" class="page-link" :class="isCurrentPage(page) ? 'page-link bg-primary' : ''" @click.prevent="changePage(page)">{{ page }}</a>
+            <a style="cursor:pointer !important;" class="page-link bg-brand-primary" :class="isCurrentPage(page) ? 'page-link bg-brand-greenish text-white' : ''" @click.prevent="changePage(page)">{{ page }}</a>
         </li>
     </ul>
 </template>

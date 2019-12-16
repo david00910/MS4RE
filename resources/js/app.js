@@ -17,6 +17,7 @@ import MyProperties from "./components/self_service/MyProperties";
 import CreateProperties from "./components/properties/CreateProperties";
 import ShowProperty from "./components/properties/ShowProperty";
 import Footer from "./components/misc/Footer";
+import AdminDashboard from "./components/admin_dashboard/AdminDashboard";
 
 // Third party, installed components
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
@@ -25,7 +26,8 @@ import 'vue-slider-component/theme/default.css';
 import VueDawa from '@ancaio/vue-dawa/sfc';
 import * as VueGoogleMaps from 'vue2-google-maps';
 import vue2Dropzone from 'vue2-dropzone'
-import 'vue2-dropzone/dist/vue2Dropzone.min.css'
+import 'vue2-dropzone/dist/vue2Dropzone.min.css';
+import VueAnalytics from 'vue-analytics';
 
 // use default options
 // Numeral filter for outputs
@@ -36,7 +38,12 @@ Vue.use(VueGoogleMaps, {
         libraries: 'places',
     },
 });
-// Use debouncer for search queries
+
+Vue.use(VueAnalytics, {
+    id: 'UA-XXX-X',
+    checkDuplicatedScript: true
+});
+
 
 
 /**
@@ -61,6 +68,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.prototype.$dawa = require('dawa-autocomplete2');
 Vue.component('pagination', Pagination);
 Vue.component('user', User);
+Vue.component('admin-dashboard', AdminDashboard);
 Vue.component('myproperties', MyProperties);
 Vue.component('createproperties', CreateProperties);
 Vue.component('showproperty', ShowProperty);
@@ -68,6 +76,8 @@ Vue.component('v-footer', Footer);
 Vue.component('vue-slider', VueSlider);
 Vue.component('vue-dawa', VueDawa);
 Vue.component('vue-dropzone', vue2Dropzone);
+
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -78,7 +88,7 @@ Vue.component('vue-dropzone', vue2Dropzone);
 const app = new Vue({
     el: '#app',
     components: {
-        VueDawa
+        VueDawa,
     }
 
 });

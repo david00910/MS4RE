@@ -15,22 +15,22 @@
 
 // PUBLIC ROUTES
 
-Auth::routes();
+    Auth::routes();
 
-Route::get('/', 'HomeController@index')->name('home');
+    Route::get('/', 'HomeController@index')->name('home');
 
-// Get all the properties
-Route::get('/properties', 'PropertyController@indexData')->name('properties');
+    // Get all the properties
+    Route::get('/properties', 'PropertyController@indexData')->name('properties');
 
-// Search route
-Route::get('search', 'SearchController@search');
+    // Search route
+    Route::get('search', 'SearchController@search');
 
-// Contact send message route
-Route::post('contactUs', 'MessageController@contactUs');
+    // Contact send message route
+    Route::post('contactUs', 'MessageController@contactUs');
 
 // AUTHENTICATED ROUTES
 
-Route::group(['middleware' => 'auth'], function () {
+    Route::group(['middleware' => 'auth'], function () {
 
     // Self-service routes
     Route::prefix('self_service/')->group(function () {
@@ -57,9 +57,27 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('show/{id}', 'PropertyController@show')->name('show');
         // Return data for single paroperty
         Route::get('show/showProperty/{id}', 'PropertyController@singlePropertyData');
+        // Upload images after creation
+        Route::post('storeUpload', 'PropertyController@storeImage');
 
     });
 
+    // Admin routes
+        Route::prefix('admin_dashboard/')->group(function () {
+
+            Route::get('index', 'AdminController@index')->name('admin-dashboard');
+
+            // List of properties
+            Route::get('properties', 'AdminController@indexProperties');
+            // Edit user info
+            Route::post('editUser', 'AdminController@editUser');
+            // Edit property info (except address for now)
+            Route::post('editProperty/{id}', 'AdminController@editProperty');
+            // Soft delete user (User does not get deleted permanently, can be recovered anytime)
+            Route::delete('deleteUser', 'AdminController@deleteUser');
+            // Soft delete property (Property does not get deleted permanently, can be recovered anytime)
+            Route::delete('deleteProperty/{id}', 'AdminController@deleteProperty');
+        });
 
 
 });
