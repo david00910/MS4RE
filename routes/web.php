@@ -19,7 +19,10 @@
 
     Route::get('/', 'HomeController@index')->name('home');
 
-    // Get all the properties
+    Route::get('/propertyList', 'PropertyController@index')->name('propertyList');
+
+
+// Get all the properties
     Route::get('/properties', 'PropertyController@indexData')->name('properties');
 
     // Search route
@@ -77,6 +80,8 @@
             Route::delete('deleteUser', 'AdminController@deleteUser');
             // Soft delete property (Property does not get deleted permanently, can be recovered anytime)
             Route::delete('deleteProperty/{id}', 'AdminController@deleteProperty');
+            // Soft delete property image (The file wil lnot be delete, nor the DB entry, but gets the deleted_at timestamp and won't show up in the list.
+            Route::delete('deletePropertyImage/{id}', 'AdminController@deletePropertyImage');
         });
 
 

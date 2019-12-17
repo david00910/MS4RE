@@ -2621,10 +2621,52 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      config: {
+        url: "../property/storeUpload",
+        maxFilesize: 8,
+        // MB
+        maxFiles: 4,
+        thumbnailWidth: 150,
+        // px
+        thumbnailHeight: 150,
+        addRemoveLinks: true,
+        headers: {
+          "X-CSRF-TOKEN": document.head.querySelector("[name=csrf-token]").content
+        }
+      },
       selected: false,
+      confirmDeleteImage: false,
       confirmDelete: false,
       searchInProgress: false,
       // if this is true, the pagination is rendered for the filtered results only.
@@ -2723,6 +2765,10 @@ __webpack_require__.r(__webpack_exports__);
         _this2.hasError = true;
       });
     },
+    //Sending property id with the img upload request
+    sendingEvent: function sendingEvent(file, xhr, formData) {
+      formData.append('propertyId', this.singleProperty.id);
+    },
     checkForm: function checkForm() {
       var _this3 = this;
 
@@ -2737,7 +2783,7 @@ __webpack_require__.r(__webpack_exports__);
           deposit: this.singleProperty.deposit,
           sqm_price: this.singleProperty.sqm_price
         }).then(function (response) {
-          _this3.output = response.status;
+          _this3.output = response.msg;
           _this3.errors = response.errors;
           _this3.loading = false;
           var self = _this3;
@@ -2781,6 +2827,12 @@ __webpack_require__.r(__webpack_exports__);
         this.errors.push('The square metre price field is empty');
       }
     },
+    afterComplete: function afterComplete() {
+      this.output = 'Image uploaded. Refreshing...';
+      var self = this;
+      this.showEditField(self.singleProperty.id);
+      this.output = false;
+    },
     deleteProperty: function deleteProperty(id) {
       var _this4 = this;
 
@@ -2798,6 +2850,25 @@ __webpack_require__.r(__webpack_exports__);
         _this4.error = error.msg;
         _this4.hasError = true;
         _this4.confirmDelete = false;
+      });
+    },
+    deletePropertyImage: function deletePropertyImage(ImageId) {
+      var _this5 = this;
+
+      this.loading = true;
+      axios["delete"]('deletePropertyImage/' + ImageId).then(function (res) {
+        _this5.output = res.data.msg;
+        _this5.loading = false;
+        _this5.confirmDeleteImage = false;
+        var self = _this5;
+        setTimeout(function () {
+          self.showEditField(self.singleProperty.id);
+          self.output = false;
+        }, 3000);
+      })["catch"](function (error) {
+        _this5.error = error.msg;
+        _this5.hasError = true;
+        _this5.confirmDeleteImage = false;
       });
     }
   }
@@ -46903,7 +46974,7 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col" }, [
-            _c("div", { staticClass: "card border-brand-greenish" }, [
+            _c("div", { staticClass: "card border-brand-greenish " }, [
               _c(
                 "div",
                 { staticClass: "card-header bg-brand-primary text-white" },
@@ -47387,337 +47458,447 @@ var render = function() {
                     ])
                   : _vm._e(),
                 _vm._v(" "),
-                _vm.errors && _vm.errors.length
-                  ? _c("h6", [
-                      _c("p", [
-                        _vm._v("Please correct the following error(s):")
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "ul",
-                        { staticClass: "list-group-flush" },
-                        _vm._l(_vm.errors, function(error) {
-                          return _c(
-                            "li",
-                            { staticClass: "list-group-item text-danger" },
-                            [_vm._v(_vm._s(error))]
+                _c("div", { staticClass: "card border-brand-greenish p-3" }, [
+                  _vm.errors && _vm.errors.length
+                    ? _c("h6", [
+                        _c("p", [
+                          _vm._v("Please correct the following error(s):")
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "ul",
+                          { staticClass: "list-group-flush" },
+                          _vm._l(_vm.errors, function(error) {
+                            return _c(
+                              "li",
+                              { staticClass: "list-group-item text-danger" },
+                              [_vm._v(_vm._s(error))]
+                            )
+                          }),
+                          0
+                        )
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("small", { staticClass: "text-brand-charleston" }, [
+                    _vm._v(
+                      "Info: Property addresses are not modifiable in the Beta version."
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", { attrs: { for: "description" } }, [
+                      _vm._v("Description")
+                    ]),
+                    _vm._v(" "),
+                    _c("textarea", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.singleProperty.description,
+                          expression: "singleProperty.description"
+                        }
+                      ],
+                      staticClass: "form-control border-brand-greenish",
+                      attrs: {
+                        "aria-describedby": "descriptionHelp",
+                        placeholder:
+                          "Describe the property you would like to sell",
+                        id: "description"
+                      },
+                      domProps: { value: _vm.singleProperty.description },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.singleProperty,
+                            "description",
+                            $event.target.value
                           )
-                        }),
-                        0
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-sm" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("label", { attrs: { for: "price" } }, [
+                          _vm._v("Price (DKK)")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.singleProperty.price,
+                              expression: "singleProperty.price"
+                            }
+                          ],
+                          staticClass: "form-control border-brand-greenish",
+                          attrs: {
+                            type: "number",
+                            autocomplete: "off",
+                            "aria-describedby": "priceHelp",
+                            placeholder: "The price in DKK",
+                            id: "price"
+                          },
+                          domProps: { value: _vm.singleProperty.price },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.singleProperty,
+                                "price",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        })
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-sm" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("label", { attrs: { for: "brutto" } }, [
+                          _vm._v("Brutto (DKK)")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.singleProperty.brutto,
+                              expression: "singleProperty.brutto"
+                            }
+                          ],
+                          staticClass: "form-control border-brand-greenish",
+                          attrs: {
+                            type: "number",
+                            autocomplete: "off",
+                            "aria-describedby": "bruttoHelp",
+                            placeholder: "The brutto price in DKK",
+                            id: "brutto"
+                          },
+                          domProps: { value: _vm.singleProperty.brutto },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.singleProperty,
+                                "brutto",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        })
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-sm" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("label", { attrs: { for: "netto" } }, [
+                          _vm._v("Netto (DKK)")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.singleProperty.netto,
+                              expression: "singleProperty.netto"
+                            }
+                          ],
+                          staticClass: "form-control border-brand-greenish",
+                          attrs: {
+                            type: "number",
+                            autocomplete: "off",
+                            "aria-describedby": "nettoHelp",
+                            placeholder: "The netto price in DKK",
+                            id: "netto"
+                          },
+                          domProps: { value: _vm.singleProperty.netto },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.singleProperty,
+                                "netto",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        })
+                      ])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-sm" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("label", { attrs: { for: "own_exp" } }, [
+                          _vm._v("Owner's Expense (DKK)")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.singleProperty.own_exp,
+                              expression: "singleProperty.own_exp"
+                            }
+                          ],
+                          staticClass: "form-control border-brand-greenish",
+                          attrs: {
+                            type: "number",
+                            autocomplete: "off",
+                            "aria-describedby": "ownExpHelp",
+                            placeholder: "The owner's expense in DKK",
+                            id: "own_exp"
+                          },
+                          domProps: { value: _vm.singleProperty.own_exp },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.singleProperty,
+                                "own_exp",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        })
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-sm" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("label", { attrs: { for: "deposit" } }, [
+                          _vm._v("Deposit (DKK)")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.singleProperty.deposit,
+                              expression: "singleProperty.deposit"
+                            }
+                          ],
+                          staticClass: "form-control border-brand-greenish",
+                          attrs: {
+                            type: "number",
+                            autocomplete: "off",
+                            "aria-describedby": "depositHelp",
+                            placeholder: "The deposit in DKK",
+                            id: "deposit"
+                          },
+                          domProps: { value: _vm.singleProperty.deposit },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.singleProperty,
+                                "deposit",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        })
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-sm" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("label", { attrs: { for: "sqm_price" } }, [
+                          _vm._v("m2 price (DKK)")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.singleProperty.sqm_price,
+                              expression: "singleProperty.sqm_price"
+                            }
+                          ],
+                          staticClass: "form-control border-brand-greenish",
+                          attrs: {
+                            type: "number",
+                            autocomplete: "off",
+                            "aria-describedby": "sqmPriceHelp",
+                            placeholder: "The square metre price in DKK",
+                            id: "sqm_price"
+                          },
+                          domProps: { value: _vm.singleProperty.sqm_price },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.singleProperty,
+                                "sqm_price",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        })
+                      ])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  !_vm.loading
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary btn-brand-primary mt-3",
+                          attrs: { type: "submit" },
+                          on: { click: _vm.checkForm }
+                        },
+                        [_vm._v("Save information")]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.loading
+                    ? _c(
+                        "button",
+                        {
+                          staticClass:
+                            "btn btn-primary btn-brand-primary mt-3 disabled",
+                          attrs: { type: "submit" }
+                        },
+                        [_vm._v("Please wait")]
+                      )
+                    : _vm._e()
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "card border-brand-greenish p-3 mt-3" },
+                  [
+                    _c("h6", { staticClass: "p-3" }, [
+                      _vm._v("Currently stored images")
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "row" },
+                      _vm._l(_vm.singleProperty.files, function(sf) {
+                        return _c("div", { staticClass: "col" }, [
+                          _c("img", {
+                            staticClass: "img-fluid",
+                            attrs: {
+                              src: "/storage/" + sf.thumbnail_url,
+                              alt: ""
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-sm btn-danger",
+                              on: {
+                                click: function($event) {
+                                  _vm.confirmDeleteImage = true
+                                }
+                              }
+                            },
+                            [_vm._v("Delete")]
+                          ),
+                          _vm._v(" "),
+                          _vm.confirmDeleteImage
+                            ? _c("div", { staticClass: "row" }, [
+                                _c("div", { staticClass: "col" }, [
+                                  _c("p", { staticClass: "text-danger mt-1" }, [
+                                    _vm._v("Are you sure?")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-sm btn-danger",
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.deletePropertyImage(sf.id)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("Yes")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass:
+                                        "btn btn-sm btn-brand-greenish",
+                                      on: {
+                                        click: function($event) {
+                                          _vm.confirmDeleteImage = false
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "No\n                                        "
+                                      )
+                                    ]
+                                  )
+                                ])
+                              ])
+                            : _vm._e()
+                        ])
+                      }),
+                      0
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "card border-brand-greenish p-3 mt-3" },
+                  [
+                    _c("h6", { staticClass: "p-3" }, [
+                      _vm._v("Upload new images")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "row" }, [
+                      _c(
+                        "div",
+                        { staticClass: "col" },
+                        [
+                          _c("vue-dropzone", {
+                            attrs: { id: "dropzone", options: _vm.config },
+                            on: {
+                              "vdropzone-complete": _vm.afterComplete,
+                              "vdropzone-sending": _vm.sendingEvent
+                            }
+                          })
+                        ],
+                        1
                       )
                     ])
-                  : _vm._e(),
-                _vm._v(" "),
-                _c("h6", { staticClass: "text-brand-charleston" }, [
-                  _vm._v(
-                    "Info: Property addresses are not be modifiable in the Beta version."
-                  )
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "description" } }, [
-                    _vm._v("Description")
-                  ]),
-                  _vm._v(" "),
-                  _c("textarea", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.singleProperty.description,
-                        expression: "singleProperty.description"
-                      }
-                    ],
-                    staticClass: "form-control border-brand-greenish",
-                    attrs: {
-                      "aria-describedby": "descriptionHelp",
-                      placeholder:
-                        "Describe the property you would like to sell",
-                      id: "description"
-                    },
-                    domProps: { value: _vm.singleProperty.description },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(
-                          _vm.singleProperty,
-                          "description",
-                          $event.target.value
-                        )
-                      }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "row" }, [
-                  _c("div", { staticClass: "col-sm" }, [
-                    _c("div", { staticClass: "form-group" }, [
-                      _c("label", { attrs: { for: "price" } }, [
-                        _vm._v("Price (DKK)")
-                      ]),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.singleProperty.price,
-                            expression: "singleProperty.price"
-                          }
-                        ],
-                        staticClass: "form-control border-brand-greenish",
-                        attrs: {
-                          type: "number",
-                          autocomplete: "off",
-                          "aria-describedby": "priceHelp",
-                          placeholder: "The price in DKK",
-                          id: "price"
-                        },
-                        domProps: { value: _vm.singleProperty.price },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.singleProperty,
-                              "price",
-                              $event.target.value
-                            )
-                          }
-                        }
-                      })
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-sm" }, [
-                    _c("div", { staticClass: "form-group" }, [
-                      _c("label", { attrs: { for: "brutto" } }, [
-                        _vm._v("Brutto (DKK)")
-                      ]),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.singleProperty.brutto,
-                            expression: "singleProperty.brutto"
-                          }
-                        ],
-                        staticClass: "form-control border-brand-greenish",
-                        attrs: {
-                          type: "number",
-                          autocomplete: "off",
-                          "aria-describedby": "bruttoHelp",
-                          placeholder: "The brutto price in DKK",
-                          id: "brutto"
-                        },
-                        domProps: { value: _vm.singleProperty.brutto },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.singleProperty,
-                              "brutto",
-                              $event.target.value
-                            )
-                          }
-                        }
-                      })
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-sm" }, [
-                    _c("div", { staticClass: "form-group" }, [
-                      _c("label", { attrs: { for: "netto" } }, [
-                        _vm._v("Netto (DKK)")
-                      ]),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.singleProperty.netto,
-                            expression: "singleProperty.netto"
-                          }
-                        ],
-                        staticClass: "form-control border-brand-greenish",
-                        attrs: {
-                          type: "number",
-                          autocomplete: "off",
-                          "aria-describedby": "nettoHelp",
-                          placeholder: "The netto price in DKK",
-                          id: "netto"
-                        },
-                        domProps: { value: _vm.singleProperty.netto },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.singleProperty,
-                              "netto",
-                              $event.target.value
-                            )
-                          }
-                        }
-                      })
-                    ])
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "row" }, [
-                  _c("div", { staticClass: "col-sm" }, [
-                    _c("div", { staticClass: "form-group" }, [
-                      _c("label", { attrs: { for: "own_exp" } }, [
-                        _vm._v("Owner's Expense (DKK)")
-                      ]),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.singleProperty.own_exp,
-                            expression: "singleProperty.own_exp"
-                          }
-                        ],
-                        staticClass: "form-control border-brand-greenish",
-                        attrs: {
-                          type: "number",
-                          autocomplete: "off",
-                          "aria-describedby": "ownExpHelp",
-                          placeholder: "The owner's expense in DKK",
-                          id: "own_exp"
-                        },
-                        domProps: { value: _vm.singleProperty.own_exp },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.singleProperty,
-                              "own_exp",
-                              $event.target.value
-                            )
-                          }
-                        }
-                      })
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-sm" }, [
-                    _c("div", { staticClass: "form-group" }, [
-                      _c("label", { attrs: { for: "deposit" } }, [
-                        _vm._v("Deposit (DKK)")
-                      ]),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.singleProperty.deposit,
-                            expression: "singleProperty.deposit"
-                          }
-                        ],
-                        staticClass: "form-control border-brand-greenish",
-                        attrs: {
-                          type: "number",
-                          autocomplete: "off",
-                          "aria-describedby": "depositHelp",
-                          placeholder: "The deposit in DKK",
-                          id: "deposit"
-                        },
-                        domProps: { value: _vm.singleProperty.deposit },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.singleProperty,
-                              "deposit",
-                              $event.target.value
-                            )
-                          }
-                        }
-                      })
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-sm" }, [
-                    _c("div", { staticClass: "form-group" }, [
-                      _c("label", { attrs: { for: "sqm_price" } }, [
-                        _vm._v("m2 price (DKK)")
-                      ]),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.singleProperty.sqm_price,
-                            expression: "singleProperty.sqm_price"
-                          }
-                        ],
-                        staticClass: "form-control border-brand-greenish",
-                        attrs: {
-                          type: "number",
-                          autocomplete: "off",
-                          "aria-describedby": "sqmPriceHelp",
-                          placeholder: "The square metre price in DKK",
-                          id: "sqm_price"
-                        },
-                        domProps: { value: _vm.singleProperty.sqm_price },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.singleProperty,
-                              "sqm_price",
-                              $event.target.value
-                            )
-                          }
-                        }
-                      })
-                    ])
-                  ])
-                ]),
-                _vm._v(" "),
-                !_vm.loading
-                  ? _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-primary btn-brand-primary mt-3",
-                        attrs: { type: "submit" },
-                        on: { click: _vm.checkForm }
-                      },
-                      [_vm._v("Submit")]
-                    )
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.loading
-                  ? _c(
-                      "button",
-                      {
-                        staticClass:
-                          "btn btn-primary btn-brand-primary mt-3 disabled",
-                        attrs: { type: "submit" }
-                      },
-                      [_vm._v("Please wait")]
-                    )
-                  : _vm._e()
+                  ]
+                )
               ])
             ])
           ])
@@ -48102,7 +48283,17 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _vm._m(1)
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-12 p-2 bg-brand-primary" }, [
+        _c("p", { staticClass: "text-center text-brand-white mt-2" }, [
+          _vm._v(
+            "© " + _vm._s(new Date().getFullYear()) + " Main Solution A/S "
+          ),
+          _c("br"),
+          _vm._v(" All Rights Reserved")
+        ])
+      ])
+    ])
   ])
 }
 var staticRenderFns = [
@@ -48116,20 +48307,6 @@ var staticRenderFns = [
       _vm._v("\n                Esbjerg 6700 "),
       _c("br"),
       _vm._v("\n                Denmark")
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-12 p-2 bg-brand-primary" }, [
-        _c("p", { staticClass: "text-center text-brand-white mt-2" }, [
-          _vm._v("© 2019 Main Solution A/S "),
-          _c("br"),
-          _vm._v(" All Rights Reserved")
-        ])
-      ])
     ])
   }
 ]

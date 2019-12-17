@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\PropertyFiles;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use App\User;
@@ -147,7 +148,7 @@ class AdminController extends Controller
             DB::commit();
 
             return response()->json([
-                'status' => 'You have successfully edited the property.',
+                'msg' => 'You have successfully edited the property.',
                 'id' => $property->id
             ], 200);
 
@@ -198,6 +199,28 @@ class AdminController extends Controller
             if ($property->delete()) {
 
                 return response()->json(['msg' => 'Property deleted successfully. Please stand by while the list is reloading..'], 200);
+            } else {
+                return response()->json(['msg' => 'Error.'], 500);
+            }
+        }
+
+        else {
+            return response()->json([
+                'status' => 'Access denied'
+            ], 403);
+        }
+    }
+
+    protected function deletePropertyImage($id, Request $request) {
+
+        $authUser = Auth::user();
+        if($authUser->is_admin === 1) {
+
+            $propertyFile = PropertyFiles::find($id);
+
+            if ($propertyFile->delete()) {
+
+                return response()->json(['msg' => 'Image deleted successfully. Reloading the property in a few seconds..'], 200);
             } else {
                 return response()->json(['msg' => 'Error.'], 500);
             }

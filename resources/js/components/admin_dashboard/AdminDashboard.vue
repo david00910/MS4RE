@@ -32,7 +32,7 @@
             <div class="col">
 
 
-                <div class="card border-brand-greenish">
+                <div class="card border-brand-greenish ">
                     <div class="card-header bg-brand-primary text-white">List of properties</div>
 
                     <div class="progress" v-if="loading">
@@ -177,8 +177,7 @@
                             <div class="card-body">{{errormsg}}</div>
                         </div>
 
-
-
+                        <div class="card border-brand-greenish p-3">
 
                             <h6 v-if=" errors && errors.length">
                                 <p>Please correct the following error(s):</p>
@@ -187,7 +186,7 @@
                                 </ul>
                             </h6>
 
-                            <h6 class="text-brand-charleston">Info: Property addresses are not be modifiable in the Beta version.</h6>
+                            <small class="text-brand-charleston">Info: Property addresses are not modifiable in the Beta version.</small>
 
                             <div class="form-group">
                                 <label for="description">Description</label>
@@ -264,8 +263,37 @@
                                 </div>
                             </div>
 
-                            <button type="submit" @click="checkForm" v-if="!loading" class="btn btn-primary btn-brand-primary mt-3">Submit</button>
+                            <button type="submit" @click="checkForm" v-if="!loading" class="btn btn-primary btn-brand-primary mt-3">Save information</button>
                             <button type="submit" v-if="loading" class="btn btn-primary btn-brand-primary mt-3 disabled">Please wait</button>
+                        </div>
+
+                        <div class="card border-brand-greenish p-3 mt-3">
+                            <h6 class="p-3">Currently stored images</h6>
+                            <div class="row">
+                                <div class="col" v-for="sf in singleProperty.files">
+                                    <img :src="'/storage/'+sf.thumbnail_url" class="img-fluid"  alt="">
+                                    <button class="btn btn-sm btn-danger" @click="confirmDeleteImage = true">Delete</button>
+                                    <div class="row" v-if="confirmDeleteImage">
+                                        <div class="col">
+                                            <p class="text-danger mt-1">Are you sure?</p>
+                                            <button class="btn btn-sm btn-danger" @click="deletePropertyImage(sf.id)">Yes</button>
+                                            <button class="btn btn-sm btn-brand-greenish"
+                                                    @click="confirmDeleteImage = false">No
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card border-brand-greenish p-3 mt-3">
+                            <h6 class="p-3">Upload new images</h6>
+                            <div class="row">
+                                <div class="col">
+                                    <vue-dropzone id="dropzone" @vdropzone-complete="afterComplete" v-on:vdropzone-sending="sendingEvent" :options="config"></vue-dropzone>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
@@ -293,7 +321,19 @@
 
         data: function () {
             return {
+                config: {
+                    url: "../property/storeUpload",
+                    maxFilesize: 8, // MB
+                    maxFiles: 4,
+                    thumbnailWidth: 150, // px
+                    thumbnailHeight: 150,
+                    addRemoveLinks: true,
+                    headers: {
+                        "X-CSRF-TOKEN": document.head.querySelector("[name=csrf-token]").content
+                    },
+                },
                 selected: false,
+                confirmDeleteImage : false,
                 confirmDelete: false,
                 searchInProgress: false, // if this is true, the pagination is rendered for the filtered results only.
                 expressionQuery: null, // Main search query
@@ -407,6 +447,11 @@
 
             },
 
+            //Sending property id with the img upload request
+            sendingEvent (file, xhr, formData) {
+                formData.append('propertyId', this.singleProperty.id);
+            },
+
             checkForm: function () {
 
                 if (this.singleProperty.id && this.singleProperty.description && this.singleProperty.price && this.singleProperty.brutto && this.singleProperty.netto &&
@@ -426,7 +471,7 @@
                     })
 
                         .then(response => {
-                            this.output = response.status;
+                            this.output = response.msg;
                             this.errors = response.errors;
                             this.loading = false;
                             var self = this;
@@ -475,6 +520,13 @@
 
             },
 
+            afterComplete() {
+              this.output = 'Image uploaded. Refreshing...';
+              var self = this;
+              this.showEditField(self.singleProperty.id);
+              this.output = false;
+            },
+
             deleteProperty(id) {
 
                 this.loading = true;
@@ -490,6 +542,25 @@
                         this.error = error.msg;
                         this.hasError = true;
                         this.confirmDelete = false;
+                    })
+
+            },
+
+            deletePropertyImage(ImageId) {
+
+                this.loading = true;
+                axios.delete('deletePropertyImage/' + ImageId)
+                    .then(res => {
+                        this.output = res.data.msg;
+                        this.loading = false;
+                        this.confirmDeleteImage = false;
+                        var self = this;
+                        setTimeout(function () { self.showEditField(self.singleProperty.id); self.output = false }, 3000)
+                    })
+                    .catch(error => {
+                        this.error = error.msg;
+                        this.hasError = true;
+                        this.confirmDeleteImage = false;
                     })
 
             },

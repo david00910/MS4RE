@@ -4,9 +4,9 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">Self-service</div>
+            <div class="col-md-12 p-5">
+                <div class="card border-brand-greenish">
+                    <div class="card-header bg-brand-primary text-white">Self-service</div>
 
                     <div class="card-body">
                         @if (session('status'))

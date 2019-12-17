@@ -27,6 +27,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 </head>
 <body class="bg-brand-white">
     <div id="app">
@@ -50,6 +51,15 @@
 
                         <li class="nav-item">
                             <a class="nav-link text-brand-grey" href="{{ route('home') }}">{{ __('Home') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-brand-grey" href="{{ route('propertyList') }}">{{ __('Properties') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-brand-grey" href="#">{{ __('Services') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-brand-grey" href="#">{{ __('About us') }}</a>
                         </li>
                         <!-- Authentication Links -->
                         @guest

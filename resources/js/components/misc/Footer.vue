@@ -92,7 +92,7 @@
         </div>
         <div class="row">
             <div class="col-12 p-2 bg-brand-primary">
-                <p class="text-center text-brand-white mt-2">© 2019 Main Solution A/S <br> All Rights Reserved</p>
+                <p class="text-center text-brand-white mt-2">© {{new Date().getFullYear()}} Main Solution A/S <br> All Rights Reserved</p>
             </div>
         </div>
     </div>

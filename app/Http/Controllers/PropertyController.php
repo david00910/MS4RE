@@ -26,6 +26,10 @@ class PropertyController extends Controller
 
     }
 
+    protected function index() {
+        return view('model.property.index');
+    }
+
     protected function indexData()
     {
 
